@@ -1,5 +1,5 @@
-#ifndef PLAYER_H_
-#define PLAYER_H_
+#ifndef TEST_H_
+#define TEST_H_
 #include <memory>
 class BiddingStrategy;
 

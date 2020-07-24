@@ -1,5 +1,5 @@
-#ifndef STRATEGIES_H_
-#define STRATEGIES_H_
+#ifndef LEVELS_H_
+#define LEVELS_H_
 #include <cstddef>
 class AgileBidder;
 
