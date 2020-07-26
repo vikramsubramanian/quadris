@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -MMD
 EXEC = main
-OBJECTS = levels.o
+OBJECTS = level_harness.o level_test.o levels.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
@@ -13,13 +13,3 @@ ${EXEC}: ${OBJECTS}
 
 clean:
 	rm ${OBJECTS} ${EXEC} ${DEPENDS}
-
-.PHONY: test
-
-test:
-	make -f Makefile.test
-
-.PHONY: test_clean
-
-test_clean:
-	make -f Makefile.test clean

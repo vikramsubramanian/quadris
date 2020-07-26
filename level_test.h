@@ -1,5 +1,5 @@
-#ifndef TEST_H_
-#define TEST_H_
+#ifndef LEVEL_TEST_H_
+#define LEVEL_TEST_H_
 #include <memory>
 class BiddingStrategy;
 
