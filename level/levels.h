@@ -21,4 +21,12 @@ class Level0 : public Level {
         std::vector<Command> drop(Command) const override;
 };
 
+class Level1 : public Level {
+    public:
+        char nextBlock(int) const override;
+        char nextBlock(std::ifstream) const override;
+        std::vector<Command> transform(Command) const override;
+        std::vector<Command> drop(Command) const override;
+};
+
 #endif
