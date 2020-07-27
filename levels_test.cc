@@ -1,7 +1,8 @@
 #include "levels.h"
 #include <iostream>
 #include <utility>
-using namespace std;
+#include <string>
+#include <fstream>
 
 int main() {
     // Our levels, we refer to them as a, b, c, and d respectively.
@@ -13,31 +14,40 @@ int main() {
     levels[4] = new Level4();
     char cmd;    
     int lvl, seed;
+    std::string file;
     // A board cannot be used for operations until it is constructed.
     // NOTE: If a board (a, b, c, d) is moved from then it is not longer
     // a valid object to be used for any operations (until you create 
     // a new board in that location). Moved from levels are nulled out
     // after being moved from to help you realize this.
-    while (cin >> cmd && cmd != 'q') {
+    std::cout << "Please specify your sequence file." << std::endl;
+    std::cin >> file;
+    std::ifstream myIn (file);
+    if(!myIn.is_open()){
+        std::cerr << "Error, cannot open specified text file." << std::endl;
+        return 0;
+    }
+    while (std::cin >> cmd && cmd != 'q') {
         switch (cmd) {
             // Command to play one turn on the target board. Expects
             // to receive which board to play on after reading 't'.
             case 'i':
-                cin >> lvl >> seed;
-                cout << levels[lvl]->nextBlock(seed) << endl;
+                std::cin >> lvl >> seed;
+                std::cout << levels[lvl]->nextBlock(seed) << std::endl;
                 break;
             default:
-                cout << "Invalid test case! ";
-                cout << "Invalid command: '" << cmd << "'" << endl;
+                std::cout << "Invalid test case! ";
+                std::cout << "Invalid command: '" << cmd << "'" << std::endl;
         }   
     }
     for (size_t i = 0; i < 5; ++i) delete levels[i];
-    if (!cin && !cin.eof()) {
-        cout << "Invalid test case! ";
-        cout << "A read failed, likely because the program was trying";
-        cout << " to read a number and didn't receive it. ";
-        cout << "Make sure your test case is valid!" << endl;
+    if (!std::cin && !std::cin.eof()) {
+        std::cout << "Invalid test case! ";
+        std::cout << "A read failed, likely because the program was trying";
+        std::cout << " to read a number and didn't receive it. ";
+        std::cout << "Make sure your test case is valid!" << std::endl;
         return -1;
     }
+    myIn.close();
     return 0;
 }

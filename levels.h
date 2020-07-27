@@ -2,6 +2,8 @@
 #define LEVELS_H_
 #include <fstream>
 #include <vector>
+#include <random>
+#include <iostream>
 
 enum Command { CLUB, DIAMOND, HEART, SPADE, SUIT_COUNT };
 
