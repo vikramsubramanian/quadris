@@ -29,7 +29,7 @@ istream &operator>>(istream &in, Command &c){
     // identify multiplier if present
     // if so, extract all digits in prefix
     int i = 0;
-    while(isdigit(cmd[0]) && cmd[0] > 1)
+    while(isdigit(cmd[0]) && cmd[0] >= 1)
     {
         c.multiplier_ *= i * 10;
         c.multiplier_ += cmd[0];
