@@ -12,14 +12,12 @@ int main() {
     levels[2] = new Level2();
     levels[3] = new Level3();
     levels[4] = new Level4();
-    char cmd;    
+    char cmd, trans;    
     int lvl, seed;
+    bool flag;
     std::string file;
-    // A board cannot be used for operations until it is constructed.
-    // NOTE: If a board (a, b, c, d) is moved from then it is not longer
-    // a valid object to be used for any operations (until you create 
-    // a new board in that location). Moved from levels are nulled out
-    // after being moved from to help you realize this.
+    Command command;
+    std::string CommandString[6] = {"left", "right", "down", "clockwise", "counterclockwise", "drop"};
     std::cout << "Please specify your sequence file." << std::endl;
     std::cin >> file;
     std::ifstream myIn (file);
@@ -29,11 +27,51 @@ int main() {
     }
     while (std::cin >> cmd && cmd != 'q') {
         switch (cmd) {
-            // Command to play one turn on the target board. Expects
-            // to receive which board to play on after reading 't'.
             case 'i':
                 std::cin >> lvl >> seed;
                 std::cout << levels[lvl]->nextBlock(seed) << std::endl;
+                break;
+            case 'f':
+                std::cin >> lvl;
+                std::cout << levels[lvl]->nextBlock(myIn) << std::endl;
+                break;
+            case 't':
+                std::cin >> lvl >> trans;
+                switch (trans) {
+                    case 'l':
+                        command = Command::left;
+                        break;
+                    case 'r':
+                        command = Command::right;
+                        break;
+                    case 'd':
+                        command = Command::down;
+                        break;
+                    case 'c':
+                        command = Command::clockwise;
+                        break;
+                    case 'w':
+                        command = Command::counterclockwise;
+                        break;
+                    default:
+                        std::cout << "Invalid transformation case! ";
+                        std::cout << "Invalid transformation: '" << trans << "'" << std::endl;
+                }
+                for (auto c: levels[lvl]->transform(command)) {
+                    std::cout << CommandString[c] << std::endl;
+                }
+                break;
+            case 'd':
+                std::cin >> lvl;
+                for (auto c: levels[lvl]->drop()) {
+                    std::cout << CommandString[c] << std::endl;
+                }
+                break;
+            case 'b':
+                std::cin >> lvl >> flag;
+                for (auto c: levels[lvl]->drop(flag)) {
+                    std::cout << CommandString[c] << std::endl;
+                }
                 break;
             default:
                 std::cout << "Invalid test case! ";

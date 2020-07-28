@@ -17,9 +17,13 @@ char Level0::nextBlock(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (β)
-char Level0::nextBlock(std::ifstream file) const {
+char Level0::nextBlock(std::ifstream& file) const {
     char block;
-    file >> block;
+    if (!(file >> block)) {
+        file.clear();
+        file.seekg(std::ios::beg);
+        file >> block;
+    }
     return block;
 }
 
@@ -32,10 +36,18 @@ std::vector<Command> Level0::transform(Command c) const {
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Command> Level0::drop(Command c) const {
+// Dropper (α)
+std::vector<Command> Level0::drop() const {
     std::vector<Command> commands;
-    commands.push_back(c);
+    commands.push_back(Command::drop);
+    return commands;
+}
+
+// -------------------------------------------------------------------------------
+// Dropper (β)
+std::vector<Command> Level0::drop(bool flag) const {
+    std::vector<Command> commands;
+    commands.push_back(Command::drop);
     return commands;
 }
 
@@ -67,7 +79,7 @@ char Level1::nextBlock(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (β)
-char Level1::nextBlock(std::ifstream file) const {
+char Level1::nextBlock(std::ifstream& file) const {
     // Should not be called
     std::cerr << "This function is off-limits. It should not be called in the final code." << std::endl;
     return '*';
@@ -82,10 +94,18 @@ std::vector<Command> Level1::transform(Command c) const {
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Command> Level1::drop(Command c) const {
+// Dropper (α)
+std::vector<Command> Level1::drop() const {
     std::vector<Command> commands;
-    commands.push_back(c);
+    commands.push_back(Command::drop);
+    return commands;
+}
+
+// -------------------------------------------------------------------------------
+// Dropper (β)
+std::vector<Command> Level1::drop(bool flag) const {
+    std::vector<Command> commands;
+    commands.push_back(Command::drop);
     return commands;
 }
 
@@ -117,7 +137,7 @@ char Level2::nextBlock(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (β)
-char Level2::nextBlock(std::ifstream file) const {
+char Level2::nextBlock(std::ifstream& file) const {
     // Should not be called
     std::cerr << "This function is off-limits. It should not be called in the final code." << std::endl;
     return '*';
@@ -132,10 +152,18 @@ std::vector<Command> Level2::transform(Command c) const {
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Command> Level2::drop(Command c) const {
+// Dropper (α)
+std::vector<Command> Level2::drop() const {
     std::vector<Command> commands;
-    commands.push_back(c);
+    commands.push_back(Command::drop);
+    return commands;
+}
+
+// -------------------------------------------------------------------------------
+// Dropper (β)
+std::vector<Command> Level2::drop(bool flag) const {
+    std::vector<Command> commands;
+    commands.push_back(Command::drop);
     return commands;
 }
 
@@ -167,9 +195,13 @@ char Level3::nextBlock(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (β)
-char Level3::nextBlock(std::ifstream file) const {
+char Level3::nextBlock(std::ifstream& file) const {
     char block;
-    file >> block;
+    if (!(file >> block)) {
+        file.clear();
+        file.seekg(std::ios::beg);
+        file >> block;
+    }
     return block;
 }
 
@@ -178,16 +210,26 @@ char Level3::nextBlock(std::ifstream file) const {
 std::vector<Command> Level3::transform(Command c) const {
     std::vector<Command> commands;
     commands.push_back(c);
+    commands.push_back(Command::down);
     return commands;
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Command> Level3::drop(Command c) const {
+// Dropper (α)
+std::vector<Command> Level3::drop() const {
     std::vector<Command> commands;
-    commands.push_back(c);
+    commands.push_back(Command::drop);
     return commands;
 }
+
+// -------------------------------------------------------------------------------
+// Dropper (β)
+std::vector<Command> Level3::drop(bool flag) const {
+    std::vector<Command> commands;
+    commands.push_back(Command::drop);
+    return commands;
+}
+
 
 // -------------------------------------------------------------------------------
 // Level4
@@ -217,9 +259,13 @@ char Level4::nextBlock(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (β)
-char Level4::nextBlock(std::ifstream file) const {
+char Level4::nextBlock(std::ifstream& file) const {
     char block;
-    file >> block;
+    if (!(file >> block)) {
+        file.clear();
+        file.seekg(std::ios::beg);
+        file >> block;
+    }
     return block;
 }
 
@@ -228,14 +274,29 @@ char Level4::nextBlock(std::ifstream file) const {
 std::vector<Command> Level4::transform(Command c) const {
     std::vector<Command> commands;
     commands.push_back(c);
+    commands.push_back(Command::down);
     return commands;
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Command> Level4::drop(Command c) const {
+// Dropper (α)
+std::vector<Command> Level4::drop() const {
     std::vector<Command> commands;
-    commands.push_back(c);
+    commands.push_back(Command::drop);
     return commands;
 }
+
+// -------------------------------------------------------------------------------
+// Dropper (β)
+// flag represents whether a row has been cleared in the past between the last multiple of 5 turns (between 0 and 5, betwen 5 and 10, etc.)
+std::vector<Command> Level4::drop(bool flag) const {
+    std::vector<Command> commands;
+    commands.push_back(Command::drop);
+    if (flag) {
+        // Needs to send back a create block command with a b char
+        // Also needs to drop that block
+    }
+    return commands;
+}
+
 
