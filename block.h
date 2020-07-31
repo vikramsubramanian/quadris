@@ -2,11 +2,8 @@
 #define _BLOCK_H_
 
 #include <vector>
+#include "direction.h"
 #include "piece.h"
-
-
-enum direction { down, left, right, clockwise, counterclockwise };
-
 
 class Block{
 
@@ -21,7 +18,7 @@ public:
     std::vector<Piece> pieceList;
     int rotateAroundPivot[2];
     int level;
-    bool translate(direction, char board[18][11]);
+    bool translate(Direction, char board[18][11]);
 };
 
 #endif

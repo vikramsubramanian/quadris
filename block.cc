@@ -10,7 +10,7 @@ Block::Block(){
 
 
 
-bool Block::translate(direction dir, char board[18][11])
+bool Block::translate(Direction dir, char board[18][11])
 {
     //Placeholder variables to store the location of the moved object
     int newX = -1;
@@ -26,7 +26,7 @@ bool Block::translate(direction dir, char board[18][11])
 
     switch (dir)
     {
-        case direction::left:
+        case Direction::left:
             cout << "Translate called in the left direction" << endl;
             //we check if move is valid for all sub pieces in the object
             for (int i = 0; i < 4; i++)
@@ -48,7 +48,7 @@ bool Block::translate(direction dir, char board[18][11])
             rotateAroundPivot[0] -= 1;
             break;
 
-        case direction::right:
+        case Direction::right:
             cout << "Translate called in the right direction" << endl;
 
             for (int i = 0; i < 4; i++)
@@ -70,7 +70,7 @@ bool Block::translate(direction dir, char board[18][11])
             }
             rotateAroundPivot[0] += 1;
             break;
-        case direction::down:
+        case Direction::down:
             cout << "Translate called in the downwards direction" << endl;
             for (int i = 0; i < 4; i++)
             {
@@ -93,7 +93,7 @@ bool Block::translate(direction dir, char board[18][11])
 
             break;
 
-        case direction::clockwise:
+        case Direction::clockwise:
             cout << "Translate called in the clkwise direction" << endl;
             for (int i = 0; i < 4; i++)
             {   
@@ -121,7 +121,7 @@ bool Block::translate(direction dir, char board[18][11])
             }
             break;
 
-        case direction::counterclockwise:
+        case Direction::counterclockwise:
             cout << "Translate called in the counterclkwise direction" << endl;
             for (int i = 0; i < 4; i++)
             {

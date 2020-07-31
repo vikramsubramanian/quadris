@@ -1,16 +1,31 @@
-#ifndef PLAYER_H_
-#define PLAYER_H_
-#include <memory>
-class BiddingStrategy;
+#ifndef GAME_H_
+#define GAME_H_
+#include <iostream>
+#include <utility>
+#include <string>
+#include <fstream>
+#include "direction.h"
 
-class AgileBidder {
-    std::unique_ptr<BiddingStrategy> strat;
-    size_t chips;
-  public:
-    AgileBidder(size_t);
-    size_t bid();
-    size_t chipCount() const;
-    void setStrategy(std::unique_ptr<BiddingStrategy>);
+class Level;
+class gameBoard;
+struct Command;
+
+struct gamePImpl{
+    int lvl_;
+    Level* strat_;
+    std::ifstream file_;
+    int seed_;
+    bool random_;
+    gameBoard* board_;
+};
+
+class Game {
+    public:
+        Game(int, std::string, int);
+        ~Game();
+        void setLevel();
+    private:
+        gamePImpl* gameData_;
 };
 
 #endif

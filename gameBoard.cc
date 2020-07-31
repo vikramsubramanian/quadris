@@ -129,7 +129,7 @@ gameBoard::~gameBoard()
     delete displayStruct;
 }
 
-void gameBoard::transformBlock(vector<direction> dirs){
+void gameBoard::transformBlock(vector<Direction> dirs){
 
     for (int i=0; i<dirs.size(); i++){
         generateBoardFromBlocks();
@@ -139,10 +139,10 @@ void gameBoard::transformBlock(vector<direction> dirs){
 
 void gameBoard::drop() {
     generateBoardFromBlocks();
-    bool status = curBlock->translate(direction::down, displayStruct->board);
+    bool status = curBlock->translate(Direction::down, displayStruct->board);
     while (status==true){
         generateBoardFromBlocks();
-        status = curBlock->translate(direction::down, displayStruct->board);
+        status = curBlock->translate(Direction::down, displayStruct->board);
     }
     curBlock = nullptr; 
     return;

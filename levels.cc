@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 #include <iostream>
+#include "direction.h"
 
 // -------------------------------------------------------------------------------
 // Level0
@@ -29,26 +30,26 @@ char Level0::nextBlock(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Command> Level0::transform(Command c) const {
-    std::vector<Command> commands;
-    commands.push_back(c);
-    return commands;
+std::vector<Direction> Level0::transform(Direction c) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(c);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (α)
-std::vector<Command> Level0::drop() const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level0::drop() const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (β)
-std::vector<Command> Level0::drop(bool flag) const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level0::drop(bool flag) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
@@ -87,26 +88,26 @@ char Level1::nextBlock(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Command> Level1::transform(Command c) const {
-    std::vector<Command> commands;
-    commands.push_back(c);
-    return commands;
+std::vector<Direction> Level1::transform(Direction c) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(c);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (α)
-std::vector<Command> Level1::drop() const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level1::drop() const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (β)
-std::vector<Command> Level1::drop(bool flag) const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level1::drop(bool flag) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
@@ -145,26 +146,26 @@ char Level2::nextBlock(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Command> Level2::transform(Command c) const {
-    std::vector<Command> commands;
-    commands.push_back(c);
-    return commands;
+std::vector<Direction> Level2::transform(Direction c) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(c);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (α)
-std::vector<Command> Level2::drop() const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level2::drop() const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (β)
-std::vector<Command> Level2::drop(bool flag) const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level2::drop(bool flag) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
@@ -207,27 +208,27 @@ char Level3::nextBlock(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Command> Level3::transform(Command c) const {
-    std::vector<Command> commands;
-    commands.push_back(c);
-    commands.push_back(Command::down);
-    return commands;
+std::vector<Direction> Level3::transform(Direction c) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(c);
+    Directions.push_back(Direction::down);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (α)
-std::vector<Command> Level3::drop() const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level3::drop() const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (β)
-std::vector<Command> Level3::drop(bool flag) const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level3::drop(bool flag) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 
@@ -271,32 +272,32 @@ char Level4::nextBlock(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Command> Level4::transform(Command c) const {
-    std::vector<Command> commands;
-    commands.push_back(c);
-    commands.push_back(Command::down);
-    return commands;
+std::vector<Direction> Level4::transform(Direction c) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(c);
+    Directions.push_back(Direction::down);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (α)
-std::vector<Command> Level4::drop() const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
-    return commands;
+std::vector<Direction> Level4::drop() const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
+    return Directions;
 }
 
 // -------------------------------------------------------------------------------
 // Dropper (β)
 // flag represents whether a row has been cleared in the past between the last multiple of 5 turns (between 0 and 5, betwen 5 and 10, etc.)
-std::vector<Command> Level4::drop(bool flag) const {
-    std::vector<Command> commands;
-    commands.push_back(Command::drop);
+std::vector<Direction> Level4::drop(bool flag) const {
+    std::vector<Direction> Directions;
+    Directions.push_back(Direction::drop);
     if (flag) {
-        // Needs to send back a create block command with a b char
+        // Needs to send back a create block Direction with a b char
         // Also needs to drop that block
     }
-    return commands;
+    return Directions;
 }
 
 

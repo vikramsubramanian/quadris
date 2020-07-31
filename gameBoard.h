@@ -15,7 +15,7 @@ class gameBoard
         ~gameBoard();
         bool gameOver();
         void newBlock(char);
-        void transformBlock(std::vector<direction>);
+        void transformBlock(std::vector<Direction>);
         int getScore();
         void updateScore();
         DisplayStruct *getState();
