@@ -88,6 +88,47 @@ void Game::play()
     Command cmd;
 
     while (std::cin >> cmd) {
+        switch (cmd.commandType_) {
+            case Type::LEFT:
+                break;
+            case Type::RIGHT:
+                break;
+            case Type::DOWN:
+                break;
+            case Type::CLOCKWISE:
+                break;
+            case Type::COUNTERCLOCKWISE:
+                break;
+            case Type::DROP :
+                break;
+            case Type::LEVELUP:
+                break;
+            case Type::LEVELDOWN:
+                break;
+            case Type::NORANDOM:
+                break;
+            case Type::RANDOM:
+                break;
+            case Type::I:
+                break;
+            case Type::J: 
+                break;
+            case Type::L: 
+                break;
+            case Type::S: 
+                break;
+            case Type::Z: 
+                break;
+            case Type::O: 
+                break;
+            case Type::RESTART: 
+                break;
+            case Type::HINT: 
+                break;
+            default:
+                std::cout << "Invalid player command!";
+                //std::cout << "Invalid command: '" << cmd << "'" << std::endl;
+        }
     }
 }
 
