@@ -32,12 +32,6 @@ int main(int argc, char *argv[])
                 break;
             case "-scriptfile":
                 fileName = argv[2];
-//                sequenceFile.open (fileName.c_str());
-//                if(!sequenceFile)
-//                {
-//                    cerr << "Error, cannot open specified sequence file."
-//                    exit(1);
-//                }   // file not found
                 break;
             case "-startlevel":
                 startLevel = strtol(argv[2], &endp, 0);
@@ -47,12 +41,11 @@ int main(int argc, char *argv[])
 
         }
     }
-
-    // MOVE INTO SWITCH STATEMENT ONCE CTOR DETERMINED
+    
     // initializing game object
-    Game* g = new Game(players_, playersType_);
-    g->play_(seed); // returns once game is over or player quits
-    delete g; // Delering game instance
+    Game* g = new Game(startLevel, fileName, seed);
+    g->play(); // returns once game is over or player quits
+    delete g; // Deleting game instance
     return 1;
 }
 
