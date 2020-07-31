@@ -42,13 +42,11 @@ istream &operator>>(istream &in, Command &c){
     c.multiplier_ = 0;
 
     // EOF terminates program
-    if(in.eof()){
+    string cmd;
+    if (!(in >> cmd)) {
         c.commandType_ = ENDFILE;
         return in;
     }
-
-    string cmd;
-    in >> cmd;
 
     assert(!cmd.empty());
 
