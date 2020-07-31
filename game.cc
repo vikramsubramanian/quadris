@@ -86,20 +86,30 @@ void Game::_setLevel() {
 void Game::play()
 {
     Command cmd;
-
+    std::vector<Direction> trans;
     while (std::cin >> cmd) {
         switch (cmd.commandType_) {
             case Type::LEFT:
+                trans = gameData_->strat_->transform(Direction::left);
+                gameData_->board_->transformBlock(trans);
                 break;
             case Type::RIGHT:
+                trans = gameData_->strat_->transform(Direction::right);
+                gameData_->board_->transformBlock(trans);
                 break;
             case Type::DOWN:
+                trans = gameData_->strat_->transform(Direction::down);
+                gameData_->board_->transformBlock(trans);
                 break;
             case Type::CLOCKWISE:
+                trans = gameData_->strat_->transform(Direction::clockwise);
+                gameData_->board_->transformBlock(trans);
                 break;
             case Type::COUNTERCLOCKWISE:
+                trans = gameData_->strat_->transform(Direction::counterclockwise);
+                gameData_->board_->transformBlock(trans);
                 break;
-            case Type::DROP :
+            case Type::DROP:
                 break;
             case Type::LEVELUP:
                 break;
