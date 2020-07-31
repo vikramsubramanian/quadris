@@ -9,11 +9,15 @@
 #include "Command.h"
 
 // -------------------------------------------------------------------------------
+// Public Functions (- play)
+// -------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------
 // Constructor
 Game::Game(int lvl, std::string file, int seed) {
     gameData_ = new gamePImpl;
     gameData_->lvl_ = lvl;
-    setLevel();
+    _setLevel();
     gameData_->file_ = std::ifstream(file);
     if(!gameData_->file_.is_open()){
         std::cerr << "Error, cannot open specified text file." << std::endl;
@@ -30,6 +34,9 @@ Game::~Game() {
         if (nullptr != gameData_->strat_) {
             delete gameData_->strat_;
         }
+        if(gameData_->file_.is_open()){
+            gameData_->file_.close();
+        }
         if (nullptr != gameData_->board_) {
             delete gameData_->board_;
         }
@@ -38,9 +45,13 @@ Game::~Game() {
 }
 
 // -------------------------------------------------------------------------------
+// Private Functions
+// -------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------
 // Level Setter
 // A integer level must be set
-void Game::setLevel() {
+void Game::_setLevel() {
     if (nullptr != gameData_->strat_) {
         delete gameData_->strat_;
     }
@@ -64,4 +75,32 @@ void Game::setLevel() {
             std::cout << "Invalid level for creating a strategy";
             std::cout << "Invalid level: '" << gameData_->lvl_ << "'" << std::endl;
     }
+}
+
+// -------------------------------------------------------------------------------
+// Public Functions (Only play)
+// -------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------
+// Gameplayer
+void Game::play()
+{
+    Command cmd;
+
+    while (std::cin >> cmd) {
+    }
+}
+
+int main() { 
+    int lvl, seed;
+    std::string file;
+    std::cout << "Please specify your starting level." << std::endl;
+    std::cin >> lvl;
+    std::cout << "Please specify your sequence file." << std::endl;
+    std::cin >> file;
+    std::cout << "Please specify your seed level." << std::endl;
+    std::cin >> seed;
+    Game* game = new Game(lvl, file, seed);
+    game->play();
+    return 0;
 }

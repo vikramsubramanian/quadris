@@ -23,8 +23,9 @@ class Game {
     public:
         Game(int, std::string, int);
         ~Game();
-        void setLevel();
+        void play();
     private:
+        void _setLevel();
         gamePImpl* gameData_;
 };
 

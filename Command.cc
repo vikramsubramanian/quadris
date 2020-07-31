@@ -2,15 +2,32 @@
 #include <cassert>
 #include <sstream>
 #include <ctype.h>
+#include <algorithm>
 using namespace std;
+
+std::map <std::string, Type> commandTypes_ = {{"left", LEFT},
+                                        {"right", RIGHT},
+                                        {"down", DOWN},
+                                        {"clockwise", CLOCKWISE},
+                                        {"counterclockwise", COUNTERCLOCKWISE},
+                                        {"drop", DROP},
+                                        {"i", I}, {"j", J}, {"l", L}, {"s", S},
+                                        {"z", Z}, {"o", O}, {"t", T},
+                                        {"norandom", NORANDOM},
+                                        {"random", RANDOM},
+                                        {"levelup", LEVELUP},
+                                        {"leveldown", LEVELDOWN},
+                                        {"restart", RESTART},
+                                        {"hint", HINT}};
 
 // functor to check substring equality
 class substrEqual
 {
+    public:
     substrEqual(string substr, int len) : substr_(substr), len_(len){}
     bool operator()(const pair<string, Type> &c) const
     {
-        return c.first.substr(0, len) == substr_;
+        return c.first.substr(0, len_) == substr_;
     }
 private:
     string substr_;
@@ -65,7 +82,7 @@ istream &operator>>(istream &in, Command &c){
             substrLen++;
     }
 
-    assert(!in.fail() && c.type != BAD_COMMAND);
+    assert(!in.fail() && c.commandType_ != BAD_COMMAND);
 
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM)
