@@ -87,6 +87,14 @@ void Game::play()
 {
     Command cmd;
     std::vector<Direction> trans;
+    char block;
+
+    block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+    gameData_->board_->newBlock(block);
+    block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+    gameData_->board_->newBlock(block);
+    gameData_->board_->tempPrint();
+    
     while (std::cin >> cmd) {
         switch (cmd.commandType_) {
             case Type::LEFT:
@@ -144,6 +152,7 @@ void Game::play()
                 std::cout << "Invalid command!" << std::endl;
                 //std::cout << "Invalid command: '" << cmd << "'" << std::endl;
         }
+        gameData_->board_->tempPrint();
     }
 }
 
