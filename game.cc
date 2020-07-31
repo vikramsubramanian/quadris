@@ -116,8 +116,10 @@ void Game::play()
             case Type::LEVELDOWN:
                 break;
             case Type::NORANDOM:
+                gameData_->random_ = false;
                 break;
             case Type::RANDOM:
+                gameData_->random_ = true;
                 break;
             case Type::I:
                 break;
