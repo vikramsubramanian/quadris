@@ -6,7 +6,7 @@
 
 enum Type { LEFT, RIGHT, DOWN, CLOCKWISE, COUNTERCLOCKWISE, DROP,
         I, J, L, S, Z, O, T, NORANDOM, RANDOM, LEVELUP, LEVELDOWN,
-        RESTART, HINT, BAD_COMMAND };
+        RESTART, HINT, BAD_COMMAND, ENDFILE };
 
 struct Command{
     Type commandType_;

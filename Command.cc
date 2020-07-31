@@ -3,22 +3,23 @@
 #include <sstream>
 #include <ctype.h>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
-std::map <std::string, Type> commandTypes_ = {{"left", LEFT},
-                                        {"right", RIGHT},
-                                        {"down", DOWN},
-                                        {"clockwise", CLOCKWISE},
-                                        {"counterclockwise", COUNTERCLOCKWISE},
-                                        {"drop", DROP},
-                                        {"i", I}, {"j", J}, {"l", L}, {"s", S},
-                                        {"z", Z}, {"o", O}, {"t", T},
-                                        {"norandom", NORANDOM},
-                                        {"random", RANDOM},
-                                        {"levelup", LEVELUP},
-                                        {"leveldown", LEVELDOWN},
-                                        {"restart", RESTART},
-                                        {"hint", HINT}};
+map <string, Type> commandTypes_ = {{"left", LEFT},
+                                    {"right", RIGHT},
+                                    {"down", DOWN},
+                                    {"clockwise", CLOCKWISE},
+                                    {"counterclockwise", COUNTERCLOCKWISE},
+                                    {"drop", DROP},
+                                    {"i", I}, {"j", J}, {"l", L}, {"s", S},
+                                    {"z", Z}, {"o", O}, {"t", T},
+                                    {"norandom", NORANDOM},
+                                    {"random", RANDOM},
+                                    {"levelup", LEVELUP},
+                                    {"leveldown", LEVELDOWN},
+                                    {"restart", RESTART},
+                                    {"hint", HINT}};
 
 // functor to check substring equality
 class substrEqual
@@ -35,8 +36,16 @@ private:
 };
 
 istream &operator>>(istream &in, Command &c){
+
+    cerr << "instream" << endl;
     c.commandType_ = BAD_COMMAND;
     c.multiplier_ = 0;
+
+    // EOF terminates program
+    if(in.eof()){
+        c.commandType_ = ENDFILE;
+        return in;
+    }
 
     string cmd;
     in >> cmd;
@@ -45,17 +54,17 @@ istream &operator>>(istream &in, Command &c){
 
     // identify multiplier if present
     // if so, extract all digits in prefix
-    int i = 0;
-    while(isdigit(cmd[0]) && cmd[0] >= 1)
+    int i = 1;
+    while(!cmd.empty() && isdigit(cmd[0]) && cmd[0] >= 0)
     {
-        c.multiplier_ *= i * 10;
-        c.multiplier_ += cmd[0];
-        cmd.erase(cmd[0]);
-        i++;
+        c.multiplier_ *= i;
+        c.multiplier_ += cmd[0] - '0';
+        cmd.erase(cmd.begin());
+        i *= 10;
     }
 
     // no multiplier provided
-    if(c.multiplier_ == 0) c.multiplier_++;
+    if(i == 1) c.multiplier_++;
 
     // convert provided string to lowercase
     transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c){
@@ -70,23 +79,30 @@ istream &operator>>(istream &in, Command &c){
         occurrences = count_if(commandTypes_.begin(), commandTypes_.end(),
                             substrEqual(cmd.substr(0, substrLen), substrLen));
 
+        // DEBUG
+        cerr << "substr occurs: " << occurrences << endl;
+
         if(occurrences == 0) break;
         else if(occurrences == 1)
         {
             std::map<string, Type>:: iterator it =
                     find_if(commandTypes_.begin(), commandTypes_.end(),
-                            substrEqual(cmd.substr(0, substrLen), substrLen));
-            c.commandType_ = (*it).second;
+                            substrEqual(cmd, cmd.length()));
+            if(it != commandTypes_.end())
+                c.commandType_ = (*it).second;
+            break;
         }
         else
             substrLen++;
     }
 
-    assert(!in.fail() && c.commandType_ != BAD_COMMAND);
-
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM)
         c.multiplier_ = 1;
+
+    // DEBUG
+    cerr << "command multiplier: " << c.multiplier_ << endl;
+    cerr << "command type: " << c.commandType_ << endl;
 
     return in;
 }
