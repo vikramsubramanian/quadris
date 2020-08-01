@@ -4,7 +4,6 @@
 #include "displayStruct.h"
 #include "BlockFactory.h"
 #include "block.h"
-#include "TBlock.h"
 
 #include <vector>
 
@@ -27,7 +26,7 @@ class gameBoard
 
 
     private:
-        BlockFactory* factoryInstance; 
+
         std::vector<Block*> blocks;
         bool isGameOver;
         Block* curBlock;

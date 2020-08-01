@@ -56,7 +56,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newX = pieceList.at(i).x + 1;
                 newY = pieceList.at(i).y;
                 if (newY < 2 || newY > 17 ||
-                    newX < 0 || newX > 11 ||
+                    newX < 0 || newX >= 11 ||
                     board[newY][newX] != '_')
                 {
                     return false;

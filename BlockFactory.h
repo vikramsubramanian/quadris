@@ -10,7 +10,7 @@
 class BlockFactory
 {
 public:
-    virtual ~BlockFactory() {}
+    virtual ~BlockFactory();
     friend class BlockFactoryInitializer;
     static Block *createBlock(char);
 
