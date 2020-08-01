@@ -30,9 +30,11 @@ char Level0::nextBlock_(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Direction> Level0::transform(Direction c) const {
+std::vector<Direction> Level0::transform(int mult, Direction c) const {
     std::vector<Direction> Directions;
-    Directions.push_back(c);
+    for (int i = 0; i < mult; i++) {
+        Directions.push_back(c);
+    }
     return Directions;
 }
 
@@ -80,9 +82,11 @@ char Level1::nextBlock_(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Direction> Level1::transform(Direction c) const {
+std::vector<Direction> Level1::transform(int mult, Direction c) const {
     std::vector<Direction> Directions;
-    Directions.push_back(c);
+    for (int i = 0; i < mult; i++) {
+        Directions.push_back(c);
+    }
     return Directions;
 }
 
@@ -130,9 +134,11 @@ char Level2::nextBlock_(int seed) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Direction> Level2::transform(Direction c) const {
+std::vector<Direction> Level2::transform(int mult, Direction c) const {
     std::vector<Direction> Directions;
-    Directions.push_back(c);
+    for (int i = 0; i < mult; i++) {
+        Directions.push_back(c);
+    }
     return Directions;
 }
 
@@ -197,9 +203,11 @@ char Level3::nextBlock_(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Direction> Level3::transform(Direction c) const {
+std::vector<Direction> Level3::transform(int mult, Direction c) const {
     std::vector<Direction> Directions;
-    Directions.push_back(c);
+    for (int i = 0; i < mult; i++) {
+        Directions.push_back(c);
+    }
     Directions.push_back(Direction::down);
     return Directions;
 }
@@ -265,9 +273,11 @@ char Level4::nextBlock_(std::ifstream& file) const {
 
 // -------------------------------------------------------------------------------
 // Transformer
-std::vector<Direction> Level4::transform(Direction c) const {
+std::vector<Direction> Level4::transform(int mult, Direction c) const {
     std::vector<Direction> Directions;
-    Directions.push_back(c);
+    for (int i = 0; i < mult; i++) {
+        Directions.push_back(c);
+    }
     Directions.push_back(Direction::down);
     return Directions;
 }

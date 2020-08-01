@@ -88,6 +88,7 @@ void Game::play()
     Command cmd;
     std::vector<Direction> trans;
     char block;
+    int mult;
 
     block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
@@ -96,25 +97,26 @@ void Game::play()
     gameData_->board_->tempPrint();
 
     while (std::cin >> cmd) {
+        mult = cmd.multiplier_;
         switch (cmd.commandType_) {
             case Type::LEFT:
-                trans = gameData_->strat_->transform(Direction::left);
+                trans = gameData_->strat_->transform(mult, Direction::left);
                 gameData_->board_->transformBlock(trans);
                 break;
             case Type::RIGHT:
-                trans = gameData_->strat_->transform(Direction::right);
+                trans = gameData_->strat_->transform(mult, Direction::right);
                 gameData_->board_->transformBlock(trans);
                 break;
             case Type::DOWN:
-                trans = gameData_->strat_->transform(Direction::down);
+                trans = gameData_->strat_->transform(mult, Direction::down);
                 gameData_->board_->transformBlock(trans);
                 break;
             case Type::CLOCKWISE:
-                trans = gameData_->strat_->transform(Direction::clockwise);
+                trans = gameData_->strat_->transform(mult, Direction::clockwise);
                 gameData_->board_->transformBlock(trans);
                 break;
             case Type::COUNTERCLOCKWISE:
-                trans = gameData_->strat_->transform(Direction::counterclockwise);
+                trans = gameData_->strat_->transform(mult, Direction::counterclockwise);
                 gameData_->board_->transformBlock(trans);
                 break;
             case Type::DROP:
