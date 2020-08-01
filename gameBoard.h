@@ -19,7 +19,7 @@ class gameBoard : public Subject
         int getScore();
         void updateScore();
         DisplayStruct *getState();
-        char** getNextBlock();
+        char* getNextBlock();
         void drop();
         //I think Julia will work on the text display. She could take this and work off it.
         void tempPrint();
