@@ -17,15 +17,15 @@ Block* BlockFactory::createBlock(char id)
     }
 }
 
-BlockFactory::~BlockFactory() 
-{
-    for (pair<const char, BlockFactory *> &place : factories)
-    {
-        delete place.second;
-        place.second = nullptr;
-    }
-}
 
+BlockFactory::~BlockFactory()
+{
+    std::map<char, BlockFactory *>::iterator it = BlockFactory::factories.begin();
+    while (it != BlockFactory::factories.end())
+    {
+        delete it++->second;
+    } 
+}
 //static member
 std::map<char, BlockFactory *> BlockFactory::factories;
 
@@ -43,4 +43,4 @@ BlockFactoryInitializer::BlockFactoryInitializer()
 }
 
 //Static member defination:
-BlockFactoryInitializer BlockFactoryInitializer::si;
+BlockFactoryInitializer BlockFactoryInitializer::si; 
