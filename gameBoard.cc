@@ -174,8 +174,7 @@ void gameBoard::updateScore()
 
     bool isFullFlag = true;
     int numberOfLines = 0;
-    int counter = 0;
-    while (counter < 18)
+    for(int counter = 0; counter < 18; counter++)
     {
         generateBoardFromBlocks();
         for (int j = 0; j < 11; j++)
@@ -220,16 +219,12 @@ void gameBoard::updateScore()
                     
                     generateBoardFromBlocks();
                     tempPrint();
-                    blocks.at(l)->translate(Direction::down, displayStruct->board);
+                    blocks.at(l)->shiftDown(displayStruct->board);
 
                     
                 }
             }
              
-        }
-        else
-        {
-            counter++;
         }
         isFullFlag = true;
     }
@@ -243,7 +238,6 @@ void gameBoard::updateScore()
         displayStruct->hiScore = displayStruct->score;
     }
 
-    cout << "score is- " << displayStruct->score << "the high score-" << displayStruct->hiScore << endl;
 
     return;
 }
