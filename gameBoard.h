@@ -1,6 +1,6 @@
 #ifndef _GAMEBOARD_
 #define _GAMEBOARD_
-
+#include "observer.h"
 #include "displayStruct.h"
 #include "BlockFactory.h"
 #include "block.h"
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-class gameBoard
+class gameBoard : public Observer
 {
     public:
         gameBoard();

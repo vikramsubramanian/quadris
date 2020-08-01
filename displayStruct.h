@@ -7,6 +7,7 @@ struct DisplayStruct
 {
 int level;
 int score;
+int hiScore;
 char board[18][11];
 };
 
