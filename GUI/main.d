@@ -1141,4 +1141,6 @@ main.o: main.cc helloworld.h /usr/include/gtkmm-3.0/gtkmm.h \
  /usr/include/gtkmm-3.0/gtkmm/treestore.h \
  /usr/include/gtkmm-3.0/gtkmm/uimanager.h \
  /usr/include/gtkmm-3.0/gtkmm/viewport.h \
- /usr/include/gtkmm-3.0/gtkmm/volumebutton.h
+ /usr/include/gtkmm-3.0/gtkmm/volumebutton.h \
+ /usr/include/cairomm-1.0/cairomm/cairomm.h \
+ /usr/lib/x86_64-linux-gnu/cairomm-1.0/include/cairommconfig.h
