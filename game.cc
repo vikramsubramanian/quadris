@@ -94,7 +94,7 @@ void Game::play()
     block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
     gameData_->board_->tempPrint();
-    
+
     while (std::cin >> cmd) {
         switch (cmd.commandType_) {
             case Type::LEFT:
@@ -156,6 +156,7 @@ void Game::play()
     }
 }
 
+/*
 int main() { 
     int lvl, seed;
     std::string file;
@@ -167,5 +168,7 @@ int main() {
     std::cin >> seed;
     Game* game = new Game(lvl, file, seed);
     game->play();
+    delete game;
     return 0;
 }
+*/

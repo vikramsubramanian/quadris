@@ -4,7 +4,6 @@
 #include <vector>
 #include <fstream>
 #include "Game.h"
-#include "Command.h"
 using namespace std;
 
 int main(int argc, char *argv[])
