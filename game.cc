@@ -152,25 +152,7 @@ void Game::play()
                 break;
             default:
                 std::cout << "Invalid command!" << std::endl;
-                //std::cout << "Invalid command: '" << cmd << "'" << std::endl;
         }
         gameData_->board_->tempPrint();
     }
 }
-
-/*
-int main() { 
-    int lvl, seed;
-    std::string file;
-    std::cout << "Please specify your starting level." << std::endl;
-    std::cin >> lvl;
-    std::cout << "Please specify your sequence file." << std::endl;
-    std::cin >> file;
-    std::cout << "Please specify your seed level." << std::endl;
-    std::cin >> seed;
-    Game* game = new Game(lvl, file, seed);
-    game->play();
-    delete game;
-    return 0;
-}
-*/
