@@ -14,34 +14,28 @@ int main(int argc, char *argv[])
     string cmd;
     bool textOnly = false;
     int seed = 0;
-    string fileName;
-//    ifstream sequenceFile;
+    string fileName = "sequence.txt";
     int startLevel = 0;
 
-    if (argc > 1)   // seed given through command line
+    for (int i = 1; i < argc; i++)   // seed given through command line
     {
         char* endp;
-        cmd = argv[1];
-        switch(cmd){
-            case "-text":
-                textOnly = true;
-                break;
-            case "-seed":
-                seed = strtol(argv[2], &endp, 0);
-                break;
-            case "-scriptfile":
-                fileName = argv[2];
-                break;
-            case "-startlevel":
-                startLevel = strtol(argv[2], &endp, 0);
-                break;
-            default:
-                cerr << "Invalid command line option." << endl;
+        cmd = argv[i];
 
-        }
+        if(cmd == "-text")
+            textOnly = true;
+        else if (cmd == "-seed")
+            seed = strtol(argv[i++ + 1], &endp, 0);
+        else if(cmd == "-scriptfile")
+            fileName = argv[i++ + 1];
+        else if(cmd == "-startlevel")
+            startLevel = strtol(argv[i++ + 1], &endp, 0);
+        else
+            cerr << "Invalid command line option." << endl;
+
     }
-    
-    // initializing game object
+
+// initializing game object
     Game* g = new Game(startLevel, fileName, seed);
     g->play(); // returns once game is over or player quits
     delete g; // Deleting game instance
