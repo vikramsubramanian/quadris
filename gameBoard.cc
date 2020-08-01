@@ -9,13 +9,13 @@
 #include <iostream>
 using namespace std;
 
-
 gameBoard::gameBoard(){
     isGameOver = false;
     curBlock = nullptr;
     nextBlock = nullptr;
     displayStruct = new DisplayStruct;
     displayStruct->score = 0;
+    displayStruct->hiScore = 0;
     displayStruct->level = 0;
     for(int i=0;i<18;i++){
         for(int j = 0; j<11; j++){
@@ -124,6 +124,7 @@ void gameBoard::tempPrint()
         cout << "    |______________________|" << endl << endl;
     }
 
+
 gameBoard::~gameBoard()
 {
     delete displayStruct;
@@ -191,11 +192,28 @@ void gameBoard::updateScore(){
         isFullFlag = true;
     }
     displayStruct->score += (numberOfLines + displayStruct->level) * (numberOfLines + displayStruct->level);
+    if (displayStruct->score > displayStruct->hiScore)
+        displayStruct->hiScore = displayStruct->score;
     return;
 }
 
 DisplayStruct *gameBoard::getState(){
     return displayStruct;
+}
+
+char* gameBoard::getNextBlock(){
+    char nextBlockRepr[2][4];
+    char type = nextBlock->pieceList.at(1).type;
+    for(int i=0; i<2; i++){
+        for(int j=0; j<4; j++){
+            nextBlockRepr[i][j] = '_';
+        }
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        nextBlockRepr[nextBlock->pieceList.at(i).y - 3][nextBlock->pieceList.at(i).x] = type;
+    }
+    return *nextBlockRepr;
 }
 
 void gameBoard::increaseLevel()
