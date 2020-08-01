@@ -122,8 +122,16 @@ void Game::play()
             case Type::DROP:
                 break;
             case Type::LEVELUP:
+                if (4 > gameData_->lvl_) {
+                    gameData_->lvl_ += 1;
+                }
+                _setLevel();
                 break;
             case Type::LEVELDOWN:
+                if (0 < gameData_->lvl_) {
+                    gameData_->lvl_ -= 1;
+                }
+                _setLevel();
                 break;
             case Type::NORANDOM:
                 gameData_->random_ = false;
