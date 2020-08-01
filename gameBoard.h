@@ -4,7 +4,6 @@
 #include "displayStruct.h"
 #include "BlockFactory.h"
 #include "block.h"
-#include "TBlock.h"
 
 #include <vector>
 #include <string>
@@ -29,7 +28,7 @@ class gameBoard : public Subject
 
 
     private:
-        BlockFactory* factoryInstance; 
+
         std::vector<Block*> blocks;
         bool isGameOver;
         Block* curBlock;

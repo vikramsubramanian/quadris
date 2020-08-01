@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 #include <fstream>
-#include "Game.h"
+#include "game.h"
 using namespace std;
 
 int main(int argc, char *argv[])

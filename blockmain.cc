@@ -1,6 +1,5 @@
 #include "BlockFactory.h"
 #include "block.h"
-#include "TBlock.h"
 #include "gameBoard.h"
 
 #include <iostream>
@@ -9,13 +8,22 @@ using namespace std;
 
 
 int main(){
-    vector<direction> tryr;
-    tryr.push_back(direction::right);
-    tryr.push_back(direction::clockwise);
-    tryr.push_back(direction::right);
-    tryr.push_back(direction::down);
-    tryr.push_back(direction::down);
-    tryr.push_back(direction::down);
+    vector<Direction> tryr;
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::clockwise);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::down);
+    tryr.push_back(Direction::down);
+    tryr.push_back(Direction::down);
     
     gameBoard boop = gameBoard();
     boop.newBlock('T');

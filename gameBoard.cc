@@ -3,7 +3,6 @@
 #include "BlockFactory.h"
 #include "block.h"
 #include "piece.h"
-#include "TBlock.h"
 
 #include <vector>
 #include <iostream>
@@ -127,6 +126,13 @@ void gameBoard::tempPrint()
 
 gameBoard::~gameBoard()
 {
+
+    delete nextBlock;
+    for (auto p : blocks)
+    {
+        delete p;
+    }
+    blocks.clear();
     delete displayStruct;
 }
 
