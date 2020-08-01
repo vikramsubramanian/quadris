@@ -16,7 +16,7 @@ int main() {
     int lvl, seed;
     bool flag;
     std::string file;
-    Command command;
+    Direction dir;
     std::string CommandString[6] = {"left", "right", "down", "clockwise", "counterclockwise", "drop"};
     std::cout << "Please specify your sequence file." << std::endl;
     std::cin >> file;
@@ -27,47 +27,37 @@ int main() {
     }
     while (std::cin >> cmd && cmd != 'q') {
         switch (cmd) {
-            case 'i':
-                std::cin >> lvl >> seed;
-                std::cout << levels[lvl]->nextBlock(seed) << std::endl;
-                break;
-            case 'f':
-                std::cin >> lvl;
-                std::cout << levels[lvl]->nextBlock(myIn) << std::endl;
+            case 'b':
+                std::cin >> lvl >> seed >> flag;
+                std::cout << levels[lvl]->nextBlock(seed, myIn, flag) << std::endl;
                 break;
             case 't':
                 std::cin >> lvl >> trans;
                 switch (trans) {
                     case 'l':
-                        command = Command::left;
+                        dir = Direction::left;
                         break;
                     case 'r':
-                        command = Command::right;
+                        dir = Direction::right;
                         break;
                     case 'd':
-                        command = Command::down;
+                        dir = Direction::down;
                         break;
                     case 'c':
-                        command = Command::clockwise;
+                        dir = Direction::clockwise;
                         break;
                     case 'w':
-                        command = Command::counterclockwise;
+                        dir = Direction::counterclockwise;
                         break;
                     default:
                         std::cout << "Invalid transformation case! ";
                         std::cout << "Invalid transformation: '" << trans << "'" << std::endl;
                 }
-                for (auto c: levels[lvl]->transform(command)) {
+                for (auto c: levels[lvl]->transform(dir)) {
                     std::cout << CommandString[c] << std::endl;
                 }
                 break;
             case 'd':
-                std::cin >> lvl;
-                for (auto c: levels[lvl]->drop()) {
-                    std::cout << CommandString[c] << std::endl;
-                }
-                break;
-            case 'b':
                 std::cin >> lvl >> flag;
                 for (auto c: levels[lvl]->drop(flag)) {
                     std::cout << CommandString[c] << std::endl;
@@ -75,7 +65,7 @@ int main() {
                 break;
             default:
                 std::cout << "Invalid test case! ";
-                std::cout << "Invalid command: '" << cmd << "'" << std::endl;
+                std::cout << "Invalid dir: '" << cmd << "'" << std::endl;
         }   
     }
     for (size_t i = 0; i < 5; ++i) delete levels[i];
