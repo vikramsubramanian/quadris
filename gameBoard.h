@@ -7,6 +7,7 @@
 #include "TBlock.h"
 
 #include <vector>
+#include <string>
 
 class gameBoard : public Subject
 {
@@ -19,7 +20,7 @@ class gameBoard : public Subject
         int getScore();
         void updateScore();
         DisplayStruct *getState();
-        char* getNextBlock();
+        std::string getNextBlock();
         void drop();
         //I think Julia will work on the text display. She could take this and work off it.
         void tempPrint();

@@ -201,19 +201,19 @@ DisplayStruct *gameBoard::getState(){
     return displayStruct;
 }
 
-char* gameBoard::getNextBlock(){
-    char nextBlockRepr[2][4];
+string gameBoard::getNextBlock(){
+    string nextBlockRepr;
     char type = nextBlock->pieceList.at(1).type;
     for(int i=0; i<2; i++){
         for(int j=0; j<4; j++){
-            nextBlockRepr[i][j] = '_';
+            nextBlockRepr[i*4+j] = '_';
         }
     }
     for (int i = 0; i < 4; i++)
     {
-        nextBlockRepr[nextBlock->pieceList.at(i).y - 3][nextBlock->pieceList.at(i).x] = type;
+        nextBlockRepr[(nextBlock->pieceList.at(i).y - 3)*4+nextBlock->pieceList.at(i).x] = type;
     }
-    return *nextBlockRepr;
+    return string(nextBlockRepr);
 }
 
 void gameBoard::increaseLevel()
