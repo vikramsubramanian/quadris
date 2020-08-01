@@ -52,12 +52,12 @@ void TextDisplay::notify_()
 
     // print next block
     out << "    Next:" << endl;
-    char ** nextBlock = subject_->getNextBlock();
+    string nextBlock = subject_->getNextBlock();
     for (int i = 0; i < 2; i++)
     {
         out << "    ";
         for(int j = 0; j < 4; j++)
-            out << nextBlock[i][j];
+            out << nextBlock[i*4+j];
         out << endl;
     }
 
