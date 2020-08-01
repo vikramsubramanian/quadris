@@ -7,6 +7,7 @@
 #include "levels.h"
 #include "gameBoard.h"
 #include "Command.h"
+#include "TextDisplay.h"
 
 // -------------------------------------------------------------------------------
 // Public Functions (- play)
@@ -25,6 +26,7 @@ Game::Game(int lvl, std::string file, int seed) {
     gameData_->seed_ = seed;
     gameData_->random_ = false;
     gameData_->board_ = new gameBoard;
+    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
 }
 
 // -------------------------------------------------------------------------------
@@ -94,7 +96,6 @@ void Game::play()
     gameData_->board_->newBlock(block);
     block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
-    gameData_->board_->tempPrint();
 
     while (std::cin >> cmd && !gameData_->board_->gameOver()) {
         mult = cmd.multiplier_;
@@ -165,6 +166,5 @@ void Game::play()
             default:
                 std::cout << "Invalid command!" << std::endl;
         }
-        gameData_->board_->tempPrint();
     }
 }

@@ -23,12 +23,12 @@ void TextDisplay::notify_()
     // print header info
     out << "    Level:     " << display->level << endl;
     out << "    Score:     " << display->score << endl;
-    out << "    Hi Score: " << display->hiScore << endl;
+    out << "    Hi Score:  " << display->hiScore << endl;
     out << "    ___________ " << endl;
 
     // print board
-    out << "1" << "    ";
-    for (int i = 0; i < 18; i++)
+    out << "1" << "   ";
+    for (int i = 0; i < 17; i++)
     {
 
         for (int j = 0; j < 11; j++)
@@ -36,7 +36,7 @@ void TextDisplay::notify_()
             //We use underscores for testing purposes. TODO: Final code should have " "
             out << display->board[i][j];
         }
-        if (i+1 < 10)
+        if (i+2 < 10)
         {
             out << endl
                  << i+2 << "   ";
@@ -47,8 +47,7 @@ void TextDisplay::notify_()
                  << i+2<< "  ";
         }
     }
-    out << endl;
-    out << "    ___________ " << endl;
+    out << "___________ " << endl;
 
     // print next block
     out << "    Next:" << endl;
