@@ -17,8 +17,8 @@ bool Block::translate(Direction dir, char board[18][11])
     int newY = -1;
     
     // First we remove the block from this copy of the board
-
-    for (int i = 0; i < 4; i++)
+    cout << pieceList.size() << "Piece list size !!!!" << endl;
+    for (int i = 0; i < pieceList.size(); i++)
     {
         board[pieceList.at(i).y][pieceList.at(i).x] = '_';
     }
@@ -29,7 +29,7 @@ bool Block::translate(Direction dir, char board[18][11])
         case Direction::left:
             cout << "Translate called in the left direction" << endl;
             //we check if move is valid for all sub pieces in the object
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 newX = pieceList.at(i).x - 1;
                 newY = pieceList.at(i).y;
@@ -42,7 +42,8 @@ bool Block::translate(Direction dir, char board[18][11])
                 }
             }
             //If move is valid, we actually move the object
-            for(int i =0 ; i<4; i++){
+            for (int i = 0; i < pieceList.size(); i++)
+            {
                 pieceList.at(i).x -= 1;
             }
             rotateAroundPivot[0] -= 1;
@@ -51,7 +52,7 @@ bool Block::translate(Direction dir, char board[18][11])
         case Direction::right:
             cout << "Translate called in the right direction" << endl;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 newX = pieceList.at(i).x + 1;
                 newY = pieceList.at(i).y;
@@ -64,7 +65,7 @@ bool Block::translate(Direction dir, char board[18][11])
             }
 
             //If move is valid, we actually move the object
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 pieceList.at(i).x += 1;
             }
@@ -93,9 +94,10 @@ bool Block::translate(Direction dir, char board[18][11])
 
             break;
 
+
         case Direction::clockwise:
             cout << "Translate called in the clkwise direction" << endl;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {   
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b)
                 //Produces (y+a-b, a+b-x)
@@ -110,7 +112,7 @@ bool Block::translate(Direction dir, char board[18][11])
             }
 
             //If move is valid, we actually move the object
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b) 
                 //Produces (y+a-b, a+b-x)
@@ -123,7 +125,7 @@ bool Block::translate(Direction dir, char board[18][11])
 
         case Direction::counterclockwise:
             cout << "Translate called in the counterclkwise direction" << endl;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b)
                 //Produces (-y+a+b, -a+b+x)
@@ -138,7 +140,7 @@ bool Block::translate(Direction dir, char board[18][11])
             }
 
             //If move is valid, we actually move the object
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b)
                 //Produces (y+a-b, a+b-x)

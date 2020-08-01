@@ -33,7 +33,7 @@ void gameBoard::newBlock(char piece){
 
         Block *genblock = BlockFactory::createBlock(piece);
         genblock->level = displayStruct->level;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
@@ -74,7 +74,8 @@ void gameBoard::generateBoardFromBlocks()
     int xCor = -1;
     int yCor = -1;
     for(int i=0; i<blocks.size(); i++){
-        for (int j=0; j<4; j++){
+        for (int j = 0; j < blocks.at(i)->pieceList.size(); j++)
+        {
             xCor = blocks.at(i)->pieceList.at(j).x;
             yCor = blocks.at(i)->pieceList.at(j).y;
             displayStruct->board[yCor][xCor] = blocks.at(i)->pieceList.at(j).type;
@@ -87,46 +88,46 @@ bool gameBoard::gameOver()
     return isGameOver;
 }
 
-//void gameBoard::tempPrint()
-//    {
-//        generateBoardFromBlocks();
-//        cout << "    ||1|2|3|4|5|6|7|8|9|A|B|" << endl;
-//        cout << "    ||_____________________|" << endl;
-//        cout << "0"
-//             << "   ||";
-//        for (int i = 0; i < 18; i++)
-//        {
-//
-//            for (int j = 0; j < 11; j++)
-//            {
-//                //We use underscores for testing purposes. TODO: Final code should have " "
-//                cout << displayStruct->board[i][j] << "|";
-//            }
-//            if (i+1 < 10)
-//            {
-//                cout << endl
-//                     << i+1 << "   ||";
-//            }
-//            else
-//            {
-//                cout << endl
-//                     << i+1<< "  ||";
-//            }
-//        }
-//        cout << endl;
-//        cout << endl;
-//        if(nextBlock != nullptr){
-//            cout << "    |______________________|" << endl;
-//            cout << "    | NEXT BLOCK:          |" << endl
-//                 << "    | ";
-//                for (int i = 0; i < 4; i++)
-//            {
-//                cout << "("<< nextBlock->pieceList.at(i).x << "," << nextBlock->pieceList.at(i).y << ")";
-//            }
-//        }
-//        cout << " |" << endl;
-//        cout << "    |______________________|" << endl << endl;
-//    }
+void gameBoard::tempPrint()
+   {
+       generateBoardFromBlocks();
+       cout << "    ||1|2|3|4|5|6|7|8|9|A|B|" << endl;
+       cout << "    ||_____________________|" << endl;
+       cout << "0"
+            << "   ||";
+       for (int i = 0; i < 18; i++)
+       {
+
+           for (int j = 0; j < 11; j++)
+           {
+               //We use underscores for testing purposes. TODO: Final code should have " "
+               cout << displayStruct->board[i][j] << "|";
+           }
+           if (i+1 < 10)
+           {
+               cout << endl
+                    << i+1 << "   ||";
+           }
+           else
+           {
+               cout << endl
+                    << i+1<< "  ||";
+           }
+       }
+       cout << endl;
+       cout << endl;
+       if(nextBlock != nullptr){
+           cout << "    |______________________|" << endl;
+           cout << "    | NEXT BLOCK:          |" << endl
+                << "    | ";
+               for (int i = 0; i < 4; i++)
+           {
+               cout << "("<< nextBlock->pieceList.at(i).x << "," << nextBlock->pieceList.at(i).y << ")";
+           }
+       }
+       cout << " |" << endl;
+       cout << "    |______________________|" << endl << endl;
+   }
 
 
 gameBoard::~gameBoard()
@@ -170,13 +171,16 @@ int gameBoard::getScore(){
 
 void gameBoard::updateScore()
 {
+
     bool isFullFlag = true;
     int numberOfLines = 0;
-    for (int i = 0; i < 18; i++)
+    int counter = 0;
+    while (counter < 18)
     {
+        generateBoardFromBlocks();
         for (int j = 0; j < 11; j++)
         {
-            if (displayStruct->board[i][j] == '_')
+            if (displayStruct->board[counter][j] == '_')
             {
                 isFullFlag = false;
             }
@@ -187,13 +191,14 @@ void gameBoard::updateScore()
             numberOfLines += 1;
             for (int j = 0; j < 11; j++)
             {
-                displayStruct->board[i][j] = '_';
+                displayStruct->board[counter][j] = '_';
                 for (int l = 0; l < blocks.size(); l++)
                 {
-                    for (int ll = 0; ll < 4; ll++)
+                    for (int ll = 0; ll < blocks.at(l)->pieceList.size(); ll++)
                     {
                         if (blocks.at(l)->pieceList.at(ll).x == j &&
-                            blocks.at(l)->pieceList.at(ll).y == i)
+                            blocks.at(l)->pieceList.at(ll).y == counter &&
+                            blocks.at(l) != curBlock)
                         {
                             blocks.at(l)->pieceList.erase(blocks.at(l)->pieceList.begin() + ll);
                         }
@@ -207,6 +212,24 @@ void gameBoard::updateScore()
                     }
                 }
             }
+            
+            for (int l = 0; l < blocks.size(); l++)
+            {
+                if (blocks.at(l) != curBlock)
+                {
+                    
+                    generateBoardFromBlocks();
+                    tempPrint();
+                    blocks.at(l)->translate(Direction::down, displayStruct->board);
+
+                    
+                }
+            }
+             
+        }
+        else
+        {
+            counter++;
         }
         isFullFlag = true;
     }
@@ -219,7 +242,9 @@ void gameBoard::updateScore()
     {
         displayStruct->hiScore = displayStruct->score;
     }
+
     cout << "score is- " << displayStruct->score << "the high score-" << displayStruct->hiScore << endl;
+
     return;
 }
 
@@ -235,7 +260,7 @@ string gameBoard::getNextBlock(){
             nextBlockRepr[i*4+j] = '_';
         }
     }
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < nextBlock->pieceList.size(); i++)
     {
         nextBlockRepr[(nextBlock->pieceList.at(i).y - 3)*4+nextBlock->pieceList.at(i).x] = type;
     }
