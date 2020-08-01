@@ -7,8 +7,7 @@ using namespace std;
 Block* BlockFactory::createBlock(char id)
 {
     if (factories.find(id) != factories.end())
-    {   
-        
+    {      
         return factories[id]->create();
     }
     else
@@ -17,15 +16,7 @@ Block* BlockFactory::createBlock(char id)
     }
 }
 
-
-BlockFactory::~BlockFactory()
-{
-    std::map<char, BlockFactory *>::iterator it = BlockFactory::factories.begin();
-    while (it != BlockFactory::factories.end())
-    {
-        delete it++->second;
-    } 
-}
+BlockFactory::~BlockFactory() {}
 //static member
 std::map<char, BlockFactory *> BlockFactory::factories;
 
@@ -40,6 +31,14 @@ BlockFactoryInitializer::BlockFactoryInitializer()
     BlockFactory::factories['J'] = new JBlock::Factory;
     BlockFactory::factories['I'] = new IBlock::Factory;
 
+}
+BlockFactoryInitializer::~BlockFactoryInitializer()
+{
+    std::map<char, BlockFactory *>::iterator it = BlockFactory::factories.begin();
+    while (it != BlockFactory::factories.end())
+    {
+        delete it++->second;
+    }
 }
 
 //Static member defination:

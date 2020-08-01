@@ -24,5 +24,6 @@ class BlockFactoryInitializer
     static BlockFactoryInitializer si;
     BlockFactoryInitializer();
     BlockFactoryInitializer(const BlockFactoryInitializer &);
+    ~BlockFactoryInitializer();
 };
 #endif

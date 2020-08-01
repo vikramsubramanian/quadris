@@ -168,49 +168,58 @@ int gameBoard::getScore(){
     return displayStruct->score;
 }
 
-void gameBoard::updateScore(){
+void gameBoard::updateScore()
+{
     bool isFullFlag = true;
     int numberOfLines = 0;
     for (int i = 0; i < 18; i++)
     {
         for (int j = 0; j < 11; j++)
         {
-            if(displayStruct->board[i][j] = '_'){
+            if (displayStruct->board[i][j] == '_')
+            {
                 isFullFlag = false;
             }
         }
 
-        if (isFullFlag == true){
+        if (isFullFlag == true)
+        {
             numberOfLines += 1;
             for (int j = 0; j < 11; j++)
             {
                 displayStruct->board[i][j] = '_';
-                for(int l=0; l< blocks.size(); l++){
-                    for(int ll = 0; ll < 4; ll++){
-                        if ( blocks.at(l)->pieceList.at(ll).x ==  j &&
-                             blocks.at(l)->pieceList.at(ll).y ==  i)
-                             {
-                                 blocks.at(l)->pieceList.erase(blocks.at(l)->pieceList.begin() + ll);
-                             }
+                for (int l = 0; l < blocks.size(); l++)
+                {
+                    for (int ll = 0; ll < 4; ll++)
+                    {
+                        if (blocks.at(l)->pieceList.at(ll).x == j &&
+                            blocks.at(l)->pieceList.at(ll).y == i)
+                        {
+                            blocks.at(l)->pieceList.erase(blocks.at(l)->pieceList.begin() + ll);
+                        }
                         if (blocks.at(l)->pieceList.size() == 0)
-                            {
-                                displayStruct->score += (1 + blocks.at(l)->level) * (1 + blocks.at(l)->level);
-                                Block* temp = blocks.at(l);
-                                blocks.erase(blocks.begin() + l);
-                                delete temp;
-                            }
+                        {
+                            displayStruct->score += (1 + blocks.at(l)->level) * (1 + blocks.at(l)->level);
+                            Block *temp = blocks.at(l);
+                            blocks.erase(blocks.begin() + l);
+                            delete temp;
+                        }
                     }
                 }
             }
         }
         isFullFlag = true;
     }
-    displayStruct->score += (numberOfLines + displayStruct->level) * (numberOfLines + displayStruct->level);
-    if (displayStruct->score > displayStruct->hiScore){
+    // We update score only if rows have been deleted
+    if (numberOfLines > 0)
+    {
+        displayStruct->score += (numberOfLines + displayStruct->level) * (numberOfLines + displayStruct->level);
+    }
+    if (displayStruct->score > displayStruct->hiScore)
+    {
         displayStruct->hiScore = displayStruct->score;
     }
-    generateBoardFromBlocks();
-    notifyObservers();
+    cout << "score is- " << displayStruct->score << "the high score-" << displayStruct->hiScore << endl;
     return;
 }
 
