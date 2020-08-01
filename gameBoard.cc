@@ -126,7 +126,6 @@ void gameBoard::tempPrint()
 
 gameBoard::~gameBoard()
 {
-
     delete nextBlock;
     for (auto p : blocks)
     {
@@ -142,6 +141,8 @@ void gameBoard::transformBlock(vector<Direction> dirs){
         generateBoardFromBlocks();
         curBlock->translate(dirs.at(i), displayStruct->board);
     }
+    generateBoardFromBlocks();
+    notifyObservers();
 }
 
 void gameBoard::drop() {
@@ -151,7 +152,9 @@ void gameBoard::drop() {
         generateBoardFromBlocks();
         status = curBlock->translate(Direction::down, displayStruct->board);
     }
-    curBlock = nullptr; 
+    curBlock = nullptr;
+    generateBoardFromBlocks();
+    notifyObservers();
     return;
 }
 
@@ -198,8 +201,9 @@ void gameBoard::updateScore(){
         isFullFlag = true;
     }
     displayStruct->score += (numberOfLines + displayStruct->level) * (numberOfLines + displayStruct->level);
-    if (displayStruct->score > displayStruct->hiScore)
+    if (displayStruct->score > displayStruct->hiScore){
         displayStruct->hiScore = displayStruct->score;
+    }
     return;
 }
 
