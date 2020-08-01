@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <algorithm>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 map <string, Type> commandTypes_ = {{"left", LEFT},
@@ -19,7 +20,8 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"levelup", LEVELUP},
                                     {"leveldown", LEVELDOWN},
                                     {"restart", RESTART},
-                                    {"hint", HINT}};
+                                    {"hint", HINT},
+                                    {"rename", RENAME}};
 
 // functor to check substring equality
 class substrEqual
@@ -94,9 +96,37 @@ istream &operator>>(istream &in, Command &c){
             substrLen++;
     }
 
+    // reset multiplier for commands that don't support it
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM)
         c.multiplier_ = 1;
+
+    // update map for rename command
+    if(c.commandType_ == RENAME)
+    {
+        c.multiplier_ = 1;
+        vector <string> tokens;
+        stringstream renameCmd(cmd);
+        string temp;
+
+        while(getline(renameCmd, temp, ' '))
+            tokens.push_back(temp);
+
+//        std::map<string, Type>:: iterator it =
+//                find_if(commandTypes_.begin(), commandTypes_.end(),
+//                        substrEqual(tokens[1], tokens[1].length()));
+
+//        if(it != commandTypes_.end())
+//        {
+            auto kvp = commandTypes_.find(tokens[1]);
+        if(kvp != end(commandTypes_))
+            {
+            auto const value = move(kvp->second);
+            commandTypes_.erase(kvp);
+            commandTypes_.insert({tokens[2], std::move(value)});
+            }
+        //}
+    }
 
     // DEBUG
     cerr << "command multiplier: " << c.multiplier_ << endl;
