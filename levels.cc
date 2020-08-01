@@ -39,14 +39,6 @@ std::vector<Direction> Level0::transform(int mult, Direction c) const {
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Direction> Level0::drop(bool flag) const {
-    std::vector<Direction> Directions;
-    Directions.push_back(Direction::drop);
-    return Directions;
-}
-
-// -------------------------------------------------------------------------------
 // Level1
 
 // -------------------------------------------------------------------------------
@@ -87,14 +79,6 @@ std::vector<Direction> Level1::transform(int mult, Direction c) const {
     for (int i = 0; i < mult; i++) {
         Directions.push_back(c);
     }
-    return Directions;
-}
-
-// -------------------------------------------------------------------------------
-// Dropper
-std::vector<Direction> Level1::drop(bool flag) const {
-    std::vector<Direction> Directions;
-    Directions.push_back(Direction::drop);
     return Directions;
 }
 
@@ -143,14 +127,6 @@ std::vector<Direction> Level2::transform(int mult, Direction c) const {
 }
 
 // -------------------------------------------------------------------------------
-// Dropper
-std::vector<Direction> Level2::drop(bool flag) const {
-    std::vector<Direction> Directions;
-    Directions.push_back(Direction::drop);
-    return Directions;
-}
-
-// -------------------------------------------------------------------------------
 // Level3
 
 // -------------------------------------------------------------------------------
@@ -164,7 +140,6 @@ char Level3::nextBlock(int seed, std::ifstream& file, bool random) const {
     }
     return block;
 }
-
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (α)
@@ -211,15 +186,6 @@ std::vector<Direction> Level3::transform(int mult, Direction c) const {
     Directions.push_back(Direction::down);
     return Directions;
 }
-
-// -------------------------------------------------------------------------------
-// Dropper
-std::vector<Direction> Level3::drop(bool flag) const {
-    std::vector<Direction> Directions;
-    Directions.push_back(Direction::drop);
-    return Directions;
-}
-
 
 // -------------------------------------------------------------------------------
 // Level4
@@ -281,18 +247,3 @@ std::vector<Direction> Level4::transform(int mult, Direction c) const {
     Directions.push_back(Direction::down);
     return Directions;
 }
-
-// -------------------------------------------------------------------------------
-// Dropper
-// flag represents whether a row has been cleared in the past between the last multiple of 5 turns (between 0 and 5, betwen 5 and 10, etc.)
-std::vector<Direction> Level4::drop(bool flag) const {
-    std::vector<Direction> Directions;
-    Directions.push_back(Direction::drop);
-    if (flag) {
-        // Needs to send back a create block Direction with a b char
-        // Also needs to drop that block
-    }
-    return Directions;
-}
-
-

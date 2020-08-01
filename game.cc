@@ -86,7 +86,7 @@ void Game::_setLevel() {
 void Game::play()
 {
     Command cmd;
-    std::vector<Direction> trans;
+    std::vector<Direction> dirs;
     char block;
     int mult;
 
@@ -96,30 +96,34 @@ void Game::play()
     gameData_->board_->newBlock(block);
     gameData_->board_->tempPrint();
 
-    while (std::cin >> cmd) {
+    while (std::cin >> cmd && !gameData_->board_->gameOver()) {
         mult = cmd.multiplier_;
         switch (cmd.commandType_) {
             case Type::LEFT:
-                trans = gameData_->strat_->transform(mult, Direction::left);
-                gameData_->board_->transformBlock(trans);
+                dirs = gameData_->strat_->transform(mult, Direction::left);
+                gameData_->board_->transformBlock(dirs);
                 break;
             case Type::RIGHT:
-                trans = gameData_->strat_->transform(mult, Direction::right);
-                gameData_->board_->transformBlock(trans);
+                dirs = gameData_->strat_->transform(mult, Direction::right);
+                gameData_->board_->transformBlock(dirs);
                 break;
             case Type::DOWN:
-                trans = gameData_->strat_->transform(mult, Direction::down);
-                gameData_->board_->transformBlock(trans);
+                dirs = gameData_->strat_->transform(mult, Direction::down);
+                gameData_->board_->transformBlock(dirs);
                 break;
             case Type::CLOCKWISE:
-                trans = gameData_->strat_->transform(mult, Direction::clockwise);
-                gameData_->board_->transformBlock(trans);
+                dirs = gameData_->strat_->transform(mult, Direction::clockwise);
+                gameData_->board_->transformBlock(dirs);
                 break;
             case Type::COUNTERCLOCKWISE:
-                trans = gameData_->strat_->transform(mult, Direction::counterclockwise);
-                gameData_->board_->transformBlock(trans);
+                dirs = gameData_->strat_->transform(mult, Direction::counterclockwise);
+                gameData_->board_->transformBlock(dirs);
                 break;
             case Type::DROP:
+                gameData_->board_->drop();
+                gameData_->board_->updateScore();
+                block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+                gameData_->board_->newBlock(block);
                 break;
             case Type::LEVELUP:
                 if (4 > gameData_->lvl_) {
