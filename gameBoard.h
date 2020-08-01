@@ -22,7 +22,7 @@ class gameBoard : public Subject
         std::string getNextBlock();
         void drop();
         //I think Julia will work on the text display. She could take this and work off it.
-        void tempPrint();
+        //void tempPrint();
         void increaseLevel();
         void decreaseLevel();
 

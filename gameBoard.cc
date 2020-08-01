@@ -43,7 +43,7 @@ void gameBoard::newBlock(char piece){
                 //This means we have no space to get the new block into the board
                 //this means the game is over
                 isGameOver = true;
-                cerr << "Looks like there is no place. Game Over." << endl;
+                cerr << "Looks like there is no space. Game Over." << endl;
                 return;
             }
         }
@@ -52,6 +52,11 @@ void gameBoard::newBlock(char piece){
             if (curBlock != nullptr){
             blocks.push_back(curBlock);
             }
+    }
+    if(blocks.size() >= 1)
+    {
+        generateBoardFromBlocks();
+        notifyObservers();
     }
 }
 
@@ -82,46 +87,46 @@ bool gameBoard::gameOver()
     return isGameOver;
 }
 
-void gameBoard::tempPrint()
-    {
-        generateBoardFromBlocks();
-        cout << "    ||1|2|3|4|5|6|7|8|9|A|B|" << endl;
-        cout << "    ||_____________________|" << endl;
-        cout << "0"
-             << "   ||";
-        for (int i = 0; i < 18; i++)
-        {
-
-            for (int j = 0; j < 11; j++)
-            {
-                //We use underscores for testing purposes. TODO: Final code should have " "
-                cout << displayStruct->board[i][j] << "|";
-            }
-            if (i+1 < 10)
-            {
-                cout << endl
-                     << i+1 << "   ||";
-            }
-            else
-            {
-                cout << endl
-                     << i+1<< "  ||";
-            }
-        }
-        cout << endl;
-        cout << endl;
-        if(nextBlock != nullptr){
-            cout << "    |______________________|" << endl;
-            cout << "    | NEXT BLOCK:          |" << endl
-                 << "    | ";
-                for (int i = 0; i < 4; i++)
-            {
-                cout << "("<< nextBlock->pieceList.at(i).x << "," << nextBlock->pieceList.at(i).y << ")";
-            }
-        }
-        cout << " |" << endl;
-        cout << "    |______________________|" << endl << endl;
-    }
+//void gameBoard::tempPrint()
+//    {
+//        generateBoardFromBlocks();
+//        cout << "    ||1|2|3|4|5|6|7|8|9|A|B|" << endl;
+//        cout << "    ||_____________________|" << endl;
+//        cout << "0"
+//             << "   ||";
+//        for (int i = 0; i < 18; i++)
+//        {
+//
+//            for (int j = 0; j < 11; j++)
+//            {
+//                //We use underscores for testing purposes. TODO: Final code should have " "
+//                cout << displayStruct->board[i][j] << "|";
+//            }
+//            if (i+1 < 10)
+//            {
+//                cout << endl
+//                     << i+1 << "   ||";
+//            }
+//            else
+//            {
+//                cout << endl
+//                     << i+1<< "  ||";
+//            }
+//        }
+//        cout << endl;
+//        cout << endl;
+//        if(nextBlock != nullptr){
+//            cout << "    |______________________|" << endl;
+//            cout << "    | NEXT BLOCK:          |" << endl
+//                 << "    | ";
+//                for (int i = 0; i < 4; i++)
+//            {
+//                cout << "("<< nextBlock->pieceList.at(i).x << "," << nextBlock->pieceList.at(i).y << ")";
+//            }
+//        }
+//        cout << " |" << endl;
+//        cout << "    |______________________|" << endl << endl;
+//    }
 
 
 gameBoard::~gameBoard()
@@ -204,6 +209,8 @@ void gameBoard::updateScore(){
     if (displayStruct->score > displayStruct->hiScore){
         displayStruct->hiScore = displayStruct->score;
     }
+    generateBoardFromBlocks();
+    notifyObservers();
     return;
 }
 
