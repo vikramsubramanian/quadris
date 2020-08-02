@@ -111,14 +111,13 @@ bool Block::translate(Direction dir, char board[18][11])
 
             break;
 
-
-        case Direction::clockwise:
+        case Direction::counterclockwise:
             for (int i = 0; i < pieceList.size(); i++)
             {   
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b)
                 //Produces (y+a-b, a+b-x)
                 newX = pieceList.at(i).y + rotateAroundPivot[0] - rotateAroundPivot[1];
-                newY = (-1 * pieceList.at(i).x) + rotateAroundPivot[0] + rotateAroundPivot[1] - 3;
+                newY = (-1 * pieceList.at(i).x) + rotateAroundPivot[0] + rotateAroundPivot[1];
                 cout << newX << "," << newY << endl;
                 if (newY < 0 || newY > 17 ||
                     newX < 0 || newX > 11 ||
@@ -134,23 +133,28 @@ bool Block::translate(Direction dir, char board[18][11])
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b) 
                 //Produces (y+a-b, a+b-x)
                 newX = pieceList.at(i).y + rotateAroundPivot[0] - rotateAroundPivot[1];
-                newY = (-1 * pieceList.at(i).x) + rotateAroundPivot[0] + rotateAroundPivot[1] - 3;
+                newY = (-1 * pieceList.at(i).x) + rotateAroundPivot[0] + rotateAroundPivot[1];
                 pieceList.at(i).y = newY;
                 pieceList.at(i).x = newX;
             }
+            cout << "PIVOT:" << rotateAroundPivot[0] << "," << rotateAroundPivot[1] << endl;
             break;
 
-        case Direction::counterclockwise:
+        case Direction::clockwise:
+            cout << "_____" << endl;
             for (int i = 0; i < pieceList.size(); i++)
             {
+                
                 //Matric multiplcation says rotating a coordinate (x,y) 90deg clockwise around a pivot (a,b)
                 //Produces (-y+a+b, -a+b+x)
                 newX = (-1 * pieceList.at(i).y) + rotateAroundPivot[0] + rotateAroundPivot[1];
-                newY = (pieceList.at(i).x) - rotateAroundPivot[0] + rotateAroundPivot[1];
-                if (newY <= 2 || newY > 17 ||
+                newY = (pieceList.at(i).x) - rotateAroundPivot[0] + rotateAroundPivot[1] ;
+                cout << newX << "," << newY << endl;
+                if (newY < 0 || newY > 17 ||
                     newX < 0 || newX > 11 ||
                     board[newY][newX] != '_')
                 {
+                    cout << "FAILED!!!!" << endl;
                     return false;
                 }
             }
@@ -165,6 +169,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 pieceList.at(i).y = newY;
                 pieceList.at(i).x = newX;
             }
+            cout << "PIVOT:" << rotateAroundPivot[0] << "," << rotateAroundPivot[1] << endl;
             break;
 
         default:

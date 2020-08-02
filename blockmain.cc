@@ -9,19 +9,31 @@ using namespace std;
 
 int main(){
     vector<Direction> tryr;
-    tryr.push_back(Direction::clockwise);
+    tryr.push_back(Direction::right);
+    vector<Direction> tryr2;
+    tryr2.push_back(Direction::clockwise);
+
+    // tryr2.push_back(Direction::clockwise);
+    // tryr2.push_back(Direction::counterclockwise);
+    // tryr2.push_back(Direction::counterclockwise);
 
 
-    
+
     gameBoard boop = gameBoard();
-
-    boop.newBlock('L');
-    boop.newBlock('L');
+    boop.newBlock('T');
+    boop.newBlock('T');
     boop.tempPrint();
     boop.transformBlock(tryr);
-    // boop.drop();
     boop.tempPrint();
-    boop.newBlock('L');
+    boop.transformBlock(tryr2);
+    boop.tempPrint();
+    boop.transformBlock(tryr2);
+    boop.tempPrint();
+    boop.transformBlock(tryr2);
+    boop.tempPrint();
+    boop.transformBlock(tryr2);
+    boop.tempPrint();
+    boop.newBlock('I');
 
     
 
