@@ -146,12 +146,10 @@ void Game::play()
                 _setLevel();
                 break;
             case Type::NORANDOM:
-                if (gameData_->random_) {
-                    gameData_->random_ = false;
-                    *(gameData_->in_) >> file;
-                    _closeFile();
-                    gameData_->file_ = std::ifstream(file);
-                }
+                gameData_->random_ = false;
+                *(gameData_->in_) >> file;
+                _closeFile();
+                gameData_->file_ = std::ifstream(file);
                 break;
             case Type::RANDOM:
                 gameData_->random_ = true;
