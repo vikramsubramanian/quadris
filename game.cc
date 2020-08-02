@@ -76,6 +76,135 @@ void Game::_setLevel() {
 }
 
 // -------------------------------------------------------------------------------
+// Next Block Setter
+void Game::_nextBlock() {
+    char block;
+    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+    gameData_->board_->newBlock(block);
+}
+
+// -------------------------------------------------------------------------------
+// Game Restarter
+void Game::_restart() {
+    int hiScore;
+    
+    //Reset the seed
+    gameData_->rng_ = std::mt19937(gameData_->seed_);
+
+    //Reset the block file
+    gameData_->file_.clear();
+    gameData_->file_.seekg(std::ios::beg);
+
+    // Carry over the highest score, whether that's the current hiScore saved in game or something else entirely
+    hiScore = gameData_->board_->getHiScore();
+    delete gameData_->board_;
+    gameData_->board_ = new gameBoard;
+    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
+    gameData_->board_->setLevel(gameData_->lvl_);
+    gameData_->board_->setHiScore(hiScore);
+
+    _nextBlock();
+    _nextBlock();
+}
+
+// -------------------------------------------------------------------------------
+// Game Action Taker
+void Game::_act(Command cmd)
+{
+    std::vector<Direction> dirs;
+    int mult;
+    std::string file;
+    std::ifstream ifn;
+
+    mult = cmd.multiplier_;
+    if (0 == mult) {
+        std::cout << "A multiplier of zero does not issue a command. Please use a positive integer multiplier." << std::endl;
+        return;
+    }
+    switch (cmd.commandType_) {
+        case Type::LEFT:
+            dirs = gameData_->strat_->transform(mult, Direction::left);
+            gameData_->board_->transformBlock(dirs);
+            break;
+        case Type::RIGHT:
+            dirs = gameData_->strat_->transform(mult, Direction::right);
+            gameData_->board_->transformBlock(dirs);
+            break;
+        case Type::DOWN:
+            dirs = gameData_->strat_->transform(mult, Direction::down);
+            gameData_->board_->transformBlock(dirs);
+            break;
+        case Type::CLOCKWISE:
+            dirs = gameData_->strat_->transform(mult, Direction::clockwise);
+            gameData_->board_->transformBlock(dirs);
+            break;
+        case Type::COUNTERCLOCKWISE:
+            dirs = gameData_->strat_->transform(mult, Direction::counterclockwise);
+            gameData_->board_->transformBlock(dirs);
+            break;
+        case Type::DROP:
+            gameData_->board_->drop();
+            gameData_->board_->updateScore();
+            _nextBlock();
+            break;
+        case Type::LEVELUP:
+            gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
+            _setLevel();
+            break;
+        case Type::LEVELDOWN:
+            gameData_->lvl_ = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
+            _setLevel();
+            break;
+        case Type::NORANDOM:
+            gameData_->random_ = false;
+            *(gameData_->in_) >> file;
+            gameData_->file_ = std::ifstream(file);
+            break;
+        case Type::RANDOM:
+            gameData_->random_ = true;
+            break;
+        case Type::SEQUENCE:
+            *(gameData_->in_) >> file;
+            ifn = std::ifstream(file);
+            gameData_->in_ = &ifn;
+            break;
+        case Type::I:
+            gameData_->board_->replace('I');
+            break;
+        case Type::J: 
+            gameData_->board_->replace('J');
+            break;
+        case Type::L: 
+            gameData_->board_->replace('L');
+            break;
+        case Type::S: 
+            gameData_->board_->replace('S');
+            break;
+        case Type::Z: 
+            gameData_->board_->replace('Z');
+            break;
+        case Type::O: 
+            gameData_->board_->replace('O');
+            break;
+        case Type::T:
+            gameData_->board_->replace('T');
+            break;
+        case Type::RESTART: 
+            _restart();
+            break;
+        case Type::HINT: 
+            break;
+        case Type::RENAME: 
+            break;
+        case Type::BAD_COMMAND:
+            std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
+            break;
+        default:
+            std::cout << "Invalid command!" << std::endl;
+    }
+}
+
+// -------------------------------------------------------------------------------
 // Public Functions (Only play)
 // -------------------------------------------------------------------------------
 
@@ -84,116 +213,12 @@ void Game::_setLevel() {
 void Game::play()
 {
     Command cmd;
-    std::vector<Direction> dirs;
-    char block;
-    int mult;
-    std::string file;
-    std::ifstream ifn;
 
-    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-    gameData_->board_->newBlock(block);
-    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-    gameData_->board_->newBlock(block);
-
+    _nextBlock();
+    _nextBlock();
+    
     while (!gameData_->board_->gameOver() && *(gameData_->in_) >> cmd) {
-        mult = cmd.multiplier_;
-        if (0 == mult) {
-            std::cout << "A multiplier of zero does not issue a command. Please use a positive integer multiplier." << std::endl;
-            continue;
-        }
-        switch (cmd.commandType_) {
-            case Type::LEFT:
-                dirs = gameData_->strat_->transform(mult, Direction::left);
-                gameData_->board_->transformBlock(dirs);
-                break;
-            case Type::RIGHT:
-                dirs = gameData_->strat_->transform(mult, Direction::right);
-                gameData_->board_->transformBlock(dirs);
-                break;
-            case Type::DOWN:
-                dirs = gameData_->strat_->transform(mult, Direction::down);
-                gameData_->board_->transformBlock(dirs);
-                break;
-            case Type::CLOCKWISE:
-                dirs = gameData_->strat_->transform(mult, Direction::clockwise);
-                gameData_->board_->transformBlock(dirs);
-                break;
-            case Type::COUNTERCLOCKWISE:
-                dirs = gameData_->strat_->transform(mult, Direction::counterclockwise);
-                gameData_->board_->transformBlock(dirs);
-                break;
-            case Type::DROP:
-                gameData_->board_->drop();
-                gameData_->board_->updateScore();
-                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-                gameData_->board_->newBlock(block);
-                break;
-            case Type::LEVELUP:
-                gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
-                _setLevel();
-                break;
-            case Type::LEVELDOWN:
-                gameData_->lvl_ = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
-                _setLevel();
-                break;
-            case Type::NORANDOM:
-                gameData_->random_ = false;
-                *(gameData_->in_) >> file;
-                gameData_->file_ = std::ifstream(file);
-                break;
-            case Type::RANDOM:
-                gameData_->random_ = true;
-                break;
-            case Type::SEQUENCE:
-                *(gameData_->in_) >> file;
-                ifn = std::ifstream(file);
-                gameData_->in_ = &ifn;
-                break;
-            case Type::I:
-                gameData_->board_->replace('I');
-                break;
-            case Type::J: 
-                gameData_->board_->replace('J');
-                break;
-            case Type::L: 
-                gameData_->board_->replace('L');
-                break;
-            case Type::S: 
-                gameData_->board_->replace('S');
-                break;
-            case Type::Z: 
-                gameData_->board_->replace('Z');
-                break;
-            case Type::O: 
-                gameData_->board_->replace('O');
-                break;
-            case Type::T:
-                gameData_->board_->replace('T');
-                break;
-            case Type::RESTART: 
-                gameData_->rng_ = std::mt19937(gameData_->seed_);
-                gameData_->file_.clear();
-                gameData_->file_.seekg(std::ios::beg);
-                gameData_->hiScore = (gameData_->hiScore > gameData_->board_->getHiScore()) ? gameData_->hiScore : gameData_->board_->getHiScore();
-                delete gameData_->board_;
-                gameData_->board_ = new gameBoard;
-                gameData_->board_->setHiScore(gameData_->hiScore);
-                gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
-                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-                gameData_->board_->newBlock(block);
-                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-                gameData_->board_->newBlock(block);
-                break;
-            case Type::HINT: 
-                break;
-            case Type::RENAME: 
-                break;
-            case Type::BAD_COMMAND:
-                std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
-                break;
-            default:
-                std::cout << "Invalid command!" << std::endl;
-        }
+        _act(cmd);
     }
     std::cout << "BZZT! Game Over!" << std::endl;
 }

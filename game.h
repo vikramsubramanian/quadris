@@ -31,6 +31,9 @@ class Game {
         void play();
     private:
         void _setLevel();
+        void _nextBlock();
+        void _restart();
+        void _act(Command);
         gamePImpl* gameData_;
 };
 
