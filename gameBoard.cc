@@ -164,9 +164,13 @@ void gameBoard::drop() {
     return;
 }
 
-int gameBoard::getScore(){
+int gameBoard::getHiScore(){
 
-    return displayStruct->score;
+    return displayStruct->hiScore;
+}
+
+void gameBoard::setHiScore(int hiScore){
+    displayStruct->hiScore = hiScore;
 }
 
 void gameBoard::updateScore()

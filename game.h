@@ -21,6 +21,7 @@ struct gamePImpl{
     std::mt19937 rng_;
     bool random_;
     std::istream* in_;
+    int hiScore;
 };
 
 class Game {

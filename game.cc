@@ -174,8 +174,10 @@ void Game::play()
                 gameData_->rng_ = std::mt19937(gameData_->seed_);
                 gameData_->file_.clear();
                 gameData_->file_.seekg(std::ios::beg);
+                gameData_->hiScore = (gameData_->hiScore > gameData_->board_->getHiScore()) ? gameData_->hiScore : gameData_->board_->getHiScore();
                 delete gameData_->board_;
                 gameData_->board_ = new gameBoard;
+                gameData_->board_->setHiScore(gameData_->hiScore);
                 gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
                 block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
                 gameData_->board_->newBlock(block);

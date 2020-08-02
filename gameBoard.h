@@ -16,7 +16,8 @@ class gameBoard : public Subject
         bool gameOver();
         void newBlock(char);
         void transformBlock(std::vector<Direction>);
-        int getScore();
+        int getHiScore();
+        void setHiScore(int);
         void updateScore();
         DisplayStruct *getState();
         std::string getNextBlock();
