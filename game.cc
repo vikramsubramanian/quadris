@@ -4,11 +4,13 @@
 #include <utility>
 #include <string>
 #include <fstream>
+#include <vector>
 #include "game.h"
 #include "direction.h"
 #include "levels.h"
 #include "gameBoard.h"
 #include "Command.h"
+#include "observer.h"
 #include "TextDisplay.h"
 
 // -------------------------------------------------------------------------------
@@ -20,7 +22,7 @@
 Game::Game(int lvl, std::string file, int seed) {
     gameData_ = new gamePImpl;
     gameData_->board_ = new gameBoard;
-    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
+    _attachObservers();
     gameData_->lvl_ = lvl;
     _setLevel();
     gameData_->file_ = std::ifstream(file);
@@ -38,6 +40,7 @@ Game::~Game() {
             delete gameData_->strat_;
         }
         if (nullptr != gameData_->board_) {
+            _deleteObservers();
             delete gameData_->board_;
         }
         delete gameData_;
@@ -47,6 +50,29 @@ Game::~Game() {
 // -------------------------------------------------------------------------------
 // Private Functions
 // -------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------
+// Observer Attacher
+void Game::_attachObservers() {
+    gameData_->displays.push_back(new TextDisplay{std::cout, gameData_->board_});
+    gameData_->board_->attach(gameData_->displays.at(0));
+/*    
+    if (GUI) {
+            gameData_->displays.push_back(new GraphicDisplay{std::cout, gameData_->board_});
+            gameData_->board_->attach(gameData_->displays.at(1));
+    }
+*/
+}
+
+// -------------------------------------------------------------------------------
+// Observer Deleter
+void Game::_deleteObservers() {
+    for (auto a: gameData_->displays) {
+        delete a;
+    }
+    gameData_->displays.clear();
+}
+
 
 // -------------------------------------------------------------------------------
 // Level Setter
@@ -97,9 +123,10 @@ void Game::_restart() {
 
     // Carry over the highest score, whether that's the current hiScore saved in game or something else entirely
     hiScore = gameData_->board_->getHiScore();
+    _deleteObservers();
     delete gameData_->board_;
     gameData_->board_ = new gameBoard;
-    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
+    _attachObservers();
     gameData_->board_->setLevel(gameData_->lvl_);
     gameData_->board_->setHiScore(hiScore);
 
