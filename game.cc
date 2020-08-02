@@ -35,9 +35,7 @@ Game::~Game() {
         if (nullptr != gameData_->strat_) {
             delete gameData_->strat_;
         }
-        if(gameData_->file_.is_open()){
-            gameData_->file_.close();
-        }
+        _closeFile();
         if (nullptr != gameData_->board_) {
             delete gameData_->board_;
         }
@@ -79,6 +77,14 @@ void Game::_setLevel() {
 }
 
 // -------------------------------------------------------------------------------
+// File Closer
+void Game::_closeFile() {
+    if(gameData_->file_.is_open()){
+        gameData_->file_.close();
+    }
+}
+
+// -------------------------------------------------------------------------------
 // Public Functions (Only play)
 // -------------------------------------------------------------------------------
 
@@ -90,6 +96,7 @@ void Game::play()
     std::vector<Direction> dirs;
     char block;
     int mult;
+    std::string file;
 
     block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
@@ -138,7 +145,12 @@ void Game::play()
                 _setLevel();
                 break;
             case Type::NORANDOM:
-                gameData_->random_ = false;
+                if (gameData_->random_) {
+                    gameData_->random_ = false;
+                    std::cin >> file;
+                    _closeFile();
+                    gameData_->file_ = std::ifstream(file);
+                }
                 break;
             case Type::RANDOM:
                 gameData_->random_ = true;
