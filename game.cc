@@ -37,7 +37,6 @@ Game::~Game() {
         if (nullptr != gameData_->strat_) {
             delete gameData_->strat_;
         }
-        _closeFile();
         if (nullptr != gameData_->board_) {
             delete gameData_->board_;
         }
@@ -74,14 +73,6 @@ void Game::_setLevel() {
             break;
     }
     gameData_->board_->setLevel(gameData_->lvl_);
-}
-
-// -------------------------------------------------------------------------------
-// File Closer
-void Game::_closeFile() {
-    if(gameData_->file_.is_open()){
-        gameData_->file_.close();
-    }
 }
 
 // -------------------------------------------------------------------------------
@@ -148,7 +139,6 @@ void Game::play()
             case Type::NORANDOM:
                 gameData_->random_ = false;
                 *(gameData_->in_) >> file;
-                _closeFile();
                 gameData_->file_ = std::ifstream(file);
                 break;
             case Type::RANDOM:

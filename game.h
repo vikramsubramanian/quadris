@@ -30,7 +30,6 @@ class Game {
         void play();
     private:
         void _setLevel();
-        void _closeFile();
         gamePImpl* gameData_;
 };
 
