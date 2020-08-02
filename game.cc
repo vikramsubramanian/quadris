@@ -97,6 +97,10 @@ void Game::play()
 
     while (!gameData_->board_->gameOver() && *(gameData_->in_) >> cmd) {
         mult = cmd.multiplier_;
+        if (0 == mult) {
+            std::cout << "A multiplier of zero does not issue a command. Please use a positive integer multiplier." << std::endl;
+            continue;
+        }
         switch (cmd.commandType_) {
             case Type::LEFT:
                 dirs = gameData_->strat_->transform(mult, Direction::left);
@@ -125,11 +129,11 @@ void Game::play()
                 gameData_->board_->newBlock(block);
                 break;
             case Type::LEVELUP:
-                gameData_->lvl = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
+                gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
                 _setLevel();
                 break;
             case Type::LEVELDOWN:
-                gameData_->lvl = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
+                gameData_->lvl_ = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
                 _setLevel();
                 break;
             case Type::NORANDOM:
