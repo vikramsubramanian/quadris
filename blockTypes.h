@@ -132,4 +132,22 @@ class ZBlock : public Block
     };
 };
 //////////////////////////////////////////
+////////// B BLOCK FOR LEVEL 4////////////
+//////////////////////////////////////////
+
+class BBlock : public Block
+{
+    BBlock();
+    ~BBlock();
+
+    friend class BlockFactoryInitializer;
+    friend class Factory;
+
+    class Factory : public BlockFactory
+    {
+        BBlock *create();
+        friend class BlockFactoryInitializer;
+    };
+};
+//////////////////////////////////////////
 #endif

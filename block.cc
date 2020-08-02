@@ -91,7 +91,7 @@ bool Block::translate(Direction dir, char board[18][11])
             rotateAroundPivot[0] += 1;
             break;
         case Direction::down:
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 newX = pieceList.at(i).x;
                 newY = pieceList.at(i).y + 1;
@@ -104,7 +104,7 @@ bool Block::translate(Direction dir, char board[18][11])
             }
 
             //If move is valid, we actually move the object
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < pieceList.size(); i++)
             {
                 pieceList.at(i).y += 1;
             }
