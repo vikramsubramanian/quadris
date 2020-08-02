@@ -13,13 +13,13 @@ class gameBoard;
 struct Command;
 
 struct gamePImpl{
+    gameBoard* board_;
     int lvl_;
     Level* strat_;
     std::ifstream file_;
     int seed_;
     std::mt19937 rng_;
     bool random_;
-    gameBoard* board_;
     std::istream* in_;
 };
 

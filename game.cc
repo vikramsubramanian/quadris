@@ -19,14 +19,14 @@
 // Constructor
 Game::Game(int lvl, std::string file, int seed) {
     gameData_ = new gamePImpl;
+    gameData_->board_ = new gameBoard;
+    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
     gameData_->lvl_ = lvl;
     _setLevel();
     gameData_->file_ = std::ifstream(file);
     gameData_->seed_ = seed;
     gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
-    gameData_->board_ = new gameBoard;
-    gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
     gameData_->in_ = &std::cin;
 }
 
@@ -72,10 +72,8 @@ void Game::_setLevel() {
         case 4:
             gameData_->strat_ = new Level4();
             break;
-        default:
-            std::cout << "Invalid level for creating a strategy";
-            std::cout << "Invalid level: '" << gameData_->lvl_ << "'" << std::endl;
     }
+    gameData_->board_->setLevel(gameData_->lvl_);
 }
 
 // -------------------------------------------------------------------------------

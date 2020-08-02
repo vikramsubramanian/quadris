@@ -23,7 +23,7 @@ class gameBoard : public Subject
         void drop();
         void replace(char piece);
         void tempPrint();
-        void increaseLevel();
+        void setLevel(int);
         void decreaseLevel();
 
 
