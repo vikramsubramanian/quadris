@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 gameBoard::gameBoard(){
@@ -43,7 +44,6 @@ void gameBoard::newBlock(char piece){
                 //This means we have no space to get the new block into the board
                 //this means the game is over
                 isGameOver = true;
-                cerr << "Looks like there is no space. Game Over." << endl;
                 return;
             }
         }
@@ -245,6 +245,39 @@ void gameBoard::updateScore()
 DisplayStruct *gameBoard::getState(){
     return displayStruct;
 }
+
+void gameBoard::replace(char piece)
+{
+    blocks.erase(std::remove(blocks.begin(), blocks.end(), curBlock), blocks.end());
+
+    //Now we generate a new block
+    int xCor = -1;
+    int yCor = -1;
+    if (!isGameOver)
+    {
+        //We can have a new block only if the game is still playable
+        Block *genblock = BlockFactory::createBlock(piece);
+        genblock->level = displayStruct->level;
+        for (int i = 0; i < genblock->pieceList.size(); i++)
+        {
+            //Now we check if we have space to get the new block in
+            xCor = genblock->pieceList.at(i).x;
+            yCor = genblock->pieceList.at(i).y;
+            if (displayStruct->board[yCor][xCor] != '_')
+            {
+                //This means we have no space to get the new block into the board
+                //this means the game is over
+                isGameOver = true;
+                return;
+            }
+        }
+        curBlock = genblock;
+        blocks.push_back(curBlock);
+
+
+        generateBoardFromBlocks();
+        notifyObservers();
+    }
 
 string gameBoard::getNextBlock(){
     string nextBlockRepr;
