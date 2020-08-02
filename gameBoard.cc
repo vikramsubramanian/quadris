@@ -218,7 +218,6 @@ void gameBoard::updateScore()
                 {
                     
                     generateBoardFromBlocks();
-                    tempPrint();
                     blocks.at(l)->shiftDown(displayStruct->board);
 
                     
