@@ -278,6 +278,7 @@ void gameBoard::replace(char piece)
         generateBoardFromBlocks();
         notifyObservers();
     }
+}
 
 string gameBoard::getNextBlock(){
     string nextBlockRepr;

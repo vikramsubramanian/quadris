@@ -88,7 +88,7 @@ SBlock::SBlock()
     pieceList.push_back(Piece(2, 3, 'S'));
     pieceList.push_back(Piece(1, 3, 'S'));
     pieceList.push_back(Piece(1, 4, 'S'));
-    pieceList.push_back(Piece(0, 3, 'S'));
+    pieceList.push_back(Piece(0, 4, 'S'));
 }
 
 SBlock::~SBlock() {}
