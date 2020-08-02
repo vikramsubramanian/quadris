@@ -125,15 +125,11 @@ void Game::play()
                 gameData_->board_->newBlock(block);
                 break;
             case Type::LEVELUP:
-                if (4 > gameData_->lvl_) {
-                    gameData_->lvl_ += 1;
-                }
+                gameData_->lvl = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
                 _setLevel();
                 break;
             case Type::LEVELDOWN:
-                if (0 < gameData_->lvl_) {
-                    gameData_->lvl_ -= 1;
-                }
+                gameData_->lvl = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
                 _setLevel();
                 break;
             case Type::NORANDOM:
