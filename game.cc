@@ -178,6 +178,8 @@ void Game::play()
                 break;
             case Type::HINT: 
                 break;
+            case Type::RENAME: 
+                break;
             case Type::BAD_COMMAND:
                 std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
                 break;
