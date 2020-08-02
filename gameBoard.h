@@ -21,6 +21,7 @@ class gameBoard : public Subject
         DisplayStruct *getState();
         std::string getNextBlock();
         void drop();
+        void replace(char piece);
         void tempPrint();
         void increaseLevel();
         void decreaseLevel();
