@@ -84,7 +84,7 @@ SBlock::SBlock()
     pieceList.push_back(Piece(2, 3, 'S'));
     pieceList.push_back(Piece(1, 3, 'S'));
     pieceList.push_back(Piece(1, 4, 'S'));
-    pieceList.push_back(Piece(0, 3, 'S'));
+    pieceList.push_back(Piece(0, 4, 'S'));
 }
 
 SBlock::~SBlock() {}
@@ -127,4 +127,18 @@ ZBlock::~ZBlock() {}
 ZBlock *ZBlock::Factory::create()
 {
     return new ZBlock();
+}
+//////////////////////////////////////////
+/////////// B BLOCK FOR LEVEL 4 //////////
+//////////////////////////////////////////
+BBlock::BBlock()
+{
+    pieceList.push_back(Piece(5, 3, 'B'));
+}
+
+BBlock::~BBlock() {}
+
+BBlock *BBlock::Factory::create()
+{
+    return new BBlock();
 }

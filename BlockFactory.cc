@@ -30,7 +30,7 @@ BlockFactoryInitializer::BlockFactoryInitializer()
     BlockFactory::factories['L'] = new LBlock::Factory;
     BlockFactory::factories['J'] = new JBlock::Factory;
     BlockFactory::factories['I'] = new IBlock::Factory;
-
+    BlockFactory::factories['B'] = new BBlock::Factory;
 }
 BlockFactoryInitializer::~BlockFactoryInitializer()
 {

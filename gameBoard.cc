@@ -286,7 +286,7 @@ void gameBoard::replace(char piece)
 
 string gameBoard::getNextBlock(){
     string nextBlockRepr;
-    char type = nextBlock->pieceList.at(1).type;
+    char type = nextBlock->pieceList.at(0).type;
     for(int i=0; i<2; i++){
         for(int j=0; j<4; j++){
             nextBlockRepr[i*4+j] = '_';
