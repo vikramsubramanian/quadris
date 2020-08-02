@@ -1,5 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
+#include <random>
 #include <iostream>
 #include <utility>
 #include <string>
@@ -15,6 +16,7 @@ struct gamePImpl{
     Level* strat_;
     std::ifstream file_;
     int seed_;
+    std::mt19937 rng_;
     bool random_;
     gameBoard* board_;
 };

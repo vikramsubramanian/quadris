@@ -1,3 +1,4 @@
+#include <random>
 #include <iostream>
 #include <utility>
 #include <string>
@@ -24,6 +25,7 @@ Game::Game(int lvl, std::string file, int seed) {
         std::cerr << "Error, cannot open specified text file." << std::endl;
     }
     gameData_->seed_ = seed;
+    gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
     gameData_->board_ = new gameBoard;
     gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
@@ -92,9 +94,9 @@ void Game::play()
     char block;
     int mult;
 
-    block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
-    block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
 
     while (!gameData_->board_->gameOver() && std::cin >> cmd) {
@@ -123,7 +125,7 @@ void Game::play()
             case Type::DROP:
                 gameData_->board_->drop();
                 gameData_->board_->updateScore();
-                block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
+                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
                 gameData_->board_->newBlock(block);
                 break;
             case Type::LEVELUP:
@@ -166,6 +168,16 @@ void Game::play()
                 gameData_->board_->replace('T');
                 break;
             case Type::RESTART: 
+                gameData_->rng_ = std::mt19937(gameData_->seed_);
+                gameData_->file_.clear();
+                gameData_->file_.seekg(std::ios::beg);
+                delete gameData_->board_;
+                gameData_->board_ = new gameBoard;
+                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+                gameData_->board_->newBlock(block);
+                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+                gameData_->board_->newBlock(block);
+                gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
                 break;
             case Type::HINT: 
                 break;
