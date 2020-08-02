@@ -97,7 +97,7 @@ void Game::play()
     block = gameData_->strat_->nextBlock(gameData_->seed_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
 
-    while (std::cin >> cmd && !gameData_->board_->gameOver()) {
+    while (!gameData_->board_->gameOver() && std::cin >> cmd) {
         mult = cmd.multiplier_;
         switch (cmd.commandType_) {
             case Type::LEFT:
