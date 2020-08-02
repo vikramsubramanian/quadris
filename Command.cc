@@ -39,7 +39,6 @@ private:
 
 istream &operator>>(istream &in, Command &c){
 
-    cerr << "instream" << endl;
     c.commandType_ = BAD_COMMAND;
     c.multiplier_ = 0;
 
@@ -78,9 +77,6 @@ istream &operator>>(istream &in, Command &c){
     {
         occurrences = count_if(commandTypes_.begin(), commandTypes_.end(),
                             substrEqual(cmd.substr(0, substrLen), substrLen));
-
-        // DEBUG
-        cerr << "substr occurs: " << occurrences << endl;
 
         if(occurrences == 0) break;
         else if(occurrences == 1)
@@ -127,10 +123,6 @@ istream &operator>>(istream &in, Command &c){
             }
         //}
     }
-
-    // DEBUG
-    cerr << "command multiplier: " << c.multiplier_ << endl;
-    cerr << "command type: " << c.commandType_ << endl;
 
     return in;
 }

@@ -20,7 +20,6 @@ IBlock::~IBlock() {}
 
 IBlock *IBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new IBlock();
 }
 
@@ -40,7 +39,6 @@ JBlock::~JBlock() {}
 
 JBlock *JBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new JBlock();
 }
 //////////////////////////////////////////
@@ -58,7 +56,6 @@ LBlock::~LBlock() {}
 
 LBlock *LBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new LBlock();
 }
 //////////////////////////////////////////
@@ -76,7 +73,6 @@ OBlock::~OBlock() {}
 
 OBlock *OBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new OBlock();
 }
 
@@ -95,7 +91,6 @@ SBlock::~SBlock() {}
 
 SBlock *SBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new SBlock();
 }
 //////////////////////////////////////////
@@ -113,7 +108,6 @@ TBlock::~TBlock() {}
 
 TBlock *TBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new TBlock();
 }
 
@@ -132,6 +126,5 @@ ZBlock::~ZBlock() {}
 
 ZBlock *ZBlock::Factory::create()
 {
-    std::cerr << "New block factory created" << std::endl;
     return new ZBlock();
 }

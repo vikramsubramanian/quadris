@@ -21,9 +21,6 @@ Game::Game(int lvl, std::string file, int seed) {
     gameData_->lvl_ = lvl;
     _setLevel();
     gameData_->file_ = std::ifstream(file);
-    if(!gameData_->file_.is_open()){
-        std::cerr << "Error, cannot open specified text file." << std::endl;
-    }
     gameData_->seed_ = seed;
     gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
@@ -173,11 +170,11 @@ void Game::play()
                 gameData_->file_.seekg(std::ios::beg);
                 delete gameData_->board_;
                 gameData_->board_ = new gameBoard;
-                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-                gameData_->board_->newBlock(block);
-                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-                gameData_->board_->newBlock(block);
                 gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
+                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+                gameData_->board_->newBlock(block);
+                block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+                gameData_->board_->newBlock(block);
                 break;
             case Type::HINT: 
                 break;
@@ -188,5 +185,5 @@ void Game::play()
                 std::cout << "Invalid command!" << std::endl;
         }
     }
-    std::cerr << "Congrats, the game is over!" << std::endl;
+    std::cout << "BZZT! Game Over!" << std::endl;
 }
