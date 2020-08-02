@@ -249,7 +249,8 @@ DisplayStruct *gameBoard::getState(){
 void gameBoard::replace(char piece)
 {
     blocks.erase(std::remove(blocks.begin(), blocks.end(), curBlock), blocks.end());
-
+    generateBoardFromBlocks();
+    
     //Now we generate a new block
     int xCor = -1;
     int yCor = -1;
@@ -278,6 +279,7 @@ void gameBoard::replace(char piece)
         generateBoardFromBlocks();
         notifyObservers();
     }
+}
 
 string gameBoard::getNextBlock(){
     string nextBlockRepr;

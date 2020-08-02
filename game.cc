@@ -145,16 +145,25 @@ void Game::play()
                 gameData_->random_ = true;
                 break;
             case Type::I:
+                gameData_->board_->replace('I');
                 break;
             case Type::J: 
+                gameData_->board_->replace('J');
                 break;
             case Type::L: 
+                gameData_->board_->replace('L');
                 break;
             case Type::S: 
+                gameData_->board_->replace('S');
                 break;
             case Type::Z: 
+                gameData_->board_->replace('Z');
                 break;
             case Type::O: 
+                gameData_->board_->replace('O');
+                break;
+            case Type::T:
+                gameData_->board_->replace('T');
                 break;
             case Type::RESTART: 
                 break;
@@ -167,4 +176,5 @@ void Game::play()
                 std::cout << "Invalid command!" << std::endl;
         }
     }
+    std::cerr << "Congrats, the game is over!" << std::endl;
 }
