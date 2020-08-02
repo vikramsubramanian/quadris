@@ -71,11 +71,18 @@ istream &operator>>(istream &in, Command &c){
         return tolower(c);
     });
 
+    if(cmd == "i" || cmd == "j" || cmd == "l" || cmd == "s" ||
+        cmd == "z"|| cmd == "o" || cmd == "t")
+    {
+        c.commandType_ = commandTypes_[cmd];
+        return in;
+    }
     // search for unique match in commandTypes with provided cmd string
     int substrLen = 1;
     int occurrences;
     while(substrLen <= cmd.length())
     {
+
         occurrences = count_if(commandTypes_.begin(), commandTypes_.end(),
                             substrEqual(cmd.substr(0, substrLen), substrLen));
 
@@ -102,27 +109,17 @@ istream &operator>>(istream &in, Command &c){
     if(c.commandType_ == RENAME)
     {
         c.multiplier_ = 1;
-        vector <string> tokens;
-        stringstream renameCmd(cmd);
-        string temp;
+        string oldCmd, newCmd;
+        cin >> oldCmd;
+        cin >> newCmd;
 
-        while(getline(renameCmd, temp, ' '))
-            tokens.push_back(temp);
-
-//        std::map<string, Type>:: iterator it =
-//                find_if(commandTypes_.begin(), commandTypes_.end(),
-//                        substrEqual(tokens[1], tokens[1].length()));
-
-//        if(it != commandTypes_.end())
-//        {
-            auto kvp = commandTypes_.find(tokens[1]);
+        auto kvp = commandTypes_.find(oldCmd);
         if(kvp != end(commandTypes_))
             {
             auto const value = move(kvp->second);
             commandTypes_.erase(kvp);
-            commandTypes_.insert({tokens[2], std::move(value)});
+            commandTypes_.insert({newCmd, std::move(value)});
             }
-        //}
     }
 
     return in;
