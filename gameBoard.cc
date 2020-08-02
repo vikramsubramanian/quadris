@@ -164,9 +164,13 @@ void gameBoard::drop() {
     return;
 }
 
-int gameBoard::getScore(){
+int gameBoard::getHiScore(){
 
-    return displayStruct->score;
+    return displayStruct->hiScore;
+}
+
+void gameBoard::setHiScore(int hiScore){
+    displayStruct->hiScore = hiScore;
 }
 
 void gameBoard::updateScore()
@@ -218,7 +222,6 @@ void gameBoard::updateScore()
                 {
                     
                     generateBoardFromBlocks();
-                    tempPrint();
                     blocks.at(l)->shiftDown(displayStruct->board);
 
                     
@@ -249,7 +252,8 @@ DisplayStruct *gameBoard::getState(){
 void gameBoard::replace(char piece)
 {
     blocks.erase(std::remove(blocks.begin(), blocks.end(), curBlock), blocks.end());
-
+    generateBoardFromBlocks();
+    
     //Now we generate a new block
     int xCor = -1;
     int yCor = -1;
@@ -295,11 +299,7 @@ string gameBoard::getNextBlock(){
     return string(nextBlockRepr);
 }
 
-void gameBoard::increaseLevel()
+void gameBoard::setLevel(int lvl)
 {
-    displayStruct->level += 1;
-}
-void gameBoard::decreaseLevel()
-{
-    displayStruct->level -= 1;
+    displayStruct->level = lvl;
 }
