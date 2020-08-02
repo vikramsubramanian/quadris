@@ -1,5 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
+#include <fstream>
 #include <random>
 #include <iostream>
 #include <utility>
@@ -19,6 +20,7 @@ struct gamePImpl{
     std::mt19937 rng_;
     bool random_;
     gameBoard* board_;
+    std::istream* in_;
 };
 
 class Game {

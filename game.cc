@@ -1,3 +1,4 @@
+#include <fstream>
 #include <random>
 #include <iostream>
 #include <utility>
@@ -26,6 +27,7 @@ Game::Game(int lvl, std::string file, int seed) {
     gameData_->random_ = false;
     gameData_->board_ = new gameBoard;
     gameData_->board_->attach(new TextDisplay{std::cout, gameData_->board_});
+    gameData_->in_ = &std::cin;
 }
 
 // -------------------------------------------------------------------------------
@@ -97,13 +99,14 @@ void Game::play()
     char block;
     int mult;
     std::string file;
+    std::ifstream ifn;
 
     block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
     block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock(block);
 
-    while (!gameData_->board_->gameOver() && std::cin >> cmd) {
+    while (!gameData_->board_->gameOver() && *(gameData_->in_) >> cmd) {
         mult = cmd.multiplier_;
         switch (cmd.commandType_) {
             case Type::LEFT:
@@ -147,13 +150,18 @@ void Game::play()
             case Type::NORANDOM:
                 if (gameData_->random_) {
                     gameData_->random_ = false;
-                    std::cin >> file;
+                    *(gameData_->in_) >> file;
                     _closeFile();
                     gameData_->file_ = std::ifstream(file);
                 }
                 break;
             case Type::RANDOM:
                 gameData_->random_ = true;
+                break;
+            case Type::SEQUENCE:
+                *(gameData_->in_) >> file;
+                ifn = std::ifstream(file);
+                gameData_->in_ = &ifn;
                 break;
             case Type::I:
                 gameData_->board_->replace('I');

@@ -17,6 +17,7 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"z", Z}, {"o", O}, {"t", T},
                                     {"norandom", NORANDOM},
                                     {"random", RANDOM},
+                                    {"sequence", SEQUENCE},
                                     {"levelup", LEVELUP},
                                     {"leveldown", LEVELDOWN},
                                     {"restart", RESTART},
@@ -94,7 +95,7 @@ istream &operator>>(istream &in, Command &c){
 
     // reset multiplier for commands that don't support it
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
-            c.commandType_ == RANDOM || c.commandType_ == NORANDOM)
+            c.commandType_ == RANDOM || c.commandType_ == NORANDOM || c.commandType_ == SEQUENCE)
         c.multiplier_ = 1;
 
     // update map for rename command
