@@ -344,4 +344,6 @@ void Game::play()
         std::cin >> newGame;
         if(newGame == "Y") _restart();
     }
+
+    std::cout << "BZZT! Game Over!" << std::endl;
 }
