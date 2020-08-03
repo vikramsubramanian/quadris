@@ -23,6 +23,7 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"leveldown", LEVELDOWN},
                                     {"restart", RESTART},
                                     {"hint", HINT},
+                                    {"playhint", PLAY_HINT},
                                     {"rename", RENAME},
                                     {"force", FORCE},
                                     {"enablebonus", ENABLE_BONUS},
@@ -147,7 +148,14 @@ istream &operator>>(istream &in, Command &c){
                 commandTypes_.insert({newCmd, std::move(value)});
             }
         }
+        else
+        {
+            c.commandType_ = BAD_COMMAND;
+        }
     }
+
+    if(c.commandType_ == PLAY_HINT && c.bonusOn_ == false)
+        c.commandType_ = BAD_COMMAND;
 
     return in;
 }
@@ -171,6 +179,7 @@ void Command::resetMap_()
                      {"leveldown", LEVELDOWN},
                      {"restart", RESTART},
                      {"hint", HINT},
+                     {"playhint", PLAY_HINT},
                      {"rename", RENAME},
                      {"enablebonus", ENABLE_BONUS},
                      {"disablebonus", DISABLE_BONUS}};

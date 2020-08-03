@@ -242,7 +242,6 @@ void Game::_act(Command cmd)
         case Type::DROP:
             while (mult > 0) {
                 gameData_->board_->drop_();
-                gameData_->board_->updateScore_();
                 _nextBlock();
                 mult--;
                 if (gameData_->board_->gameOver_()) {
@@ -302,12 +301,15 @@ void Game::_act(Command cmd)
             _restart();
             break;
         case Type::HINT:
-            gameData_->board_->hint_();
+            gameData_->board_->hint_(false);
             break;
-        case Type::RENAME:
-            if(gameData_->bonusEnabled_ == false)
-                std::cout << "Invalid player command! " <<
-                    "Please enter a proper player command." << std::endl;
+        case Type::PLAY_HINT:
+            while (mult > 0)
+            {
+                gameData_->board_->hint_(true);
+                _nextBlock();
+                mult--;
+            }
             break;
         case Type::FORCE:
             if(gameData_->bonusEnabled_ == false) {

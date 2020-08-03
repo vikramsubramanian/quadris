@@ -120,7 +120,6 @@ void gameBoard::generateBoardFromBlocks_() {
 
 // takes in directions and transforms block accordingly
 void gameBoard::transformBlock_(vector<Direction> dirs){
-
     for (int i = 0; (unsigned)i < dirs.size(); i++)
     {
         generateBoardFromBlocks_();
@@ -144,6 +143,8 @@ void gameBoard::drop_() {
                 translate(Direction::down, displayStruct_->board_);
     }
     curBlock_ = nullptr;
+
+    updateScore_();
 
     generateBoardFromBlocks_();
     notifyObservers();
@@ -187,10 +188,13 @@ void gameBoard::replace_(char piece)
     }
 }
 
-void gameBoard::hint_()
+void gameBoard::hint_(bool playTurn)
 {
     Block *hintBlock = nullptr;
     char piece = curBlock_->pieceList.at(0).type;
+    if(playTurn){
+        blocks_.pop_back();
+    }
     if (!isGameOver_ && curBlock_ != nullptr)
     {
         Block *genblock = nullptr;
@@ -262,21 +266,27 @@ void gameBoard::hint_()
         }
     }
     
-    for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
-    {
-        //We replace the char that each piece is represented by in our block
-        //In order to display the hint block with '?'s
-        hintBlock->pieceList.at(jj).type = '?';
+    if(!playTurn){
+        for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
+        {
+            //We replace the char that each piece is represented by in our block
+            //In order to display the hint block with '?'s
+            hintBlock->pieceList.at(jj).type = '?';
+        }
     }
-
     //Push the block with the '?'s and update display
     blocks_.push_back(hintBlock);
+    updateScore_();
     generateBoardFromBlocks_();
     notifyObservers();
 
     //Remove the block with the '?'s for next command
+    if(!playTurn){
     blocks_.pop_back();
     delete hintBlock;
+    }
+
+    updateScore_();
 }
 
 // generates and drops our special blocks
