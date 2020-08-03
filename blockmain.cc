@@ -43,17 +43,7 @@ int main(){
     tryr.push_back(Direction::right);
     boop.drop();
 
-    boop.newBlock('I');
-    boop.transformBlock(tryr);
-    tryr.push_back(Direction::right);
-    
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-
-    boop.drop();
+    boop.hint();
     boop.newBlock('I');
     boop.tempPrint();
     boop.updateScore();

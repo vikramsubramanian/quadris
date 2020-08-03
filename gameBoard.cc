@@ -303,3 +303,79 @@ void gameBoard::setLevel(int lvl)
 {
     displayStruct->level = lvl;
 }
+
+void gameBoard::hint()
+{
+    
+    if (!isGameOver && nextBlock != nullptr)
+    {
+        char piece = nextBlock->pieceList.at(0).type;
+        int xCor = -1;
+        int yCor = -1;
+
+        Block *genblock = nullptr;
+        Block *hintBlock = nullptr;
+        int lowest = -1;
+        bool status = true;
+        for (int i = 0; i < 11; i++)
+        {
+            genblock = BlockFactory::createBlock(piece);
+            
+            // for (int i = 0; i < genblock->pieceList.size(); i++)
+            // {
+            //     //Now we check if we have space to get the new block in
+            //     xCor = genblock->pieceList.at(i).x;
+            //     yCor = genblock->pieceList.at(i).y;
+            //     if (displayStruct->board[yCor][xCor] != '_')
+            //     {
+            //         //This means we have no space to get the new block into the board
+            //         //this means the game is over
+            //         return;
+            //     }
+            // }
+            
+            blocks.push_back(genblock);
+            
+            for (int j = 0; j < i; j++)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::right, displayStruct->board);
+                }
+            
+            generateBoardFromBlocks();
+
+            status = genblock->translate(Direction::down, displayStruct->board);
+            
+            while (status == true)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::down, displayStruct->board);
+                }
+                
+            if (genblock->pieceList.at(i).y > lowest)
+                {
+                    lowest = genblock->pieceList.at(i).y;
+                    hintBlock = genblock;
+                    genblock = nullptr;
+                }
+            else
+                {
+                    delete genblock;
+                    genblock = nullptr;
+                }
+        }
+        for (int j = 0; j < hintBlock->pieceList.size(); j++)
+            {
+                hintBlock->pieceList.at(j).type = '?';
+            }
+        blocks.pop_back();
+        blocks.push_back(hintBlock);
+
+
+        generateBoardFromBlocks();
+        tempPrint();
+        blocks.pop_back();
+        delete hintBlock;
+        
+    }
+}
