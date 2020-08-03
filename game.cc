@@ -171,9 +171,15 @@ void Game::_act(Command cmd)
             gameData_->board_->transformBlock(dirs);
             break;
         case Type::DROP:
-            gameData_->board_->drop();
-            gameData_->board_->updateScore();
-            _nextBlock();
+            while (mult > 0) {
+                gameData_->board_->drop();
+                gameData_->board_->updateScore();
+                _nextBlock();
+                mult--;
+                if (gameData_->board_->gameOver()) {
+                    break;
+                }
+            }
             break;
         case Type::LEVELUP:
             gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
