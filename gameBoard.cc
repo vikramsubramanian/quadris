@@ -186,11 +186,9 @@ void gameBoard::replace_(char piece)
 void gameBoard::hint_()
 {
     Block *hintBlock = nullptr;
-    if (!isGameOver_ && nextBlock_ != nullptr)
+    if (!isGameOver_ && curBlock_ != nullptr)
     {
-        char piece = nextBlock_->pieceList.at(0).type;
-        int xCor = -1;
-        int yCor = -1;
+        char piece = curBlock_->pieceList.at(0).type;
 
         Block *genblock = nullptr;
         int lowest = -1;
@@ -227,9 +225,10 @@ void gameBoard::hint_()
             else
 
                 delete genblock;
+            blocks_.pop_back();
             genblock = nullptr;
         }
-        blocks_.pop_back();
+        
     }
     for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
     {
