@@ -38,7 +38,6 @@ struct gamePImpl{
     int drops_;
     int prevScore_;
     bool flag_;
-//    int hiScore_;
     bool bonusEnabled_;
 };
 
