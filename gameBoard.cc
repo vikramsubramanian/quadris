@@ -43,6 +43,7 @@ void gameBoard::newBlock(char piece){
             {
                 //This means we have no space to get the new block into the board
                 //this means the game is over
+                delete genblock;
                 isGameOver = true;
                 return;
             }
@@ -301,7 +302,9 @@ string gameBoard::getNextBlock(){
 
 void gameBoard::setLevel(int lvl)
 {
-    nextBlock->level = lvl;
+    if(nextBlock != nullptr){
+        nextBlock->level = lvl;
+    }
     displayStruct->level = lvl;
 }
 
