@@ -63,7 +63,7 @@ void gameBoard::newBlock_(char piece){
         //We can have a new block only if the game is still playable
         Block *genblock = BlockFactory::createBlock(piece);
         genblock->level_ = displayStruct_->level_;
-        for (int i = 0; i < genblock->pieceList.size(); i++)
+        for (int i = 0; (unsigned)i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
@@ -121,7 +121,8 @@ void gameBoard::generateBoardFromBlocks_() {
 // takes in directions and transforms block accordingly
 void gameBoard::transformBlock_(vector<Direction> dirs){
 
-    for (int i=0; i<dirs.size(); i++){
+    for (int i = 0; (unsigned)i < dirs.size(); i++)
+    {
         generateBoardFromBlocks_();
         curBlock_->translate(dirs.at(i), displayStruct_->board_);
     }
@@ -164,7 +165,7 @@ void gameBoard::replace_(char piece)
         //We can have a new block only if the game is still playable
         Block *genblock = BlockFactory::createBlock(piece);
         genblock->level_ = displayStruct_->level_;
-        for (int i = 0; i < genblock->pieceList.size(); i++)
+        for (int i = 0; (unsigned)i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
@@ -284,7 +285,7 @@ void gameBoard::constructiveForce_(char piece) {
     //We can have a new block only if the game is still playable
     Block *genblock = BlockFactory::createBlock(piece);
     genblock->level_ = displayStruct_->level_;
-    for (int i = 0; i < genblock->pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < (unsigned)genblock->pieceList.size(); i++)
     {
         //Now we check if we have space to get the new block in
         xCor = genblock->pieceList.at(i).x;
@@ -443,7 +444,7 @@ string gameBoard::getNextBlock_(){
             nextBlockRepr[i*4+j] = ' ';
         }
     }
-    for (int i = 0; i < nextBlock_->pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < nextBlock_->pieceList.size(); i++)
     {
         int index = (nextBlock_->pieceList.at(i).y - 3)*4
                 +nextBlock_->pieceList.at(i).x;
