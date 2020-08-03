@@ -298,7 +298,8 @@ void Game::_act(Command cmd)
         case Type::RESTART: 
             _restart();
             break;
-        case Type::HINT: 
+        case Type::HINT:
+            gameData_->board_->hint_();
             break;
         case Type::RENAME:
             if(gameData_->bonusEnabled_ == false)
