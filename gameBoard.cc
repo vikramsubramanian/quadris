@@ -120,7 +120,6 @@ void gameBoard::generateBoardFromBlocks_() {
 
 // takes in directions and transforms block accordingly
 void gameBoard::transformBlock_(vector<Direction> dirs){
-
     for (int i = 0; (unsigned)i < dirs.size(); i++)
     {
         generateBoardFromBlocks_();
@@ -144,6 +143,8 @@ void gameBoard::drop_() {
                 translate(Direction::down, displayStruct_->board_);
     }
     curBlock_ = nullptr;
+
+    updateScore_();
 
     generateBoardFromBlocks_();
     notifyObservers();
@@ -275,6 +276,7 @@ void gameBoard::hint_(bool playTurn)
     }
     //Push the block with the '?'s and update display
     blocks_.push_back(hintBlock);
+    updateScore_();
     generateBoardFromBlocks_();
     notifyObservers();
 
@@ -284,7 +286,7 @@ void gameBoard::hint_(bool playTurn)
     delete hintBlock;
     }
 
-
+    updateScore_();
 }
 
 // generates and drops our special blocks

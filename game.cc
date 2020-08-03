@@ -240,7 +240,6 @@ void Game::_act(Command cmd)
         case Type::DROP:
             while (mult > 0) {
                 gameData_->board_->drop_();
-                gameData_->board_->updateScore_();
                 _nextBlock();
                 mult--;
                 if (gameData_->board_->gameOver_()) {
@@ -303,12 +302,12 @@ void Game::_act(Command cmd)
             gameData_->board_->hint_(false);
             break;
         case Type::PLAY_HINT:
-            gameData_->board_->hint_(true);
-            gameData_->board_->updateScore_();
-            _nextBlock();
-            
-            break;
-        case Type::RENAME:
+            while (mult > 0)
+            {
+                gameData_->board_->hint_(true);
+                _nextBlock();
+                mult--;
+            }
             break;
         case Type::ENABLE_BONUS:
             gameData_->bonusEnabled_ = true;
