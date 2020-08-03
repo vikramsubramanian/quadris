@@ -16,8 +16,6 @@ struct Command{
 
     Command() : commandType_(BAD_COMMAND), multiplier_(1),
         bonusOn_(false) {}
-
-    void resetMap_();
 };
 
 std::istream &operator>>(std::istream &, Command &);

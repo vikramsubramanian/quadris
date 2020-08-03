@@ -6,20 +6,16 @@
 #include <iostream>
 #include "direction.h"
 
-// Strategy DP
-
 enum Direction;
 
 class Level {
     public:
-        virtual ~Level(){};
         virtual char nextBlock(std::mt19937&, std::ifstream&, bool) const = 0;
         virtual std::vector<Direction> transform(int, Direction) const = 0;
 };
 
 class Level0 : public Level {
     public:
-        ~Level0(){};
         char nextBlock(std::mt19937&, std::ifstream&, bool) const override;
         std::vector<Direction> transform(int, Direction) const override;
     private:
@@ -28,7 +24,6 @@ class Level0 : public Level {
 
 class Level1 : public Level {
     public:
-        ~Level1(){};
         char nextBlock(std::mt19937&, std::ifstream&, bool) const override;
         std::vector<Direction> transform(int, Direction) const override;
     private:
@@ -37,7 +32,6 @@ class Level1 : public Level {
 
 class Level2 : public Level {
     public:
-        ~Level2(){};
         char nextBlock(std::mt19937&, std::ifstream&, bool) const override;
         std::vector<Direction> transform(int, Direction) const override;
     private:
@@ -46,7 +40,6 @@ class Level2 : public Level {
 
 class Level3 : public Level {
     public:
-        ~Level3(){};
         char nextBlock(std::mt19937&, std::ifstream&, bool) const override;
         std::vector<Direction> transform(int, Direction) const override;
     private:
@@ -56,7 +49,6 @@ class Level3 : public Level {
 
 class Level4 : public Level {
     public:
-        ~Level4(){};
         char nextBlock(std::mt19937&, std::ifstream&, bool) const override;
         std::vector<Direction> transform(int, Direction) const override;
     private:
