@@ -23,9 +23,9 @@ void Block::shiftDown(char board[18][11], int clearedRow){
         newX = pieceList.at(i).x;
         newY = pieceList.at(i).y + 1;
 
-        if ((newY < 0 || newY > clearedRow ||
-             newX < 0 || newX > 11         ||
-             board[newY][newX] != ' '))
+        if (newY < 0 || newY > clearedRow ||
+             newX < 0 || newX > 11 ||
+             board[newY][newX] != ' ')
         {
             
         }
