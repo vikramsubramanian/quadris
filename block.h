@@ -22,7 +22,6 @@ class Block{
     public:
         virtual ~Block() {};
         std::vector<Piece> pieceList;
-        int rotateAroundPivot[2];
         int level_;
         void shiftDown(char board[18][11], int clearedRow);
         bool translate(Direction, char board[18][11]);
