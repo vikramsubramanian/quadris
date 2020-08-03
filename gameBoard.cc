@@ -63,7 +63,7 @@ void gameBoard::newBlock_(char piece){
         //We can have a new block only if the game is still playable
         Block *genblock = BlockFactory::createBlock(piece);
         genblock->level_ = displayStruct_->level_;
-        for (int i = 0; i < genblock->pieceList.size(); i++)
+        for (int i = 0; (unsigned)i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
@@ -121,7 +121,8 @@ void gameBoard::generateBoardFromBlocks_() {
 // takes in directions and transforms block accordingly
 void gameBoard::transformBlock_(vector<Direction> dirs){
 
-    for (int i=0; i<dirs.size(); i++){
+    for (int i = 0; (unsigned)i < dirs.size(); i++)
+    {
         generateBoardFromBlocks_();
         curBlock_->translate(dirs.at(i), displayStruct_->board_);
     }
@@ -164,7 +165,7 @@ void gameBoard::replace_(char piece)
         //We can have a new block only if the game is still playable
         Block *genblock = BlockFactory::createBlock(piece);
         genblock->level_ = displayStruct_->level_;
-        for (int i = 0; i < genblock->pieceList.size(); i++)
+        for (int i = 0; (unsigned)i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
@@ -197,46 +198,36 @@ void gameBoard::hint_()
         int lowest = -1;
         bool status = true;
         int possibleLowest = -1;
+        //We create all possible positions- both in terms of
+        //orientation and position and check to find the lowest of them all
+        //That is our hint block
         for (int i = 0; i < 11; i++)
         {
+            
             for(int rotateCount =0 ; rotateCount < 3; rotateCount++){
                 genblock = BlockFactory::createBlock(piece);
                 blocks_.push_back(genblock);
 
                 for (int coun =0; coun < rotateCount; coun++){
-                    generateBoardFromBlocks_();
-                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
-                    {
-                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
-                    }
-                    genblock->translate(Direction::clockwise, displayStruct_->board_);
+                    removeCurrentBlockFromDisplayBoard_();
+                    genblock->
+                            translate(Direction::clockwise, displayStruct_->board_);
                 }
+                //We check all possible columns through this loop.
                 for (int j = 0; j < i; j++)
                 {
-                    generateBoardFromBlocks_();
-                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
-                    {
-                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
-                    }
+                    removeCurrentBlockFromDisplayBoard_();
                     genblock->
                             translate(Direction::right, displayStruct_->board_);
                 }
-
-                generateBoardFromBlocks_();
-                for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
-                {
-                    displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
-                }
+                //We check all 4 orientations through this loop.
+                removeCurrentBlockFromDisplayBoard_();
                 status = genblock->
                         translate(Direction::down, displayStruct_->board_);
-
+                // We go as down as possible 
                 while (status == true)
                 {
-                    generateBoardFromBlocks_();
-                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
-                    {
-                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
-                    }
+                    removeCurrentBlockFromDisplayBoard_();
                     status = genblock->
                             translate(Direction::down, displayStruct_->board_);
                 }
@@ -244,14 +235,17 @@ void gameBoard::hint_()
                 possibleLowest = genblock->pieceList.at(0).y;
 
                 // find the lowest piece in this block
-                for (int pieceCount = 0; (unsigned)pieceCount < genblock->pieceList.size(); pieceCount++)
+                //Lower the piece, higher its index in our board(a 2D array).
+                for (int pieceCount = 0; (unsigned)pieceCount < 
+                                    genblock->pieceList.size(); pieceCount++)
                 {
                     if (possibleLowest < genblock->pieceList.at(pieceCount).y)
                     {
                         possibleLowest = genblock->pieceList.at(pieceCount).y;
                     }
                 }
-
+                //Lower the piece, higher its index in our board(a 2D array).
+                //We check if the current iteration of the hint block is the lowest
                 if (possibleLowest > lowest)
                 {
                     lowest = possibleLowest;
@@ -271,10 +265,11 @@ void gameBoard::hint_()
         //In order to display the hint block with '?'s
         hintBlock->pieceList.at(jj).type = '?';
     }
-
+    //Push the block with the '?'s
     blocks_.push_back(hintBlock);
     generateBoardFromBlocks_();
     notifyObservers();
+    //Remove the block with the '?'s
     blocks_.pop_back();
     delete hintBlock;
 }
@@ -290,7 +285,7 @@ void gameBoard::constructiveForce_(char piece) {
     //We can have a new block only if the game is still playable
     Block *genblock = BlockFactory::createBlock(piece);
     genblock->level_ = displayStruct_->level_;
-    for (int i = 0; i < genblock->pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < (unsigned)genblock->pieceList.size(); i++)
     {
         //Now we check if we have space to get the new block in
         xCor = genblock->pieceList.at(i).x;
@@ -428,6 +423,12 @@ DisplayStruct *gameBoard::getState_(){
 
 void gameBoard::removeCurrentBlockFromDisplayBoard_()
 {
+    //We sometimes need our board with the current piece removed.
+    //This method produces that
+    //For instance, if the block was being rotated, one piece of the
+    //block could take the position of another piece.
+    //To know that it is a valid rotate, we need to remove all the
+    //current pieces in curBlock and then compare.
     generateBoardFromBlocks_();
     for (int i = 0; (unsigned)i < curBlock_->pieceList.size(); i++)
     {
@@ -443,7 +444,7 @@ string gameBoard::getNextBlock_(){
             nextBlockRepr[i*4+j] = ' ';
         }
     }
-    for (int i = 0; i < nextBlock_->pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < nextBlock_->pieceList.size(); i++)
     {
         int index = (nextBlock_->pieceList.at(i).y - 3)*4
                 +nextBlock_->pieceList.at(i).x;

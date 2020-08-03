@@ -5,38 +5,13 @@ using namespace std;
 
 Block::Block(){}
 
-void Block::shiftDown(char board[18][11], int clearedRow){
-    //This method is used to drop pieces when a row is cleared for the board.
 
-    //Placeholder variables to store the location of the moved object
-    int newX = -1;
-    int newY = -1;
-
-    // First we remove the block from this copy of the board
-    for (int i = 0; (unsigned)i < pieceList.size(); i++)
-    {
-        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
-    }
-
-    for (int i = 0; (unsigned)i < pieceList.size(); i++)
-    {
-        newX = pieceList.at(i).x;
-        newY = pieceList.at(i).y + 1;
-
-        if (newY < 0 || newY > clearedRow ||
-             newX < 0 || newX > 11 ||
-             board[newY][newX] != ' ')
-        {
-            
-        }
-        else
-        {
-            pieceList.at(i).y += 1;
-        }
-        
-    }
-}
 void Block::_translate(bool positive, bool horizontal) {
+    //This code is used to translate all the pieces of a block
+    // horizontal = 0 & positive = 0 means the block moves up
+    // horizontal = 0 & positive = 1 means the block moves down
+    // horizontal = 1 & positive = 0 means the block moves left
+    // horizontal = 1 & positive = 1 means the block moves right
     int j = (positive) ? 1 : -1;
     for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
@@ -49,6 +24,8 @@ void Block::_translate(bool positive, bool horizontal) {
 }
 
 void Block::_clockwise() {
+    //We define these temporary variables with 
+    //values that are not possible intially
     int currentX = 12;
     int currentY = -1;
     int newXPos = 12;
@@ -57,6 +34,10 @@ void Block::_clockwise() {
     int translateY = -1;
     vector<vector<int>> rotatedPos;
     vector<int> temp;
+    //We first find the 'left corner' of the block
+    // we want to rotate
+    //This corresponds to the left most X cor and 
+    //bottom most Y cor
     for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         if (pieceList.at(i).x < currentX)
@@ -68,6 +49,8 @@ void Block::_clockwise() {
             currentY = pieceList.at(i).y;
         }
     }
+    //we then perform the rotation with 0,0 as our pivot
+    //we store these values in rotatedPos
     rotatedPos.clear();
     for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
@@ -76,7 +59,7 @@ void Block::_clockwise() {
         temp.push_back((pieceList.at(i).x));
         rotatedPos.push_back(temp);
     }
-
+    //We then find the 'left corner' of the rotated block
     for (int i = 0; (unsigned)i < rotatedPos.size(); i++)
     {
         if (rotatedPos.at(i).at(0) < newXPos)
@@ -88,8 +71,13 @@ void Block::_clockwise() {
             newYPos = rotatedPos.at(i).at(1);
         }
     }
+    //We find how much the 'left corner' of the 
+    //block and its rotated version differ by
+
     translateX = currentX - newXPos;
     translateY = currentY - newYPos;
+    //We translate the rotated block by the difference 
+    //we found above
     for (int i = 0; (unsigned)i < rotatedPos.size(); i++)
     {
         pieceList.at(i).x = rotatedPos.at(i).at(0) + translateX;
@@ -158,6 +146,36 @@ bool Block::_inBounds(char board[18][11])
         }
     }
     return true;
+}
+
+void Block::shiftDown(char board[18][11], int clearedRow)
+{
+    //This method is used to drop pieces when a row is cleared for the board.
+
+    //Placeholder variables to store the location of the moved object
+    int newX = -1;
+    int newY = -1;
+
+    // First we remove the block from this copy of the board
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
+    {
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
+    }
+
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
+    {
+        newX = pieceList.at(i).x;
+        newY = pieceList.at(i).y + 1;
+        //We perfom bounds check to ensure the
+        //caculated positions are valid.
+        //We translate if they are valid.
+        if (!(newY < 0 || newY > clearedRow ||
+              newX < 0 || newX > 11 ||
+              board[newY][newX] != ' '))
+        {
+            pieceList.at(i).y += 1;
+        }
+    }
 }
 
 bool Block::translate(Direction dir, char board[18][11])
