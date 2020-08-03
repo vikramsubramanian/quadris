@@ -46,6 +46,13 @@ std::vector<Direction> Level0::transform(int mult, Direction c) const
 }
 
 // -------------------------------------------------------------------------------
+// Constructive Force Decider
+bool Level0::constructiveForce() const
+{
+    return false;
+}
+
+// -------------------------------------------------------------------------------
 // Level1
 
 // -------------------------------------------------------------------------------
@@ -100,6 +107,13 @@ std::vector<Direction> Level1::transform(int mult, Direction c) const
 }
 
 // -------------------------------------------------------------------------------
+// Constructive Force Decider
+bool Level1::constructiveForce() const
+{
+    return false;
+}
+
+// -------------------------------------------------------------------------------
 // Level2
 
 // -------------------------------------------------------------------------------
@@ -151,6 +165,13 @@ std::vector<Direction> Level2::transform(int mult, Direction c) const
         Directions.push_back(c);
     }
     return Directions;
+}
+
+// -------------------------------------------------------------------------------
+// Constructive Force Decider
+bool Level2::constructiveForce() const
+{
+    return false;
 }
 
 // -------------------------------------------------------------------------------
@@ -229,6 +250,13 @@ std::vector<Direction> Level3::transform(int mult, Direction c) const
 }
 
 // -------------------------------------------------------------------------------
+// Constructive Force Decider
+bool Level3::constructiveForce() const
+{
+    return false;
+}
+
+// -------------------------------------------------------------------------------
 // Level4
 
 // -------------------------------------------------------------------------------
@@ -301,4 +329,11 @@ std::vector<Direction> Level4::transform(int mult, Direction c) const
     }
     Directions.push_back(Direction::down);  // heavy
     return Directions;
+}
+
+// -------------------------------------------------------------------------------
+// Constructive Force Decider
+bool Level4::constructiveForce() const
+{
+    return true;
 }
