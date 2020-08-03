@@ -304,6 +304,9 @@ void Game::_act(Command cmd)
             break;
         case Type::PLAY_HINT:
             gameData_->board_->hint_(true);
+            gameData_->board_->updateScore_();
+            _nextBlock();
+            
             break;
         case Type::RENAME:
             break;

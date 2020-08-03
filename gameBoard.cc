@@ -187,7 +187,7 @@ void gameBoard::replace_(char piece)
     }
 }
 
-void gameBoard::hint_(bool playTurn, char nextPiece= 'N')
+void gameBoard::hint_(bool playTurn)
 {
     Block *hintBlock = nullptr;
     char piece = curBlock_->pieceList.at(0).type;
@@ -283,11 +283,8 @@ void gameBoard::hint_(bool playTurn, char nextPiece= 'N')
     blocks_.pop_back();
     delete hintBlock;
     }
-    else
-    {
-        newBlock_(nextPiece);
-        nextPiece
-    }
+
+
 }
 
 // generates and drops our special blocks

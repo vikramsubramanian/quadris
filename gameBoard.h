@@ -30,7 +30,7 @@ class gameBoard : public Subject
         void constructiveForce_(char);
         void replace_(char piece);
         void setLevel_(int);
-        void hint_(bool, char);
+        void hint_(bool);
 
 
     private:
