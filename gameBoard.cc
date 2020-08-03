@@ -185,71 +185,87 @@ void gameBoard::replace_(char piece)
 
 void gameBoard::hint_()
 {
+
     Block *hintBlock = nullptr;
+    char piece = curBlock_->pieceList.at(0).type;
     if (!isGameOver_ && curBlock_ != nullptr)
     {
-        char piece = curBlock_->pieceList.at(0).type;
-
         Block *genblock = nullptr;
         int lowest = -1;
         bool status = true;
         int possibleLowest = -1;
         for (int i = 0; i < 11; i++)
         {
-            for(int rotateCount =0 ; rotateCount = 2; rotateCount++){
+            for(int rotateCount =0 ; rotateCount < 3; rotateCount++){
                 genblock = BlockFactory::createBlock(piece);
                 blocks_.push_back(genblock);
+
                 for (int coun =0; coun < rotateCount; coun++){
                     generateBoardFromBlocks_();
-                    status = genblock->translate(Direction::clockwise, displayStruct_->board_);
+                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
+                    {
+                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
+                    }
+                    genblock->translate(Direction::clockwise, displayStruct_->board_);
                 }
                 for (int j = 0; j < i; j++)
                 {
                     generateBoardFromBlocks_();
-                    status = genblock->
+                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
+                    {
+                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
+                    }
+                    genblock->
                             translate(Direction::right, displayStruct_->board_);
                 }
 
                 generateBoardFromBlocks_();
+                for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
+                {
+                    displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
+                }
                 status = genblock->
                         translate(Direction::down, displayStruct_->board_);
 
                 while (status == true)
                 {
                     generateBoardFromBlocks_();
+                    for (int ii = 0; (unsigned)ii < curBlock_->pieceList.size(); ii++)
+                    {
+                        displayStruct_->board_[curBlock_->pieceList.at(ii).y][curBlock_->pieceList.at(ii).x] = ' ';
+                    }
                     status = genblock->
                             translate(Direction::down, displayStruct_->board_);
                 }
 
                 possibleLowest = genblock->pieceList.at(0).y;
 
-                //find the lowest piece in this block
+                // find the lowest piece in this block
                 for (int pieceCount = 0; (unsigned)pieceCount < genblock->pieceList.size(); pieceCount++)
                 {
-                    if (possibleLowest > genblock->pieceList.at(pieceCount).y)
+                    if (possibleLowest < genblock->pieceList.at(pieceCount).y)
                     {
                         possibleLowest = genblock->pieceList.at(pieceCount).y;
                     }
                 }
 
-                if (possibleLowest < lowest)
+                if (possibleLowest > lowest)
                 {
                     lowest = possibleLowest;
                     hintBlock = genblock;
                     genblock = nullptr;
                 }
-                else
-                {
-                    delete genblock;
-                }
+                delete genblock;
                 blocks_.pop_back();
                 genblock = nullptr;
             }
         }
-        
     }
+    
     for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
     {
+        //We replace the char that each piece is represented by in our block
+        //In order to display the hint block with '?'s
         hintBlock->pieceList.at(jj).type = '?';
     }
 
@@ -404,6 +420,15 @@ void gameBoard::setLevel_(int lvl)
 // Accessors for Observer DP
 DisplayStruct *gameBoard::getState_(){
     return displayStruct_;
+}
+
+void gameBoard::removeCurrentBlockFromDisplayBoard_()
+{
+    generateBoardFromBlocks_();
+    for (int i = 0; (unsigned)i < curBlock_->pieceList.size(); i++)
+    {
+        displayStruct_->board_[curBlock_->pieceList.at(i).y][curBlock_->pieceList.at(i).x] = ' ';
+    }
 }
 
 string gameBoard::getNextBlock_(){

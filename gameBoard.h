@@ -41,7 +41,7 @@ class gameBoard : public Subject
         Block* curBlock_;
         Block* nextBlock_;
         DisplayStruct *displayStruct_;
-        
+        void removeCurrentBlockFromDisplayBoard_();
         void generateBoardFromBlocks_();
 };
 
