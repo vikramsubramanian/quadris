@@ -18,12 +18,12 @@ TextDisplay::~TextDisplay()
 // pulls current data from Library (subject) to output messages about changes to listener
 void TextDisplay::notify_()
 {
-    DisplayStruct* display = subject_->getState();
+    DisplayStruct* display = subject_->getState_();
 
     // print header info
-    out << "    Level:     " << display->level << endl;
-    out << "    Score:     " << display->score << endl;
-    out << "    Hi Score:  " << display->hiScore << endl;
+    out << "    Level:     " << display->level_ << endl;
+    out << "    Score:     " << display->score_ << endl;
+    out << "    Hi Score:  " << display->hiScore_ << endl;
     out << "    ___________ " << endl;
 
     // print board
@@ -40,7 +40,7 @@ void TextDisplay::notify_()
         for (int j = 0; j < 11; j++)
         {
             //We use underscores for testing purposes. TODO: Final code should have " "
-            out << display->board[i][j];
+            out << display->board_[i][j];
         }
         out << endl;
     }
@@ -48,7 +48,7 @@ void TextDisplay::notify_()
 
     // print next block
     out << "    Next:" << endl;
-    string nextBlock = subject_->getNextBlock();
+    string nextBlock = subject_->getNextBlock_();
     for (int i = 0; i < 2; i++)
     {
         out << "    ";

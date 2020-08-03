@@ -105,9 +105,9 @@ void Game::_setLevel() {
             gameData_->strat_ = new Level4();
             break;
     }
-    gameData_->board_->setLevel(gameData_->lvl_);
+    gameData_->board_->setLevel_(gameData_->lvl_);
     gameData_->drops_ = 0;
-    gameData_->prevScore_ = gameData_->board_->getScore();
+    gameData_->prevScore_ = gameData_->board_->getScore_();
     gameData_->flag_ = true;
 }
 
@@ -116,7 +116,7 @@ void Game::_setLevel() {
 void Game::_nextBlock() {
     char block;
     block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
-    gameData_->board_->newBlock(block);
+    gameData_->board_->newBlock_(block);
 }
 
 // -------------------------------------------------------------------------------
@@ -125,13 +125,13 @@ void Game::_restart() {
     int hiScore;
     
     // Carry over the highest score, whether that's the current hiScore saved in game or something else entirely
-    hiScore = gameData_->board_->getHiScore();
+    hiScore = gameData_->board_->getHiScore_();
     _clearGameData();
 
     //Reset the block file
     gameData_->board_ = new gameBoard;
     _attachObservers();
-    gameData_->board_->setHiScore(hiScore);
+    gameData_->board_->setHiScore_(hiScore);
     gameData_->lvl_ = gameData_->init_.lvl_;
     _setLevel();
     gameData_->file_ = std::ifstream( gameData_->init_.file_);
@@ -149,17 +149,17 @@ void Game::_restart() {
 // External Force Handler
 void Game::_constructiveForce() {
     gameData_->drops_++;
-    if (gameData_->prevScore_ != gameData_->board_->getScore()) {
+    if (gameData_->prevScore_ != gameData_->board_->getScore_()) {
         gameData_->flag_ = false;
     }
 
     if (0 == gameData_->drops_ % 5) {
         if (gameData_->flag_ && gameData_->lvl_ == 4) {
-            gameData_->board_->constructiveForce('B');
+            gameData_->board_->constructiveForce_('B');
         } 
         gameData_->flag_ = true;
     }
-    gameData_->prevScore_ = gameData_->board_->getScore();
+    gameData_->prevScore_ = gameData_->board_->getScore_();
 }
 
 // -------------------------------------------------------------------------------
@@ -179,35 +179,35 @@ void Game::_act(Command cmd)
     switch (cmd.commandType_) {
         case Type::LEFT:
             dirs = gameData_->strat_->transform(mult, Direction::left);
-            gameData_->board_->transformBlock(dirs);
+            gameData_->board_->transformBlock_(dirs);
             break;
         case Type::RIGHT:
             dirs = gameData_->strat_->transform(mult, Direction::right);
-            gameData_->board_->transformBlock(dirs);
+            gameData_->board_->transformBlock_(dirs);
             break;
         case Type::DOWN:
             dirs = gameData_->strat_->transform(mult, Direction::down);
-            gameData_->board_->transformBlock(dirs);
+            gameData_->board_->transformBlock_(dirs);
             break;
         case Type::CLOCKWISE:
             dirs = gameData_->strat_->transform(mult, Direction::clockwise);
-            gameData_->board_->transformBlock(dirs);
+            gameData_->board_->transformBlock_(dirs);
             break;
         case Type::COUNTERCLOCKWISE:
             dirs = gameData_->strat_->transform(mult, Direction::counterclockwise);
-            gameData_->board_->transformBlock(dirs);
+            gameData_->board_->transformBlock_(dirs);
             break;
         case Type::DROP:
             while (mult > 0) {
-                gameData_->board_->drop();
-                gameData_->board_->updateScore();
+                gameData_->board_->drop_();
+                gameData_->board_->updateScore_();
                 _nextBlock();
                 mult--;
-                if (gameData_->board_->gameOver()) {
+                if (gameData_->board_->gameOver_()) {
                     break;
                 }                    
                 _constructiveForce();
-                if (gameData_->board_->gameOver()) {
+                if (gameData_->board_->gameOver_()) {
                     break;
                 }
             }
@@ -234,25 +234,25 @@ void Game::_act(Command cmd)
             gameData_->in_ = &ifn;
             break;
         case Type::I:
-            gameData_->board_->replace('I');
+            gameData_->board_->replace_('I');
             break;
         case Type::J: 
-            gameData_->board_->replace('J');
+            gameData_->board_->replace_('J');
             break;
         case Type::L: 
-            gameData_->board_->replace('L');
+            gameData_->board_->replace_('L');
             break;
         case Type::S: 
-            gameData_->board_->replace('S');
+            gameData_->board_->replace_('S');
             break;
         case Type::Z: 
-            gameData_->board_->replace('Z');
+            gameData_->board_->replace_('Z');
             break;
         case Type::O: 
-            gameData_->board_->replace('O');
+            gameData_->board_->replace_('O');
             break;
         case Type::T:
-            gameData_->board_->replace('T');
+            gameData_->board_->replace_('T');
             break;
         case Type::RESTART: 
             _restart();
@@ -290,7 +290,7 @@ void Game::play()
     _nextBlock();
     _nextBlock();
     
-    while (!gameData_->board_->gameOver() && *(gameData_->in_) >> cmd) {
+    while (!gameData_->board_->gameOver_() && *(gameData_->in_) >> cmd) {
         _act(cmd);
     }
     std::cout << "BZZT! Game Over!" << std::endl;
