@@ -18,7 +18,7 @@ public:
     std::vector<Piece> pieceList;
     int rotateAroundPivot[2];
     int level;
-    void shiftDown(char board[18][11]);
+    void shiftDown(char board[18][11], int clearedRow);
     bool translate(Direction, char board[18][11]);
     
 };

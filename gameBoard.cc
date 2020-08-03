@@ -176,7 +176,6 @@ void gameBoard::setHiScore(int hiScore){
 
 void gameBoard::updateScore()
 {
-
     bool isFullFlag = true;
     int numberOfLines = 0;
     for(int counter = 0; counter < 18; counter++)
@@ -192,10 +191,10 @@ void gameBoard::updateScore()
 
         if (isFullFlag == true)
         {
-            numberOfLines += 1;
+            numberOfLines++;
             for (int j = 0; j < 11; j++)
             {
-                displayStruct->board[counter][j] = '_';
+                // displayStruct->board[counter][j] = '_';
                 for (int l = 0; l < blocks.size(); l++)
                 {
                     for (int ll = 0; ll < blocks.at(l)->pieceList.size(); ll++)
@@ -215,20 +214,16 @@ void gameBoard::updateScore()
                         }
                     }
                 }
+
             }
-            
             for (int l = 0; l < blocks.size(); l++)
             {
                 if (blocks.at(l) != curBlock)
                 {
-                    
                     generateBoardFromBlocks();
-                    blocks.at(l)->shiftDown(displayStruct->board);
-
-                    
+                    blocks.at(l)->shiftDown(displayStruct->board, counter);
                 }
             }
-             
         }
         isFullFlag = true;
     }
@@ -241,8 +236,6 @@ void gameBoard::updateScore()
     {
         displayStruct->hiScore = displayStruct->score;
     }
-
-
     return;
 }
 
