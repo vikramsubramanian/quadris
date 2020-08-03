@@ -24,6 +24,7 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"restart", RESTART},
                                     {"hint", HINT},
                                     {"rename", RENAME},
+                                    {"force", FORCE},
                                     {"enablebonus", ENABLE_BONUS},
                                     {"disablebonus", DISABLE_BONUS}};
 
@@ -115,7 +116,7 @@ istream &operator>>(istream &in, Command &c){
     // and handle bonus enablement
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM ||
-            c.commandType_ == SEQUENCE ||
+            c.commandType_ == SEQUENCE || c.commandType_ == FORCE ||
             c.commandType_ == ENABLE_BONUS ||
             c.commandType_ == DISABLE_BONUS)
     {

@@ -97,7 +97,7 @@ void Block::_clockwise() {
     }
 }
 
-void Block::_transform(Direction dir)
+void Block::transform(Direction dir)
 {
     //Method to transform block's location without bounds checking
     //We investigate the results of this method to see if the transform is valid
@@ -173,7 +173,7 @@ bool Block::translate(Direction dir, char board[18][11])
     //We do the transform and then check if it is valid in _inBounds()
     //If the translate is not valid, flag turns false and the switch
     // statement below runs
-    _transform(dir);
+    transform(dir);
     flag = _inBounds(board);
     
     if (!flag) {
@@ -211,7 +211,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 break; 
         }
         //We perform translate in the opposite direction
-        _transform(dir);
+        transform(dir);
     }
 
     return flag;

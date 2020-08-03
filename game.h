@@ -24,6 +24,7 @@ struct gameInit{
 struct gamePImpl{
     // Store the input parameters for the restart command
     gameInit init_;
+    // General Variables
     gameBoard* board_;
     std::vector<Observer*> displays;
     bool gui; 
@@ -37,8 +38,9 @@ struct gamePImpl{
     int drops_;
     int prevScore_;
     bool flag_;
-//    int hiScore_;
+    // Bonus
     bool bonusEnabled_;
+    char forceBlock_;
 };
 
 class Game {
@@ -50,7 +52,6 @@ class Game {
         // Observer DP
         void _attachObservers();
         void _deleteObservers();
-
         void _clearGameData();
         void _setLevel();
         void _nextBlock();
