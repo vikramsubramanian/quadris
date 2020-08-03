@@ -19,15 +19,20 @@
 
 // -------------------------------------------------------------------------------
 // Constructor
-Game::Game(int lvl, std::string file, int seed) {
+Game::Game(int lvl, std::string file, int seed)
+{
     gameData_ = new gamePImpl;
 
+    // initiation
     gameData_->init_.lvl_ = lvl;
     gameData_->init_.file_ = file;
     gameData_->init_.seed_ = seed;
 
+    // set up Observer DP
     gameData_->board_ = new gameBoard;
     _attachObservers();
+
+    // setup game data values
     gameData_->lvl_ = lvl;
     _setLevel();
     gameData_->file_ = std::ifstream(file);
@@ -39,7 +44,8 @@ Game::Game(int lvl, std::string file, int seed) {
 
 // -------------------------------------------------------------------------------
 // Destructor
-Game::~Game() {
+Game::~Game()
+{
     _clearGameData();
     delete gameData_;
 }
@@ -50,15 +56,19 @@ Game::~Game() {
 
 // -------------------------------------------------------------------------------
 // Observer Attacher
-void Game::_attachObservers() {
-    gameData_->displays.push_back(new TextDisplay{std::cout, gameData_->board_});
+void Game::_attachObservers()
+{
+    gameData_->displays.push_back
+        (new TextDisplay{std::cout, gameData_->board_});
     gameData_->board_->attach(gameData_->displays.at(0));
 }
 
 // -------------------------------------------------------------------------------
 // Observer Deleter
-void Game::_deleteObservers() {
-    for (auto a: gameData_->displays) {
+void Game::_deleteObservers()
+{
+    for (auto a: gameData_->displays)
+    {
         delete a;
     }
     gameData_->displays.clear();
@@ -66,29 +76,39 @@ void Game::_deleteObservers() {
 
 // -------------------------------------------------------------------------------
 // Game Data Clearer
-void Game::_clearGameData() {
-    if (nullptr != gameData_) {
-        if (nullptr != gameData_->strat_) {
+void Game::_clearGameData()
+{
+    if (nullptr != gameData_)
+    {
+        if (nullptr != gameData_->strat_)
+        {
             delete gameData_->strat_;
             gameData_->strat_ = nullptr;
-        }
-        if (nullptr != gameData_->board_) {
+        }   // delete level (strategy DP)
+        if (nullptr != gameData_->board_)
+        {
             _deleteObservers();
             delete gameData_->board_;
             gameData_->board_ = nullptr;
-        }
+        }   // delete board and observers
     }
 }
 
 // -------------------------------------------------------------------------------
 // Level Setter
 // A integer level must be set
-void Game::_setLevel() {
-    if (nullptr != gameData_->strat_) {
+void Game::_setLevel()
+{
+    // delete old instance of level
+    if (nullptr != gameData_->strat_)
+    {
         delete gameData_->strat_;
         gameData_->strat_ = nullptr;
     }
-    switch (gameData_->lvl_) {
+
+    // determine new level and create instance
+    switch (gameData_->lvl_)
+    {
         case 0:
             gameData_->strat_ = new Level0();
             break;
@@ -105,6 +125,8 @@ void Game::_setLevel() {
             gameData_->strat_ = new Level4();
             break;
     }
+
+    // update game data and board
     gameData_->board_->setLevel_(gameData_->lvl_);
     gameData_->drops_ = 0;
     gameData_->prevScore_ = gameData_->board_->getScore_();
@@ -113,18 +135,22 @@ void Game::_setLevel() {
 
 // -------------------------------------------------------------------------------
 // Next Block Setter
-void Game::_nextBlock() {
+void Game::_nextBlock()
+{
     char block;
-    block = gameData_->strat_->nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
+    block = gameData_->strat_->
+            nextBlock(gameData_->rng_, gameData_->file_, gameData_->random_);
     gameData_->board_->newBlock_(block);
 }
 
 // -------------------------------------------------------------------------------
 // Game Restarter
-void Game::_restart() {
+void Game::_restart()
+{
     int hiScore;
     
-    // Carry over the highest score, whether that's the current hiScore saved in game or something else entirely
+    // Carry over the highest score, whether that's the
+    // current hiScore saved in game or something else entirely
     hiScore = gameData_->board_->getHiScore_();
     _clearGameData();
 
@@ -140,25 +166,31 @@ void Game::_restart() {
     gameData_->in_ = &std::cin;
     gameData_->bonusEnabled_ = false;
 
-
     _nextBlock();
     _nextBlock();
 }
 
 // -------------------------------------------------------------------------------
 // External Force Handler
-void Game::_constructiveForce() {
+void Game::_constructiveForce()
+{
     gameData_->drops_++;
-    if (gameData_->prevScore_ != gameData_->board_->getScore_()) {
+    if (gameData_->prevScore_ != gameData_->board_->getScore_())
+    {
         gameData_->flag_ = false;
     }
 
-    if (0 == gameData_->drops_ % 5) {
-        if (gameData_->flag_ && gameData_->lvl_ == 4) {
+    // count blocks dropped and use constructive force
+    // when too many blocks have dropped
+    if (0 == gameData_->drops_ % 5)
+    {
+        if (gameData_->flag_ && gameData_->lvl_ == 4)
+        {
             gameData_->board_->constructiveForce_('B');
         } 
         gameData_->flag_ = true;
     }
+
     gameData_->prevScore_ = gameData_->board_->getScore_();
 }
 
@@ -172,11 +204,17 @@ void Game::_act(Command cmd)
     std::ifstream ifn;
 
     mult = cmd.multiplier_;
-    if (0 == mult) {
-        std::cout << "A multiplier of zero does not issue a command. Please use a positive integer multiplier." << std::endl;
+    // handle zero multiplier
+    if (0 == mult)
+    {
+        std::cout << "A multiplier of zero does not issue a command. " <<
+            "Please use a positive integer multiplier." << std::endl;
         return;
     }
-    switch (cmd.commandType_) {
+
+    // identify command and perform necessary actions
+    switch (cmd.commandType_)
+    {
         case Type::LEFT:
             dirs = gameData_->strat_->transform(mult, Direction::left);
             gameData_->board_->transformBlock_(dirs);
@@ -194,7 +232,8 @@ void Game::_act(Command cmd)
             gameData_->board_->transformBlock_(dirs);
             break;
         case Type::COUNTERCLOCKWISE:
-            dirs = gameData_->strat_->transform(mult, Direction::counterclockwise);
+            dirs = gameData_->strat_->
+                    transform(mult, Direction::counterclockwise);
             gameData_->board_->transformBlock_(dirs);
             break;
         case Type::DROP:
@@ -213,11 +252,13 @@ void Game::_act(Command cmd)
             }
             break;
         case Type::LEVELUP:
-            gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
+            gameData_->lvl_ =
+                    (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
             _setLevel();
             break;
         case Type::LEVELDOWN:
-            gameData_->lvl_ = (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
+            gameData_->lvl_ =
+                    (0 < gameData_->lvl_ - mult) ? gameData_->lvl_ - mult : 0;
             _setLevel();
             break;
         case Type::NORANDOM:
@@ -261,7 +302,8 @@ void Game::_act(Command cmd)
             break;
         case Type::RENAME:
             if(gameData_->bonusEnabled_ == false)
-                std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
+                std::cout << "Invalid player command! " <<
+                    "Please enter a proper player command." << std::endl;
             break;
         case Type::ENABLE_BONUS:
             gameData_->bonusEnabled_ = true;
@@ -270,7 +312,8 @@ void Game::_act(Command cmd)
             gameData_->bonusEnabled_ = false;
             break;
         case Type::BAD_COMMAND:
-            std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
+            std::cout << "Invalid player command! " <<
+                "Please enter a proper player command." << std::endl;
             break;
         default:
             std::cout << "Invalid command!" << std::endl;

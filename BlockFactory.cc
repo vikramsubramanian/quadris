@@ -1,8 +1,9 @@
 #include "BlockFactory.h"
 #include "blockTypes.h"
 #include <iostream>
-
 using namespace std;
+
+// Factory DP
 
 Block* BlockFactory::createBlock(char id)
 {
@@ -17,6 +18,7 @@ Block* BlockFactory::createBlock(char id)
 }
 
 BlockFactory::~BlockFactory() {}
+
 //static member
 std::map<char, BlockFactory *> BlockFactory::factories;
 
@@ -34,12 +36,13 @@ BlockFactoryInitializer::BlockFactoryInitializer()
 }
 BlockFactoryInitializer::~BlockFactoryInitializer()
 {
-    std::map<char, BlockFactory *>::iterator it = BlockFactory::factories.begin();
+    std::map<char, BlockFactory *>::iterator it =
+            BlockFactory::factories.begin();
     while (it != BlockFactory::factories.end())
     {
         delete it++->second;
     }
 }
 
-//Static member defination:
+//Static member definition:
 BlockFactoryInitializer BlockFactoryInitializer::si; 

@@ -6,18 +6,22 @@
 #include "game.h"
 using namespace std;
 
+// handles command line options and instantiates Game accordingly
 int main(int argc, char *argv[])
 {
-
     // identify if command line option given and if so
     // initiate appropriate variables for game instantiantion
+
     string cmd;
+
+    // default values
     bool textOnly = false;
     int seed = 0;
     string fileName = "sequence.txt";
     int startLevel = 0;
 
-    for (int i = 1; i < argc; i++)   // seed given through command line
+    // recognize option and set values accordingly
+    for (int i = 1; i < argc; i++)
     {
         char* endp;
         cmd = argv[i];
@@ -35,11 +39,9 @@ int main(int argc, char *argv[])
 
     }
 
-// initializing game object
+    // initializing game object
     Game* g = new Game(startLevel, fileName, seed);
     g->play(); // returns once game is over or player quits
-    delete g; // Deleting game instance
+    delete g; // deleting game instance
     return 1;
 }
-
-

@@ -1,6 +1,7 @@
 #include "TextDisplay.h"
-
 using namespace std;
+
+// Observer DP
 
 //--------------------------------------------------------------------------------------------
 // Constructor
@@ -15,7 +16,8 @@ TextDisplay::~TextDisplay()
 
 //--------------------------------------------------------------------------------------------
 // Update
-// pulls current data from Library (subject) to output messages about changes to listener
+// pulls current data from gameBoard (subject)
+// to display game and changes after each move to player
 void TextDisplay::notify_()
 {
     DisplayStruct* display = subject_->getState_();
@@ -30,16 +32,11 @@ void TextDisplay::notify_()
     for (int i = 0; i < 18; i++)
     {
         if (i+1 < 10)
-        {
             out << i+1 << "   ";
-        }
         else
-        {
             out << i+1<< "  ";
-        }
         for (int j = 0; j < 11; j++)
         {
-            //We use underscores for testing purposes. TODO: Final code should have " "
             out << display->board_[i][j];
         }
         out << endl;

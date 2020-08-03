@@ -3,6 +3,8 @@
 #include <vector>
 #include "observer.h"
 
+// Observer DP
+
 class Subject {
     std::vector<Observer*> observers;
 
