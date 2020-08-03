@@ -23,6 +23,7 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"leveldown", LEVELDOWN},
                                     {"restart", RESTART},
                                     {"hint", HINT},
+                                    {"playhint", PLAY_HINT},
                                     {"rename", RENAME},
                                     {"enablebonus", ENABLE_BONUS},
                                     {"disablebonus", DISABLE_BONUS}};
@@ -170,6 +171,7 @@ void Command::resetMap_()
                      {"leveldown", LEVELDOWN},
                      {"restart", RESTART},
                      {"hint", HINT},
+                     {"playhint", PLAY_HINT},
                      {"rename", RENAME},
                      {"enablebonus", ENABLE_BONUS},
                      {"disablebonus", DISABLE_BONUS}};

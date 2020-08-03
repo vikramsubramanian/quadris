@@ -300,7 +300,10 @@ void Game::_act(Command cmd)
             _restart();
             break;
         case Type::HINT:
-            gameData_->board_->hint_();
+            gameData_->board_->hint_(false);
+            break;
+        case Type::PLAY_HINT:
+            gameData_->board_->hint_(true);
             break;
         case Type::RENAME:
             if(gameData_->bonusEnabled_ == false)
