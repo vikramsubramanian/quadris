@@ -340,15 +340,20 @@ void Game::play()
             _act(cmd);
         }
         std::cout << "BZZT! Game Over!" << std::endl;
-        std::cout << "Would you like to play another game? (Y/N)" << std::endl;
-        std::cin >> newGame;
+        if (!gameData_->in_->good()) {
+            newGame = "N";
+        } else {
+            std::cout << "Would you like to play another game? (Y/N)" << std::endl;
+            *(gameData_->in_) >> newGame;
 
-        // if player would like to continue, restart game
-        // and clear any renamed commands
-        if(newGame == "Y")
-        {
-            _restart();
-            cmd.resetMap_();
+            // if player would like to continue, restart game
+            // and clear any renamed commands
+            if(newGame == "Y")
+            {
+                _restart();
+                cmd.resetMap_();
+            }
         }
+
     }
 }
