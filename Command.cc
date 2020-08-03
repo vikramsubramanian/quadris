@@ -84,7 +84,7 @@ istream &operator>>(istream &in, Command &c){
     }
 
     // search for unique match in commandTypes with provided string
-    int substrLen = 1;
+    unsigned int substrLen = 1;
     int occurrences;
     while(substrLen <= cmd.length())
     {
