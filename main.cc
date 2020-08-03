@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     }
 
     // initializing game object
-    Game* g = new Game(startLevel, fileName, seed);
+    Game* g = new Game(startLevel, fileName, seed, textOnly);
     g->play(); // returns once game is over or player quits
     delete g; // deleting game instance
     return 1;

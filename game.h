@@ -19,6 +19,7 @@ struct gameInit{
     int lvl_; 
     std::string file_; 
     int seed_;
+    bool textOnly_;
 };
 
 struct gamePImpl{
@@ -45,7 +46,7 @@ struct gamePImpl{
 
 class Game {
     public:
-        Game(int, std::string, int);
+        Game(int, std::string, int, bool);
         ~Game();
         void play();
     private:
