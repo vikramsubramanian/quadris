@@ -26,6 +26,10 @@ struct gamePImpl{
     std::mt19937 rng_;
     bool random_;
     std::istream* in_;
+    // For the constructive force
+    int drops_;
+    int prevScore_;
+    bool flag_;
 //    int hiScore_;
     bool bonusEnabled_;
 };
@@ -41,6 +45,7 @@ class Game {
         void _setLevel();
         void _nextBlock();
         void _restart();
+        void _constructiveForce();
         void _act(Command);
         gamePImpl* gameData_;
 };

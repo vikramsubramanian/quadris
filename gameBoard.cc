@@ -164,6 +164,48 @@ void gameBoard::drop() {
     return;
 }
 
+void gameBoard::constructiveForce(char piece) {
+    int xCor = -1;
+    int yCor = -1;
+    // Creating the block
+
+    //We can have a new block only if the game is still playable
+
+    Block *genblock = BlockFactory::createBlock(piece);
+    genblock->level = displayStruct->level;
+    for (int i = 0; i < genblock->pieceList.size(); i++)
+    {
+        //Now we check if we have space to get the new block in
+        xCor = genblock->pieceList.at(i).x;
+        yCor = genblock->pieceList.at(i).y;
+        if (displayStruct->board[yCor][xCor] != '_')
+        {
+            //This means we have no space to get the new block into the board
+            //this means the game is over
+            isGameOver = true;
+            return;
+        }
+    }
+    blocks.push_back(genblock);
+    
+    // Dropping the block
+    generateBoardFromBlocks();
+    bool status = genblock->translate(Direction::down, displayStruct->board);
+    while (status==true){
+        generateBoardFromBlocks();
+        status = genblock->translate(Direction::down, displayStruct->board);
+    }
+    genblock = nullptr;
+    generateBoardFromBlocks();
+    notifyObservers();
+    return;
+}
+
+int gameBoard::getScore(){
+
+    return displayStruct->score;
+}
+
 int gameBoard::getHiScore(){
 
     return displayStruct->hiScore;
