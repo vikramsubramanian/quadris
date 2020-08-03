@@ -303,3 +303,64 @@ void gameBoard::setLevel(int lvl)
 {
     displayStruct->level = lvl;
 }
+
+void gameBoard::hint()
+{
+    
+    if (!isGameOver && nextBlock != nullptr)
+    {
+        char piece = nextBlock->pieceList.at(0).type;
+        int xCor = -1;
+        int yCor = -1;
+
+        Block *genblock = nullptr;
+        Block *hintBlock = nullptr;
+        int lowest = -1;
+        bool status = true;
+        for (int i = 0; i < 11; i++)
+        {
+            genblock = BlockFactory::createBlock(piece); 
+            blocks.push_back(genblock);
+            
+            for (int j = 0; j < i; j++)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::right, displayStruct->board);
+                }
+            
+            generateBoardFromBlocks();
+            status = genblock->translate(Direction::down, displayStruct->board);
+            
+            while (status == true)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::down, displayStruct->board);
+                }
+                
+            if (genblock->pieceList.at(0).y > lowest)
+                {
+                    lowest = genblock->pieceList.at(0).y;
+                    hintBlock = genblock;
+                    genblock = nullptr;
+                }
+            else
+                {
+
+                    delete genblock;
+                    genblock = nullptr;
+                }
+                blocks.pop_back();
+        }
+        for (int jj = 0; jj < hintBlock->pieceList.size(); jj++)
+            {
+                hintBlock->pieceList.at(jj).type = '?';
+            }
+
+        blocks.push_back(hintBlock);
+        generateBoardFromBlocks();
+        notifyObservers();
+        blocks.pop_back();
+        delete hintBlock;
+        
+    }
+}

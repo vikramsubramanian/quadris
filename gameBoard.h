@@ -26,6 +26,7 @@ class gameBoard : public Subject
         void tempPrint();
         void setLevel(int);
         void decreaseLevel();
+        void hint();
 
 
     private:

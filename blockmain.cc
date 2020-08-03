@@ -16,28 +16,22 @@ int main(){
     
     gameBoard boop = gameBoard();
 
-    boop.newBlock('O');
-    boop.newBlock('O');
+    boop.newBlock('J');
+    boop.newBlock('Z');
     boop.drop();
 
-    boop.newBlock('O');
+    boop.newBlock('S');
     boop.transformBlock(tryr);
     tryr.push_back(Direction::right);
     tryr.push_back(Direction::right);
     boop.drop();
 
-    boop.newBlock('O');
+    boop.newBlock('S');
     boop.transformBlock(tryr);
     tryr.push_back(Direction::right);
     tryr.push_back(Direction::right);
     boop.drop();
-    boop.newBlock('O');
-    boop.transformBlock(tryr);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    boop.drop();
-
-    boop.newBlock('I');
+    boop.newBlock('L');
     boop.transformBlock(tryr);
     tryr.push_back(Direction::right);
     tryr.push_back(Direction::right);
@@ -46,14 +40,10 @@ int main(){
     boop.newBlock('I');
     boop.transformBlock(tryr);
     tryr.push_back(Direction::right);
-    
     tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-    tryr.push_back(Direction::right);
-
     boop.drop();
+
+    boop.hint();
     boop.newBlock('I');
     boop.tempPrint();
     boop.updateScore();
