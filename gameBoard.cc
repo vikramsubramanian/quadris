@@ -301,6 +301,7 @@ string gameBoard::getNextBlock(){
 
 void gameBoard::setLevel(int lvl)
 {
+    nextBlock->level = lvl;
     displayStruct->level = lvl;
 }
 
