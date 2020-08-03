@@ -11,4 +11,4 @@ struct DisplayStruct
     char board_[18][11];
 };
 
-#endi
+#endif
