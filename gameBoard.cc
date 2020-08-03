@@ -9,346 +9,185 @@
 #include <algorithm>
 using namespace std;
 
+//----------------------------------------------------------------------
+// Constructor
 gameBoard::gameBoard(){
-    isGameOver = false;
-    curBlock = nullptr;
-    nextBlock = nullptr;
-    displayStruct = new DisplayStruct;
-    displayStruct->score = 0;
-    displayStruct->hiScore = 0;
-    displayStruct->level = 0;
-    for(int i=0;i<18;i++){
-        for(int j = 0; j<11; j++){
-            //We use underscores for testing purposes. TODO: Final code should have " "
-            displayStruct->board[i][j] = '_';
+    isGameOver_ = false;
+    curBlock_ = nullptr;
+    nextBlock_ = nullptr;
+    displayStruct_ = new DisplayStruct;
+    displayStruct_->score_ = 0;
+    displayStruct_->hiScore = 0;
+    displayStruct_->level_ = 0;
+    for(int i=0;i<18;i++)
+    {
+        for(int j = 0; j<11; j++)
+        {
+            displayStruct_->board_[i][j] = ' ';
         }
     }
 }
 
-void gameBoard::newBlock(char piece){
+//----------------------------------------------------------------------
+// Destructor
+gameBoard::~gameBoard()
+{
+    delete nextBlock_;
+    for (auto p : blocks_)
+    {
+        delete p;
+    }
+    blocks_.clear();
+    delete displayStruct_;
+}
+
+//----------------------------------------------------------------------
+// FUNCTIONS
+
+bool gameBoard::gameOver_()
+{
+    return isGameOver_;
+}
+
+//----------------------------------------------------------------------
+// Command-related Functions
+
+// generates a block on the board
+void gameBoard::newBlock_(char piece){
     int xCor = -1;
     int yCor = -1;
-    if (!isGameOver)
+    if (!isGameOver_)
     {
         //We can have a new block only if the game is still playable
-
         Block *genblock = BlockFactory::createBlock(piece);
-        genblock->level = displayStruct->level;
+        genblock->level_ = displayStruct_->level_;
         for (int i = 0; i < genblock->pieceList.size(); i++)
         {
             //Now we check if we have space to get the new block in
             xCor = genblock->pieceList.at(i).x;
             yCor = genblock->pieceList.at(i).y;
-            if (displayStruct->board[yCor][xCor] != '_')
+            if (displayStruct_->board_[yCor][xCor] != ' ')
+            {
+                //This means we have no space for the new block
+                //this means the game is over
+                delete genblock;
+                isGameOver_ = true;
+                return;
+            }
+        }
+
+        // setting current and next blocks
+        curBlock_ = nextBlock_;
+        nextBlock_ = genblock;
+        if (curBlock_ != nullptr)
+        {
+            blocks_.push_back(curBlock_);
+        }
+    }
+
+    // once there are blocks on the board, update display
+    if(blocks_.size() > 0)
+    {
+        generateBoardFromBlocks_();
+        notifyObservers();
+    }
+}
+
+// takes blocks vector and generates board from blocks played
+void gameBoard::generateBoardFromBlocks_() {
+    // init board with empty spaces
+    for (int i = 0; i < 18; i++) {
+        for (int j = 0; j < 11; j++) {
+            displayStruct_->board_[i][j] = ' ';
+        }
+    }
+
+    // display blocks on board based on position of
+    // individual pieces
+    int xCor = -1;
+    int yCor = -1;
+    for (size_t i = 0; i < blocks_.size(); i++) {
+        for (size_t j = 0; j < blocks_.at(i)->pieceList.size(); j++) {
+            xCor = blocks_.at(i)->pieceList.at(j).x;
+            yCor = blocks_.at(i)->pieceList.at(j).y;
+            displayStruct_->board_[yCor][xCor] =
+                    blocks_.at(i)->pieceList.at(j).type;
+        }
+    }
+}
+
+// takes in directions and transforms block accordingly
+void gameBoard::transformBlock_(vector<Direction> dirs){
+
+    for (int i=0; i<dirs.size(); i++){
+        generateBoardFromBlocks_();
+        curBlock_->translate(dirs.at(i), displayStruct_->board_);
+    }
+
+    generateBoardFromBlocks_();
+    notifyObservers();
+
+}
+
+// drops current block onto the board
+void gameBoard::drop_() {
+
+    generateBoardFromBlocks_();
+    bool status = curBlock_->translate(Direction::down, displayStruct_->board_);
+    while (status==true){
+        generateBoardFromBlocks_();
+        status = curBlock_->translate(Direction::down, displayStruct_->board_);
+    }
+    curBlock_ = nullptr;
+
+    generateBoardFromBlocks_();
+    notifyObservers();
+
+}
+
+// for testing purposes
+// replaces current block with block of type given
+void gameBoard::replace_(char piece)
+{
+    blocks_.erase(std::remove(blocks_.begin(), blocks_.end(), curBlock_),
+                  blocks_.end());
+    generateBoardFromBlocks_();
+
+    //Now we generate a new block
+    int xCor = -1;
+    int yCor = -1;
+    if (!isGameOver_)
+    {
+        //We can have a new block only if the game is still playable
+        Block *genblock = BlockFactory::createBlock(piece);
+        genblock->level_ = displayStruct_->level_;
+        for (int i = 0; i < genblock->pieceList.size(); i++)
+        {
+            //Now we check if we have space to get the new block in
+            xCor = genblock->pieceList.at(i).x;
+            yCor = genblock->pieceList.at(i).y;
+            if (displayStruct_->board_[yCor][xCor] != ' ')
             {
                 //This means we have no space to get the new block into the board
                 //this means the game is over
                 delete genblock;
-                isGameOver = true;
+                isGameOver_ = true;
                 return;
             }
         }
-            curBlock = nextBlock;
-            nextBlock = genblock;
-            if (curBlock != nullptr){
-            blocks.push_back(curBlock);
-            }
-    }
-    if(blocks.size() >= 1)
-    {
-        generateBoardFromBlocks();
+        curBlock_ = genblock;
+        blocks_.push_back(curBlock_);
+
+        generateBoardFromBlocks_();
         notifyObservers();
     }
 }
 
-void gameBoard::generateBoardFromBlocks()
+void gameBoard::hint_()
 {
-
-    for (int i = 0; i < 18; i++)
+    if (!isGameOver_ && nextBlock_ != nullptr)
     {
-        for (int j = 0; j < 11; j++)
-        {
-            displayStruct->board[i][j] = '_';
-        }
-    }
-
-    int xCor = -1;
-    int yCor = -1;
-    for(int i=0; i<blocks.size(); i++){
-        for (int j = 0; j < blocks.at(i)->pieceList.size(); j++)
-        {
-            xCor = blocks.at(i)->pieceList.at(j).x;
-            yCor = blocks.at(i)->pieceList.at(j).y;
-            displayStruct->board[yCor][xCor] = blocks.at(i)->pieceList.at(j).type;
-        }
-    }
-}
-
-bool gameBoard::gameOver()
-{
-    return isGameOver;
-}
-
-void gameBoard::tempPrint()
-   {
-       generateBoardFromBlocks();
-       cout << "    ||1|2|3|4|5|6|7|8|9|A|B|" << endl;
-       cout << "    ||_____________________|" << endl;
-       cout << "0"
-            << "   ||";
-       for (int i = 0; i < 18; i++)
-       {
-
-           for (int j = 0; j < 11; j++)
-           {
-               //We use underscores for testing purposes. TODO: Final code should have " "
-               cout << displayStruct->board[i][j] << "|";
-           }
-           if (i+1 < 10)
-           {
-               cout << endl
-                    << i+1 << "   ||";
-           }
-           else
-           {
-               cout << endl
-                    << i+1<< "  ||";
-           }
-       }
-       cout << endl;
-       cout << endl;
-       if(nextBlock != nullptr){
-           cout << "    |______________________|" << endl;
-           cout << "    | NEXT BLOCK:          |" << endl
-                << "    | ";
-               for (int i = 0; i < 4; i++)
-           {
-               cout << "("<< nextBlock->pieceList.at(i).x << "," << nextBlock->pieceList.at(i).y << ")";
-           }
-       }
-       cout << " |" << endl;
-       cout << "    |______________________|" << endl << endl;
-   }
-
-
-gameBoard::~gameBoard()
-{
-    delete nextBlock;
-    for (auto p : blocks)
-    {
-        delete p;
-    }
-    blocks.clear();
-    delete displayStruct;
-}
-
-void gameBoard::transformBlock(vector<Direction> dirs){
-
-    for (int i=0; i<dirs.size(); i++){
-        generateBoardFromBlocks();
-        curBlock->translate(dirs.at(i), displayStruct->board);
-    }
-    generateBoardFromBlocks();
-    notifyObservers();
-}
-
-void gameBoard::drop() {
-    generateBoardFromBlocks();
-    bool status = curBlock->translate(Direction::down, displayStruct->board);
-    while (status==true){
-        generateBoardFromBlocks();
-        status = curBlock->translate(Direction::down, displayStruct->board);
-    }
-    curBlock = nullptr;
-    generateBoardFromBlocks();
-    notifyObservers();
-    return;
-}
-
-void gameBoard::constructiveForce(char piece) {
-    int xCor = -1;
-    int yCor = -1;
-    // Creating the block
-
-    //We can have a new block only if the game is still playable
-
-    Block *genblock = BlockFactory::createBlock(piece);
-    genblock->level = displayStruct->level;
-    for (int i = 0; i < genblock->pieceList.size(); i++)
-    {
-        //Now we check if we have space to get the new block in
-        xCor = genblock->pieceList.at(i).x;
-        yCor = genblock->pieceList.at(i).y;
-        if (displayStruct->board[yCor][xCor] != '_')
-        {
-            //This means we have no space to get the new block into the board
-            //this means the game is over
-            isGameOver = true;
-            return;
-        }
-    }
-    blocks.push_back(genblock);
-    
-    // Dropping the block
-    generateBoardFromBlocks();
-    bool status = genblock->translate(Direction::down, displayStruct->board);
-    while (status==true){
-        generateBoardFromBlocks();
-        status = genblock->translate(Direction::down, displayStruct->board);
-    }
-    genblock = nullptr;
-    generateBoardFromBlocks();
-    notifyObservers();
-    return;
-}
-
-int gameBoard::getScore(){
-
-    return displayStruct->score;
-}
-
-int gameBoard::getHiScore(){
-
-    return displayStruct->hiScore;
-}
-
-void gameBoard::setHiScore(int hiScore){
-    displayStruct->hiScore = hiScore;
-}
-
-void gameBoard::updateScore()
-{
-    bool isFullFlag = true;
-    int numberOfLines = 0;
-    for(int counter = 0; counter < 18; counter++)
-    {
-        generateBoardFromBlocks();
-        for (int j = 0; j < 11; j++)
-        {
-            if (displayStruct->board[counter][j] == '_')
-            {
-                isFullFlag = false;
-            }
-        }
-
-        if (isFullFlag == true)
-        {
-            numberOfLines++;
-            for (int j = 0; j < 11; j++)
-            {
-                // displayStruct->board[counter][j] = '_';
-                for (int l = 0; l < blocks.size(); l++)
-                {
-                    for (int ll = 0; ll < blocks.at(l)->pieceList.size(); ll++)
-                    {
-                        if (blocks.at(l)->pieceList.at(ll).x == j &&
-                            blocks.at(l)->pieceList.at(ll).y == counter &&
-                            blocks.at(l) != curBlock)
-                        {
-                            blocks.at(l)->pieceList.erase(blocks.at(l)->pieceList.begin() + ll);
-                        }
-                        if (blocks.at(l)->pieceList.size() == 0)
-                        {
-                            displayStruct->score += (1 + blocks.at(l)->level) * (1 + blocks.at(l)->level);
-                            Block *temp = blocks.at(l);
-                            blocks.erase(blocks.begin() + l);
-                            delete temp;
-                        }
-                    }
-                }
-
-            }
-            for (int l = 0; l < blocks.size(); l++)
-            {
-                if (blocks.at(l) != curBlock)
-                {
-                    generateBoardFromBlocks();
-                    blocks.at(l)->shiftDown(displayStruct->board, counter);
-                }
-            }
-        }
-        isFullFlag = true;
-    }
-    // We update score only if rows have been deleted
-    if (numberOfLines > 0)
-    {
-        displayStruct->score += (numberOfLines + displayStruct->level) * (numberOfLines + displayStruct->level);
-    }
-    if (displayStruct->score > displayStruct->hiScore)
-    {
-        displayStruct->hiScore = displayStruct->score;
-    }
-    return;
-}
-
-DisplayStruct *gameBoard::getState(){
-    return displayStruct;
-}
-
-void gameBoard::replace(char piece)
-{
-    blocks.erase(std::remove(blocks.begin(), blocks.end(), curBlock), blocks.end());
-    generateBoardFromBlocks();
-    
-    //Now we generate a new block
-    int xCor = -1;
-    int yCor = -1;
-    if (!isGameOver)
-    {
-        //We can have a new block only if the game is still playable
-        Block *genblock = BlockFactory::createBlock(piece);
-        genblock->level = displayStruct->level;
-        for (int i = 0; i < genblock->pieceList.size(); i++)
-        {
-            //Now we check if we have space to get the new block in
-            xCor = genblock->pieceList.at(i).x;
-            yCor = genblock->pieceList.at(i).y;
-            if (displayStruct->board[yCor][xCor] != '_')
-            {
-                //This means we have no space to get the new block into the board
-                //this means the game is over
-                isGameOver = true;
-                return;
-            }
-        }
-        curBlock = genblock;
-        blocks.push_back(curBlock);
-
-
-        generateBoardFromBlocks();
-        notifyObservers();
-    }
-}
-
-string gameBoard::getNextBlock(){
-    string nextBlockRepr;
-    char type = nextBlock->pieceList.at(0).type;
-    for(int i=0; i<2; i++){
-        for(int j=0; j<4; j++){
-            nextBlockRepr[i*4+j] = '_';
-        }
-    }
-    for (int i = 0; i < nextBlock->pieceList.size(); i++)
-    {
-        nextBlockRepr[(nextBlock->pieceList.at(i).y - 3)*4+nextBlock->pieceList.at(i).x] = type;
-    }
-    return nextBlockRepr;
-}
-
-void gameBoard::setLevel(int lvl)
-{
-    if(nextBlock != nullptr){
-        nextBlock->level = lvl;
-    }
-    displayStruct->level = lvl;
-}
-
-void gameBoard::hint()
-{
-    
-    if (!isGameOver && nextBlock != nullptr)
-    {
-        char piece = nextBlock->pieceList.at(0).type;
+        char piece = nextBlock_->pieceList.at(0).type;
         int xCor = -1;
         int yCor = -1;
 
@@ -358,48 +197,211 @@ void gameBoard::hint()
         bool status = true;
         for (int i = 0; i < 11; i++)
         {
-            genblock = BlockFactory::createBlock(piece); 
-            blocks.push_back(genblock);
-            
-            for (int j = 0; j < i; j++)
-                {
-                    generateBoardFromBlocks();
-                    status = genblock->translate(Direction::right, displayStruct->board);
-                }
-            
-            generateBoardFromBlocks();
-            status = genblock->translate(Direction::down, displayStruct->board);
-            
-            while (status == true)
-                {
-                    generateBoardFromBlocks();
-                    status = genblock->translate(Direction::down, displayStruct->board);
-                }
-                
-            if (genblock->pieceList.at(0).y > lowest)
-                {
-                    lowest = genblock->pieceList.at(0).y;
-                    hintBlock = genblock;
-                    genblock = nullptr;
-                }
-            else
-                {
+            genblock = BlockFactory::createBlock(piece);
+            blocks_.push_back(genblock);
 
-                    delete genblock;
-                    genblock = nullptr;
-                }
-                blocks.pop_back();
-        }
-        for (int jj = 0; jj < hintBlock->pieceList.size(); jj++)
+            for (int j = 0; j < i; j++)
             {
-                hintBlock->pieceList.at(jj).type = '?';
+                generateBoardFromBlocks_();
+                status = genblock->
+                        translate(Direction::right, displayStruct_->board_);
             }
 
-        blocks.push_back(hintBlock);
-        generateBoardFromBlocks();
-        notifyObservers();
-        blocks.pop_back();
-        delete hintBlock;
-        
+            generateBoardFromBlocks_();
+            status = genblock->
+                    translate(Direction::down, displayStruct_->board_);
+
+            while (status == true)
+            {
+                generateBoardFromBlocks_();
+                status = genblock->
+                        translate(Direction::down, displayStruct_->board_);
+            }
+
+            if (genblock->pieceList.at(0).y > lowest)
+            {
+                lowest = genblock->pieceList.at(0).y;
+                hintBlock = genblock;
+                genblock = nullptr;
+            }
+            else
+
+                delete genblock;
+            genblock = nullptr;
+        }
+        blocks_.pop_back();
     }
+    for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
+    {
+        hintBlock->pieceList.at(jj).type = '?';
+    }
+
+    blocks_.push_back(hintBlock);
+    generateBoardFromBlocks_();
+    notifyObservers();
+    blocks_.pop_back();
+    delete hintBlock;
+}
+
+// generates and drops our special blocks
+// for level 4: generates * block and drops it
+// in the centre of the board
+void gameBoard::constructiveForce_(char piece) {
+    int xCor = -1;
+    int yCor = -1;
+
+    // Creating the block
+    //We can have a new block only if the game is still playable
+    Block *genblock = BlockFactory::createBlock(piece);
+    genblock->level_ = displayStruct_->level_;
+    for (int i = 0; i < genblock->pieceList.size(); i++)
+    {
+        //Now we check if we have space to get the new block in
+        xCor = genblock->pieceList.at(i).x;
+        yCor = genblock->pieceList.at(i).y;
+        if (displayStruct_->board_[yCor][xCor] != ' ')
+        {
+            //This means we have no space for the new block
+            //this means the game is over
+            delete genblock;
+            isGameOver_ = true;
+            return;
+        }
+    }
+
+    blocks_.push_back(genblock);
+    
+    // Dropping the block
+    generateBoardFromBlocks_();
+    bool status = genblock->translate(Direction::down,
+            displayStruct_->board_);
+    while (status==true){
+        generateBoardFromBlocks_();
+        status = genblock->translate(Direction::down,
+                displayStruct_->board_);
+    }
+    genblock = nullptr;
+
+    generateBoardFromBlocks_();
+    notifyObservers();
+
+}
+
+//----------------------------------------------------------------------
+// ACCESSORS AND MUTATORS
+int gameBoard::getScore_(){
+
+    return displayStruct_->score_;
+}
+
+int gameBoard::getHiScore_(){
+
+    return displayStruct_->hiScore_;
+}
+
+void gameBoard::setHiScore_(int hiScore_){
+    displayStruct_->hiScore_ = hiScore_;
+}
+
+void gameBoard::updateScore_()
+{
+    bool isFullFlag = true;
+    int numberOfLines = 0;
+    for(int counter = 0; counter < 18; counter++)
+    {
+        generateBoardFromBlocks_();
+
+        // if row has an empty space, it is not full
+        for (int j = 0; j < 11; j++)
+        {
+            if (displayStruct_->board_[counter][j] == ' ')
+            {
+                isFullFlag = false;
+            }
+        }
+
+        // if row is full, it needs to be cleared
+        if (isFullFlag == true)
+        {
+            numberOfLines++;
+            for (int j = 0; j < 11; j++)
+            {
+                for (size_t l = 0; l < blocks_.size(); l++)
+                {
+                    Block* temp = blocks_.at(l);
+                    for (size_t ll = 0; ll < temp->pieceList.size(); ll++)
+                    {
+                        if (temp->pieceList.at(ll).x == j &&
+                            temp->pieceList.at(ll).y == counter &&
+                            temp != curBlock_)
+                        {
+                            temp->pieceList.erase(temp->pieceList.begin() + ll);
+                        }
+                        if (blocks_.at(l)->pieceList.size() == 0)
+                        {
+                            displayStruct_->score_ +=
+                                    (1 + temp->level_) * (1 + temp->level_);
+                            //Block *temp = blocks.at(l);
+                            blocks_.erase(blocks_.begin() + l);
+                            delete temp;
+                        }
+                    }
+                }
+            }
+
+            // shift all rows above cleared row down by one
+            for (size_t l = 0; l < blocks_.size(); l++)
+            {
+                if (blocks_.at(l) != curBlock_)
+                {
+                    generateBoardFromBlocks_();
+                    blocks_.at(l)->shiftDown(displayStruct_->board_, counter);
+                }
+            }
+        }
+        isFullFlag = true;
+    }
+
+    // We update score only if rows have been deleted
+    if (numberOfLines > 0)
+    {
+        int lineLevel = numberOfLines + displayStruct_->level_;
+        displayStruct_->score_ += lineLevel * lineLevel;
+    }
+    if (displayStruct_->score_ > displayStruct_->hiScore_)
+    {
+        displayStruct_->hiScore_ = displayStruct_->score_;
+    }
+
+}
+
+void gameBoard::setLevel_(int lvl)
+{
+    if(nextBlock_ != nullptr){
+        nextBlock_->level_ = lvl;
+    }
+    displayStruct_->level_ = lvl;
+}
+
+//----------------------------------------------------------------------
+// Accessors for Observer DP
+DisplayStruct *gameBoard::getState_(){
+    return displayStruct_;
+}
+
+string gameBoard::getNextBlock_(){
+    string nextBlockRepr;
+    char type = nextBlock_->pieceList.at(0).type;
+    for(int i=0; i<2; i++){
+        for(int j=0; j<4; j++){
+            nextBlockRepr[i*4+j] = ' ';
+        }
+    }
+    for (int i = 0; i < nextBlock_->pieceList.size(); i++)
+    {
+        int index = (nextBlock_->pieceList.at(i).y - 3)*4
+                +nextBlock_->pieceList.at(i).x;
+        nextBlockRepr[index] = type;
+    }
+    return nextBlockRepr;
 }
