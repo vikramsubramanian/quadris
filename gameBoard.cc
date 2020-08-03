@@ -17,7 +17,7 @@ gameBoard::gameBoard(){
     nextBlock_ = nullptr;
     displayStruct_ = new DisplayStruct;
     displayStruct_->score_ = 0;
-    displayStruct_->hiScore = 0;
+    displayStruct_->hiScore_ = 0;
     displayStruct_->level_ = 0;
     for(int i=0;i<18;i++)
     {
@@ -185,6 +185,7 @@ void gameBoard::replace_(char piece)
 
 void gameBoard::hint_()
 {
+    Block *hintBlock = nullptr;
     if (!isGameOver_ && nextBlock_ != nullptr)
     {
         char piece = nextBlock_->pieceList.at(0).type;
@@ -192,7 +193,6 @@ void gameBoard::hint_()
         int yCor = -1;
 
         Block *genblock = nullptr;
-        Block *hintBlock = nullptr;
         int lowest = -1;
         bool status = true;
         for (int i = 0; i < 11; i++)

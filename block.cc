@@ -16,7 +16,7 @@ void Block::shiftDown(char board[18][11], int clearedRow){
 
     for (int i = 0; i < pieceList.size(); i++)
     {
-        board[pieceList.at(i).y][pieceList.at(i).x] = '_';
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
     }
     for (int i = 0; i < pieceList.size(); i++)
     {
@@ -25,7 +25,7 @@ void Block::shiftDown(char board[18][11], int clearedRow){
         //FIX THIS!
         if (!(newY < 0 || newY > clearedRow ||
               newX < 0 || newX > 11 ||
-              board[newY][newX] != '_'))
+              board[newY][newX] != ' '))
         {
             pieceList.at(i).y += 1;
         }
@@ -41,7 +41,7 @@ bool Block::translate(Direction dir, char board[18][11])
     // First we remove the block from this copy of the board
     for (int i = 0; i < pieceList.size(); i++)
     {
-        board[pieceList.at(i).y][pieceList.at(i).x] = '_';
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
     }
 
     int currentX = 12;
@@ -62,7 +62,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newY = pieceList.at(i).y;
                 if(newY < 0 || newY > 17  ||
                 newX < 0  || newX >= 11  ||
-                board[newY][newX] != '_')
+                board[newY][newX] != ' ')
                 {
 
                     return false;
@@ -84,7 +84,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newY = pieceList.at(i).y;
                 if (newY < 0 || newY > 17 ||
                     newX < 0 || newX >= 11 ||
-                    board[newY][newX] != '_')
+                    board[newY][newX] != ' ')
                 {
                     return false;
                 }
@@ -104,7 +104,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newY = pieceList.at(i).y + 1;
                 if (newY < 0 || newY > 17 ||
                     newX < 0 || newX >= 11 ||
-                    board[newY][newX] != '_')
+                    board[newY][newX] != ' ')
                 {
                     return false;
                 }
@@ -164,7 +164,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newY = rotatedPos.at(i).at(1) + translateY;
                 if (newY < 0 || newY > 17 ||
                     newX < 0 || newX >= 11 ||
-                    board[newY][newX] != '_')
+                    board[newY][newX] != ' ')
                 {
                     return false;
                 }
@@ -222,7 +222,7 @@ bool Block::translate(Direction dir, char board[18][11])
                 newY = rotatedPos.at(i).at(1) + translateY;
                 if (newY < 0 || newY > 17 ||
                     newX < 0 || newX >= 11 ||
-                    board[newY][newX] != '_')
+                    board[newY][newX] != ' ')
                 {
                     return false;
                 }
