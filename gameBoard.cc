@@ -11,8 +11,7 @@ using namespace std;
 
 //----------------------------------------------------------------------
 // Constructor
-gameBoard::gameBoard()
-{
+gameBoard::gameBoard(){
     isGameOver_ = false;
     curBlock_ = nullptr;
     nextBlock_ = nullptr;
@@ -20,7 +19,6 @@ gameBoard::gameBoard()
     displayStruct_->score_ = 0;
     displayStruct_->hiScore_ = 0;
     displayStruct_->level_ = 0;
-
     for(int i=0;i<18;i++)
     {
         for(int j = 0; j<11; j++)
@@ -135,17 +133,16 @@ void gameBoard::transformBlock_(vector<Direction> dirs){
 void gameBoard::drop_() {
 
     generateBoardFromBlocks_();
-    bool status = curBlock_->
-            translate(Direction::down, displayStruct_->board_);
+    bool status = curBlock_->translate(Direction::down, displayStruct_->board_);
     while (status==true){
         generateBoardFromBlocks_();
-        status = curBlock_->
-                translate(Direction::down, displayStruct_->board_);
+        status = curBlock_->translate(Direction::down, displayStruct_->board_);
     }
     curBlock_ = nullptr;
 
     generateBoardFromBlocks_();
     notifyObservers();
+
 }
 
 // for testing purposes
@@ -171,8 +168,8 @@ void gameBoard::replace_(char piece)
             yCor = genblock->pieceList.at(i).y;
             if (displayStruct_->board_[yCor][xCor] != ' ')
             {
-                //This means we have no space for new block
-                //board is full and the game is over
+                //This means we have no space to get the new block into the board
+                //this means the game is over
                 delete genblock;
                 isGameOver_ = true;
                 return;
@@ -295,15 +292,12 @@ void gameBoard::constructiveForce_(char piece) {
     generateBoardFromBlocks_();
     bool status = genblock->translate(Direction::down,
             displayStruct_->board_);
-    while (status == true){
+    while (status==true){
         generateBoardFromBlocks_();
         status = genblock->translate(Direction::down,
                 displayStruct_->board_);
     }
     genblock = nullptr;
-
-    // check if newly dropped block clears a row
-    updateScore_();
 
     generateBoardFromBlocks_();
     notifyObservers();
@@ -364,6 +358,7 @@ void gameBoard::updateScore_()
                         {
                             displayStruct_->score_ +=
                                     (1 + temp->level_) * (1 + temp->level_);
+                            //Block *temp = blocks.at(l);
                             blocks_.erase(blocks_.begin() + l);
                             delete temp;
                         }
@@ -394,6 +389,7 @@ void gameBoard::updateScore_()
     {
         displayStruct_->hiScore_ = displayStruct_->score_;
     }
+
 }
 
 void gameBoard::setLevel_(int lvl)
