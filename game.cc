@@ -342,8 +342,13 @@ void Game::play()
         std::cout << "BZZT! Game Over!" << std::endl;
         std::cout << "Would you like to play another game? (Y/N)" << std::endl;
         std::cin >> newGame;
-        if(newGame == "Y") _restart();
-    }
 
-    std::cout << "BZZT! Game Over!" << std::endl;
+        // if player would like to continue, restart game
+        // and clear any renamed commands
+        if(newGame == "Y")
+        {
+            _restart();
+            cmd.resetMap_();
+        }
+    }
 }
