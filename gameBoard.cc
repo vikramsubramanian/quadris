@@ -187,10 +187,13 @@ void gameBoard::replace_(char piece)
     }
 }
 
-void gameBoard::hint_()
+void gameBoard::hint_(bool playTurn, char nextPiece= 'N')
 {
     Block *hintBlock = nullptr;
     char piece = curBlock_->pieceList.at(0).type;
+    if(playTurn){
+        blocks_.pop_back();
+    }
     if (!isGameOver_ && curBlock_ != nullptr)
     {
         Block *genblock = nullptr;
@@ -262,21 +265,29 @@ void gameBoard::hint_()
         }
     }
     
-    for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
-    {
-        //We replace the char that each piece is represented by in our block
-        //In order to display the hint block with '?'s
-        hintBlock->pieceList.at(jj).type = '?';
+    if(!playTurn){
+        for (size_t jj = 0; jj < hintBlock->pieceList.size(); jj++)
+        {
+            //We replace the char that each piece is represented by in our block
+            //In order to display the hint block with '?'s
+            hintBlock->pieceList.at(jj).type = '?';
+        }
     }
-
     //Push the block with the '?'s and update display
     blocks_.push_back(hintBlock);
     generateBoardFromBlocks_();
     notifyObservers();
 
     //Remove the block with the '?'s for next command
+    if(!playTurn){
     blocks_.pop_back();
     delete hintBlock;
+    }
+    else
+    {
+        newBlock_(nextPiece);
+        nextPiece
+    }
 }
 
 // generates and drops our special blocks
