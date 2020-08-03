@@ -150,6 +150,7 @@ istream &operator>>(istream &in, Command &c) {
 
 // reset renamed commands in case of game restart
 void Command::resetMap_() {
+  bonusOn_ = false;
   commandTypes_.clear();
   commandTypes_ = {{"left", LEFT},
                    {"right", RIGHT},
