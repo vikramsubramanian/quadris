@@ -19,7 +19,7 @@
 
 // -------------------------------------------------------------------------------
 // Constructor
-Game::Game(int lvl, std::string file, int seed)
+Game::Game(int lvl, std::string file, int seed, bool textOnly)
 {
     gameData_ = new gamePImpl;
 
@@ -27,6 +27,7 @@ Game::Game(int lvl, std::string file, int seed)
     gameData_->init_.lvl_ = lvl;
     gameData_->init_.file_ = file;
     gameData_->init_.seed_ = seed;
+    gameData_->init_.textOnly_ = textOnly;
 
     // set up Observer DP
     gameData_->board_ = new gameBoard;

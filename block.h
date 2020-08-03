@@ -5,6 +5,8 @@
 #include "direction.h"
 #include "piece.h"
 
+// Factory DP
+
 class Block{
     private:
         void _translate(bool, bool);
@@ -13,12 +15,11 @@ class Block{
         bool _inBounds(char board[18][11]);
 
     protected:
+    // The constructor is protected so that it cannot
+    // be instantiated by anything other than its factory.
         Block();
 
     public:
-        /* The constructor is protected so that it cannot be instantiated by anything other
-        * than its factory. It's not private because subclasses need to call it.
-        */
         virtual ~Block() {};
         std::vector<Piece> pieceList;
         int rotateAroundPivot[2];
