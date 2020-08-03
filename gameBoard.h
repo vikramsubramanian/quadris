@@ -13,34 +13,36 @@ class gameBoard : public Subject
     public:
         gameBoard();
         ~gameBoard();
-        bool gameOver();
-        void newBlock(char);
-        void transformBlock(std::vector<Direction>);
-        int getScore();
-        int getHiScore();
-        void setHiScore(int);
-        void updateScore();
-        DisplayStruct *getState();
-        std::string getNextBlock();
-        void drop();
-        void constructiveForce(char);
-        void replace(char piece);
-        void tempPrint();
-        void setLevel(int);
-        void decreaseLevel();
-        void hint();
+
+        bool gameOver_();
+
+        // Accessors and Mutators
+        int getScore_();
+        int getHiScore_();
+        void setHiScore_(int);
+        void updateScore_();
+        DisplayStruct *getState_();
+        std::string getNextBlock_();
+
+        // command functions
+        void newBlock_(char);
+        void transformBlock_(std::vector<Direction>);
+        void drop_();
+        void constructiveForce_(char);
+        void replace_(char piece);
+        void setLevel_(int);
+        void hint_();
 
 
     private:
 
-        std::vector<Block*> blocks;
-        bool isGameOver;
-        Block* curBlock;
-        Block* nextBlock;
-        DisplayStruct *displayStruct;
-        //METHODS//
+        std::vector<Block*> blocks_;
+        bool isGameOver_;
+        Block* curBlock_;
+        Block* nextBlock_;
+        DisplayStruct *displayStruct_;
         
-        void generateBoardFromBlocks();
+        void generateBoardFromBlocks_();
 };
 
 

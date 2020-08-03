@@ -1,14 +1,14 @@
 #ifndef _DISPLAYSTRUCT_
 #define _DISPLAYSTRUCT_
 
-
-
+// struct to be passed to observers (displays)
+// for Observer DP
 struct DisplayStruct
 {
-int level;
-int score;
-int hiScore;
-char board[18][11];
+    int level_;
+    int score_;
+    int hiScore_;
+    char board_[18][11];
 };
 
-#endif
+#endi
