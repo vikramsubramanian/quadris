@@ -5,12 +5,12 @@
 #include "displayStruct.h"
 #include <iostream>
 
+// Observer DP
+
 class TextDisplay : public Observer {
 
 public:
-
     TextDisplay(std::ostream &, gameBoard *);
-
     ~TextDisplay();
 
     void notify_() override;
@@ -20,6 +20,5 @@ private:
     std::ostream& out;
 
 };
-
 
 #endif //TEXTDISPLAY_H

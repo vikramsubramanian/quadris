@@ -1,11 +1,10 @@
 #ifndef _BLOCKFACTORY_H_
 #define _BLOCKFACTORY_H_
-
 #include "block.h"
 #include "piece.h"
-
 #include <map>
 
+// Factory DP
 
 class BlockFactory
 {

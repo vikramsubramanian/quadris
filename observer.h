@@ -1,10 +1,14 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 
+// Observer DP
+
 class Observer {
 public:
-    virtual void notify_() = 0; // to be overridden by view
     virtual ~Observer();
+
+    // to be overridden by displays
+    virtual void notify_() = 0;
 };
 
 #endif

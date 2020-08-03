@@ -1,5 +1,7 @@
 #include "subject.h"
 
+// Observer DP
+
 //--------------------------------------------------------------------------------------------
 // Constructor and Destructor
 Subject::Subject() {}

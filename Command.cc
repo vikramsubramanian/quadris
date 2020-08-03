@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 
+// map that holds kvp of command string and command type enum
 map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"right", RIGHT},
                                     {"down", DOWN},
@@ -52,8 +53,6 @@ istream &operator>>(istream &in, Command &c){
         return in;
     }
 
-    assert(!cmd.empty());
-
     // identify multiplier if present
     // if so, extract all digits in prefix
     int i = 1;
@@ -65,7 +64,7 @@ istream &operator>>(istream &in, Command &c){
         i *= 10;
     }
 
-    // no multiplier provided
+    // no multiplier provided, set to default 1
     if(i == 1) c.multiplier_++;
 
     // convert provided string to lowercase
@@ -73,24 +72,29 @@ istream &operator>>(istream &in, Command &c){
         return tolower(c);
     });
 
+    // recognize single letter commands to avoid prefix issues
     if(cmd == "i" || cmd == "j" || cmd == "l" || cmd == "s" ||
         cmd == "z"|| cmd == "o" || cmd == "t")
     {
         c.commandType_ = commandTypes_[cmd];
         return in;
     }
+
     // search for unique match in commandTypes with provided cmd string
     int substrLen = 1;
     int occurrences;
     while(substrLen <= cmd.length())
     {
-
+        // occurrences tracks number of matching commands
+        // with the current substring
         occurrences = count_if(commandTypes_.begin(), commandTypes_.end(),
                             substrEqual(cmd.substr(0, substrLen), substrLen));
 
         if(occurrences == 0) break;
         else if(occurrences == 1)
         {
+            // check that the match is actually equal as commands
+            // that match a unique prefix aren't necessarily valid
             std::map<string, Type>:: iterator it =
                     find_if(commandTypes_.begin(), commandTypes_.end(),
                             substrEqual(cmd, cmd.length()));
@@ -103,6 +107,7 @@ istream &operator>>(istream &in, Command &c){
     }
 
     // reset multiplier for commands that don't support it
+    // and handle bonus enablement
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM ||
             c.commandType_ == SEQUENCE || c.commandType_ == ENABLE_BONUS ||
@@ -115,8 +120,8 @@ istream &operator>>(istream &in, Command &c){
             c.bonusOn_ = false;
     }
 
-
     // update map for rename command if bonus on
+    // otherwise, "eat" the tokens after rename
     if(c.commandType_ == RENAME)
     {
         c.multiplier_ = 1;
