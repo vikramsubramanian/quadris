@@ -13,12 +13,12 @@ void Block::shiftDown(char board[18][11], int clearedRow){
     int newY = -1;
 
     // First we remove the block from this copy of the board
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
     }
 
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         newX = pieceList.at(i).x;
         newY = pieceList.at(i).y + 1;
@@ -38,7 +38,7 @@ void Block::shiftDown(char board[18][11], int clearedRow){
 }
 void Block::_translate(bool positive, bool horizontal) {
     int j = (positive) ? 1 : -1;
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         if (horizontal) {
             pieceList.at(i).x += j;
@@ -57,7 +57,7 @@ void Block::_clockwise() {
     int translateY = -1;
     vector<vector<int>> rotatedPos;
     vector<int> temp;
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         if (pieceList.at(i).x < currentX)
         {
@@ -69,7 +69,7 @@ void Block::_clockwise() {
         }
     }
     rotatedPos.clear();
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         temp.clear();
         temp.push_back(-1 * pieceList.at(i).y);
@@ -77,7 +77,7 @@ void Block::_clockwise() {
         rotatedPos.push_back(temp);
     }
 
-    for (int i = 0; i < rotatedPos.size(); i++)
+    for (int i = 0; (unsigned)i < rotatedPos.size(); i++)
     {
         if (rotatedPos.at(i).at(0) < newXPos)
         {
@@ -90,7 +90,7 @@ void Block::_clockwise() {
     }
     translateX = currentX - newXPos;
     translateY = currentY - newYPos;
-    for (int i = 0; i < rotatedPos.size(); i++)
+    for (int i = 0; (unsigned)i < rotatedPos.size(); i++)
     {
         pieceList.at(i).x = rotatedPos.at(i).at(0) + translateX;
         pieceList.at(i).y = rotatedPos.at(i).at(1) + translateY;
@@ -141,7 +141,7 @@ bool Block::_inBounds(char board[18][11])
     //Placeholder vars
     int newX, newY;
     //We check every piece in the block.
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         newX = pieceList.at(i).x;
         newY = pieceList.at(i).y;
@@ -166,7 +166,7 @@ bool Block::translate(Direction dir, char board[18][11])
     // First we remove the block from this copy of the board
     // One piece of a block, after transformation, could occupy another pieces location
     //Therefore we, initially, remove the entire block we are trying to rotate.
-    for (int i = 0; i < pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < pieceList.size(); i++)
     {
         board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
     }
