@@ -124,6 +124,8 @@ istream &operator>>(istream &in, Command &c){
             c.bonusOn_ = true;
         if (c.commandType_ == DISABLE_BONUS)
             c.bonusOn_ = false;
+        if(c.commandType_ == RESTART)
+            c.resetMap_();
     }
 
     // update map for rename command if bonus on
@@ -147,4 +149,28 @@ istream &operator>>(istream &in, Command &c){
     }
 
     return in;
+}
+
+// reset renamed commands in case of game restart
+void Command::resetMap_()
+{
+    commandTypes_.clear();
+    commandTypes_ = {{"left", LEFT},
+                     {"right", RIGHT},
+                     {"down", DOWN},
+                     {"clockwise", CLOCKWISE},
+                     {"counterclockwise", COUNTERCLOCKWISE},
+                     {"drop", DROP},
+                     {"i", I}, {"j", J}, {"l", L}, {"s", S},
+                     {"z", Z}, {"o", O}, {"t", T},
+                     {"norandom", NORANDOM},
+                     {"random", RANDOM},
+                     {"sequence", SEQUENCE},
+                     {"levelup", LEVELUP},
+                     {"leveldown", LEVELDOWN},
+                     {"restart", RESTART},
+                     {"hint", HINT},
+                     {"rename", RENAME},
+                     {"enablebonus", ENABLE_BONUS},
+                     {"disablebonus", DISABLE_BONUS}};
 }
