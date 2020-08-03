@@ -5,10 +5,10 @@
 
 class Observer {
 public:
-    virtual ~Observer();
+  virtual ~Observer();
 
-    // to be overridden by displays
-    virtual void notify_() = 0;
+  // to be overridden by displays
+  virtual void notify_() = 0;
 };
 
 #endif

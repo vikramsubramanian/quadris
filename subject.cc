@@ -9,25 +9,21 @@ Subject::~Subject() {}
 
 //--------------------------------------------------------------------------------------------
 // Manipulate Observers
-void Subject::attach(Observer *o)
-{
-    observers.emplace_back(o);
-}
+void Subject::attach(Observer *o) { observers.emplace_back(o); }
 
-void Subject::detach(Observer *o)
-{
-    for (auto it = observers.begin(); it != observers.end();)
-    {
-        if (*it == o)
-        {
-            observers.erase(it);
-        } else { ++it; }
+void Subject::detach(Observer *o) {
+  for (auto it = observers.begin(); it != observers.end();) {
+    if (*it == o) {
+      observers.erase(it);
+    } else {
+      ++it;
     }
+  }
 }
 
 //--------------------------------------------------------------------------------------------
 // Notify Observers
-void Subject::notifyObservers()
-{
-    for (auto ob : observers) ob->notify_();
+void Subject::notifyObservers() {
+  for (auto ob : observers)
+    ob->notify_();
 }
