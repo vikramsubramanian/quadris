@@ -193,40 +193,58 @@ void gameBoard::hint_()
         Block *genblock = nullptr;
         int lowest = -1;
         bool status = true;
+        int possibleLowest = -1;
         for (int i = 0; i < 11; i++)
         {
-            genblock = BlockFactory::createBlock(piece);
-            blocks_.push_back(genblock);
+            for(int rotateCount =0 ; rotateCount = 2; rotateCount++){
+                genblock = BlockFactory::createBlock(piece);
+                blocks_.push_back(genblock);
+                for (int coun =0; coun < rotateCount; coun++){
+                    generateBoardFromBlocks_();
+                    status = genblock->translate(Direction::clockwise, displayStruct_->board_);
+                }
+                for (int j = 0; j < i; j++)
+                {
+                    generateBoardFromBlocks_();
+                    status = genblock->
+                            translate(Direction::right, displayStruct_->board_);
+                }
 
-            for (int j = 0; j < i; j++)
-            {
-                generateBoardFromBlocks_();
-                status = genblock->
-                        translate(Direction::right, displayStruct_->board_);
-            }
-
-            generateBoardFromBlocks_();
-            status = genblock->
-                    translate(Direction::down, displayStruct_->board_);
-
-            while (status == true)
-            {
                 generateBoardFromBlocks_();
                 status = genblock->
                         translate(Direction::down, displayStruct_->board_);
-            }
 
-            if (genblock->pieceList.at(0).y > lowest)
-            {
-                lowest = genblock->pieceList.at(0).y;
-                hintBlock = genblock;
+                while (status == true)
+                {
+                    generateBoardFromBlocks_();
+                    status = genblock->
+                            translate(Direction::down, displayStruct_->board_);
+                }
+
+                possibleLowest = genblock->pieceList.at(0).y;
+
+                //find the lowest piece in this block
+                for (int pieceCount = 0; (unsigned)pieceCount < genblock->pieceList.size(); pieceCount++)
+                {
+                    if (possibleLowest > genblock->pieceList.at(pieceCount).y)
+                    {
+                        possibleLowest = genblock->pieceList.at(pieceCount).y;
+                    }
+                }
+
+                if (possibleLowest < lowest)
+                {
+                    lowest = possibleLowest;
+                    hintBlock = genblock;
+                    genblock = nullptr;
+                }
+                else
+                {
+                    delete genblock;
+                }
+                blocks_.pop_back();
                 genblock = nullptr;
             }
-            else
-
-                delete genblock;
-            blocks_.pop_back();
-            genblock = nullptr;
         }
         
     }
