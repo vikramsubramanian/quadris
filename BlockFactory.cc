@@ -22,7 +22,6 @@ BlockFactory::~BlockFactory() {}
 //static member
 std::map<char, BlockFactory *> BlockFactory::factories;
 
-
 BlockFactoryInitializer::BlockFactoryInitializer()
 {
     BlockFactory::factories['T'] = new TBlock::Factory;
@@ -34,6 +33,7 @@ BlockFactoryInitializer::BlockFactoryInitializer()
     BlockFactory::factories['I'] = new IBlock::Factory;
     BlockFactory::factories['B'] = new BBlock::Factory;
 }
+
 BlockFactoryInitializer::~BlockFactoryInitializer()
 {
     std::map<char, BlockFactory *>::iterator it =
@@ -45,4 +45,4 @@ BlockFactoryInitializer::~BlockFactoryInitializer()
 }
 
 //Static member definition:
-BlockFactoryInitializer BlockFactoryInitializer::si; 
+BlockFactoryInitializer BlockFactoryInitializer::si;

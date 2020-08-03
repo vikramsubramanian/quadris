@@ -4,7 +4,6 @@
 #include "displayStruct.h"
 #include "BlockFactory.h"
 #include "block.h"
-
 #include <vector>
 #include <string>
 
@@ -33,9 +32,7 @@ class gameBoard : public Subject
         void setLevel_(int);
         void hint_();
 
-
     private:
-
         std::vector<Block*> blocks_;
         bool isGameOver_;
         Block* curBlock_;
@@ -44,6 +41,5 @@ class gameBoard : public Subject
         
         void generateBoardFromBlocks_();
 };
-
 
 #endif

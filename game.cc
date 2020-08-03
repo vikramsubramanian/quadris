@@ -336,5 +336,6 @@ void Game::play()
     while (!gameData_->board_->gameOver_() && *(gameData_->in_) >> cmd) {
         _act(cmd);
     }
+
     std::cout << "BZZT! Game Over!" << std::endl;
 }

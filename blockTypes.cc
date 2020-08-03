@@ -137,7 +137,7 @@ ZBlock *ZBlock::Factory::create()
 //////////////////////////////////////////
 BBlock::BBlock()
 {
-    pieceList.push_back(Piece(5, 3, 'B'));
+    pieceList.push_back(Piece(5, 3, '*'));
 }
 
 BBlock::~BBlock() {}

@@ -14,7 +14,7 @@ public:
     static Block *createBlock(char);
 
 private:
-    virtual Block *create() = 0; //Factory Method
+    virtual Block *create() = 0; // Factory Method
     static std::map<char, BlockFactory *> factories;
 };
 
