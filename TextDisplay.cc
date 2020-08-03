@@ -27,27 +27,24 @@ void TextDisplay::notify_()
     out << "    ___________ " << endl;
 
     // print board
-    out << "1" << "   ";
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 18; i++)
     {
-
+        if (i+1 < 10)
+        {
+            out << i+1 << "   ";
+        }
+        else
+        {
+            out << i+1<< "  ";
+        }
         for (int j = 0; j < 11; j++)
         {
             //We use underscores for testing purposes. TODO: Final code should have " "
             out << display->board[i][j];
         }
-        if (i+2 < 10)
-        {
-            out << endl
-                 << i+2 << "   ";
-        }
-        else
-        {
-            out << endl
-                 << i+2<< "  ";
-        }
+        out << endl;
     }
-    out << "___________ " << endl;
+    out << "    ___________ " << endl;
 
     // print next block
     out << "    Next:" << endl;

@@ -164,9 +164,13 @@ void gameBoard::drop() {
     return;
 }
 
-int gameBoard::getScore(){
+int gameBoard::getHiScore(){
 
-    return displayStruct->score;
+    return displayStruct->hiScore;
+}
+
+void gameBoard::setHiScore(int hiScore){
+    displayStruct->hiScore = hiScore;
 }
 
 void gameBoard::updateScore()
@@ -218,7 +222,6 @@ void gameBoard::updateScore()
                 {
                     
                     generateBoardFromBlocks();
-                    tempPrint();
                     blocks.at(l)->shiftDown(displayStruct->board);
 
                     
@@ -249,7 +252,8 @@ DisplayStruct *gameBoard::getState(){
 void gameBoard::replace(char piece)
 {
     blocks.erase(std::remove(blocks.begin(), blocks.end(), curBlock), blocks.end());
-
+    generateBoardFromBlocks();
+    
     //Now we generate a new block
     int xCor = -1;
     int yCor = -1;
@@ -295,11 +299,68 @@ string gameBoard::getNextBlock(){
     return string(nextBlockRepr);
 }
 
-void gameBoard::increaseLevel()
+void gameBoard::setLevel(int lvl)
 {
-    displayStruct->level += 1;
+    displayStruct->level = lvl;
 }
-void gameBoard::decreaseLevel()
+
+void gameBoard::hint()
 {
-    displayStruct->level -= 1;
+    
+    if (!isGameOver && nextBlock != nullptr)
+    {
+        char piece = nextBlock->pieceList.at(0).type;
+        int xCor = -1;
+        int yCor = -1;
+
+        Block *genblock = nullptr;
+        Block *hintBlock = nullptr;
+        int lowest = -1;
+        bool status = true;
+        for (int i = 0; i < 11; i++)
+        {
+            genblock = BlockFactory::createBlock(piece); 
+            blocks.push_back(genblock);
+            
+            for (int j = 0; j < i; j++)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::right, displayStruct->board);
+                }
+            
+            generateBoardFromBlocks();
+            status = genblock->translate(Direction::down, displayStruct->board);
+            
+            while (status == true)
+                {
+                    generateBoardFromBlocks();
+                    status = genblock->translate(Direction::down, displayStruct->board);
+                }
+                
+            if (genblock->pieceList.at(0).y > lowest)
+                {
+                    lowest = genblock->pieceList.at(0).y;
+                    hintBlock = genblock;
+                    genblock = nullptr;
+                }
+            else
+                {
+
+                    delete genblock;
+                    genblock = nullptr;
+                }
+                blocks.pop_back();
+        }
+        for (int jj = 0; jj < hintBlock->pieceList.size(); jj++)
+            {
+                hintBlock->pieceList.at(jj).type = '?';
+            }
+
+        blocks.push_back(hintBlock);
+        generateBoardFromBlocks();
+        notifyObservers();
+        blocks.pop_back();
+        delete hintBlock;
+        
+    }
 }

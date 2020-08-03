@@ -15,19 +15,30 @@ int main(){
     // tryr2.push_back(Direction::counterclockwise);
     // tryr2.push_back(Direction::counterclockwise);
 
-    // tryr2.push_back(Direction::counterclockwise);
-    // tryr2.push_back(Direction::counterclockwise);
-    // tryr2.push_back(Direction::counterclockwise);
-
-    // tryr2.push_back(Direction::clockwise);
-    // tryr2.push_back(Direction::counterclockwise);
-    // tryr2.push_back(Direction::counterclockwise);
-
-
-
-    gameBoard boop = gameBoard();
     boop.newBlock('J');
-    boop.newBlock('J');
+    boop.newBlock('Z');
+    boop.drop();
+
+    boop.newBlock('S');
+    boop.transformBlock(tryr);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    boop.drop();
+
+    boop.newBlock('S');
+    boop.transformBlock(tryr);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    boop.drop();
+    boop.newBlock('L');
+    boop.transformBlock(tryr);
+    tryr.push_back(Direction::right);
+    tryr.push_back(Direction::right);
+    boop.drop();
+
+
+    boop.hint();
+    boop.newBlock('I');
     boop.tempPrint();
     boop.transformBlock(tryr2);
     boop.tempPrint();

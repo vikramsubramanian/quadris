@@ -10,7 +10,7 @@
 
 // -------------------------------------------------------------------------------
 // Next Block Decider
-char Level0::nextBlock(int seed, std::ifstream& file, bool flag) const {
+char Level0::nextBlock(std::mt19937& rng, std::ifstream& file, bool flag) const {
     char block;
     block = nextBlock_(file);
     return block;
@@ -43,16 +43,15 @@ std::vector<Direction> Level0::transform(int mult, Direction c) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider
-char Level1::nextBlock(int seed, std::ifstream& file, bool flag) const {
+char Level1::nextBlock(std::mt19937& rng, std::ifstream& file, bool flag) const {
     char block;
-    block = nextBlock_(seed);
+    block = nextBlock_(rng);
     return block;
 }
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (α)
-char Level1::nextBlock_(int seed) const {
-    static std::mt19937 rng(seed);
+char Level1::nextBlock_(std::mt19937& rng) const {
     std::uniform_real_distribution<double> dis(0.0, 1.0);
     double ran = dis(rng);
     if (0 <= ran && ran < (1.0/6.0)) {
@@ -87,16 +86,15 @@ std::vector<Direction> Level1::transform(int mult, Direction c) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider
-char Level2::nextBlock(int seed, std::ifstream& file, bool flag) const {
+char Level2::nextBlock(std::mt19937& rng, std::ifstream& file, bool flag) const {
     char block;
-    block = nextBlock_(seed);
+    block = nextBlock_(rng);
     return block;
 }
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (α)
-char Level2::nextBlock_(int seed) const {
-    static std::mt19937 rng(seed);
+char Level2::nextBlock_(std::mt19937& rng) const {
     std::uniform_real_distribution<double> dis(0.0, 1.0);
     double ran = dis(rng);
     if (0 <= ran && ran < (1.0/7.0)) {
@@ -131,10 +129,10 @@ std::vector<Direction> Level2::transform(int mult, Direction c) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider
-char Level3::nextBlock(int seed, std::ifstream& file, bool random) const {
+char Level3::nextBlock(std::mt19937& rng, std::ifstream& file, bool random) const {
     char block;
     if (random) {
-        block = nextBlock_(seed);
+        block = nextBlock_(rng);
     } else {
         block = nextBlock_(file);
     }
@@ -143,8 +141,7 @@ char Level3::nextBlock(int seed, std::ifstream& file, bool random) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (α)
-char Level3::nextBlock_(int seed) const {
-    static std::mt19937 rng(seed);
+char Level3::nextBlock_(std::mt19937& rng) const {
     std::uniform_real_distribution<double> dis(0.0, 1.0);
     double ran = dis(rng);
     if (0 <= ran && ran < (1.0/9.0)) {
@@ -192,10 +189,10 @@ std::vector<Direction> Level3::transform(int mult, Direction c) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider
-char Level4::nextBlock(int seed, std::ifstream& file, bool random) const {
+char Level4::nextBlock(std::mt19937& rng, std::ifstream& file, bool random) const {
     char block;
     if (random) {
-        block = nextBlock_(seed);
+        block = nextBlock_(rng);
     } else {
         block = nextBlock_(file);
     }
@@ -204,8 +201,7 @@ char Level4::nextBlock(int seed, std::ifstream& file, bool random) const {
 
 // -------------------------------------------------------------------------------
 // Next Block Decider (α)
-char Level4::nextBlock_(int seed) const {
-    static std::mt19937 rng(seed);
+char Level4::nextBlock_(std::mt19937& rng) const {
     std::uniform_real_distribution<double> dis(0.0, 1.0);
     double ran = dis(rng);
     if (0 <= ran && ran < (1.0/9.0)) {
