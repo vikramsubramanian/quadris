@@ -205,6 +205,7 @@ void Game::_act(Command cmd)
     int mult;
     std::string file;
     std::ifstream ifn;
+    char forceBlock;
 
     mult = cmd.multiplier_;
     // handle zero multiplier
@@ -325,8 +326,17 @@ void Game::_act(Command cmd)
                 // ADD EAT INPUT
                 std::cout << "Invalid player command! " <<
                           "Please enter a proper player command." << std::endl;
+                *(gameData_->in_) >> forceBlock;
             } else {
-                *(gameData_->in_) >> gameData_->forceBlock_;
+                *(gameData_->in_) >> forceBlock;
+                if ('I' == forceBlock || 'J' == forceBlock || 'S' == forceBlock || 'Z' == forceBlock || 'O' == forceBlock || 'T' == forceBlock) {
+                    gameData_->forceBlock_ = forceBlock;
+                } else if ('*' == forceBlock) { 
+                    forceBlock = 'B';
+                    gameData_->forceBlock_ = forceBlock;
+                } else {
+                    std::cout << "You have entered an incorrect block type. " << std::endl;
+                }
             }
             break;
         case Type::ENABLE_BONUS:
