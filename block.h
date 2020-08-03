@@ -11,7 +11,6 @@ class Block{
     private:
         void _translate(bool, bool);
         void _clockwise();
-        void _transform(Direction);
         bool _inBounds(char board[18][11]);
 
     protected:
@@ -24,6 +23,7 @@ class Block{
         std::vector<Piece> pieceList;
         int level_;
         void shiftDown(char board[18][11], int clearedRow);
+        void transform(Direction);
         bool translate(Direction, char board[18][11]);
     
 };

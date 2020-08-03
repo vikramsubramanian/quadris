@@ -41,6 +41,7 @@ Game::Game(int lvl, std::string file, int seed, bool textOnly)
     gameData_->random_ = false;
     gameData_->in_ = &std::cin;
     gameData_->bonusEnabled_ = false;
+    gameData_->forceBlock_ = 'B';
 }
 
 // -------------------------------------------------------------------------------
@@ -166,6 +167,7 @@ void Game::_restart()
     gameData_->random_ = false;
     gameData_->in_ = &std::cin;
     gameData_->bonusEnabled_ = false;
+    gameData_->forceBlock_ = 'B';
 
     _nextBlock();
     _nextBlock();
@@ -185,9 +187,9 @@ void Game::_constructiveForce()
     // when too many blocks have dropped
     if (0 == gameData_->drops_ % 5)
     {
-        if (gameData_->flag_ && gameData_->lvl_ == 4)
+        if (gameData_->flag_ && gameData_->strat_->constructiveForce())
         {
-            gameData_->board_->constructiveForce_('B');
+            gameData_->board_->constructiveForce_(gameData_->forceBlock_);
         } 
         gameData_->flag_ = true;
     }
@@ -307,6 +309,14 @@ void Game::_act(Command cmd)
                 std::cout << "Invalid player command! " <<
                     "Please enter a proper player command." << std::endl;
             break;
+        case Type::FORCE:
+            if(gameData_->bonusEnabled_ == false) {
+                std::cout << "Invalid player command! " <<
+                    "Please enter a proper player command." << std::endl;
+            } else {
+                *(gameData_->in_) >> gameData_->forceBlock_;
+            }
+            break;
         case Type::ENABLE_BONUS:
             gameData_->bonusEnabled_ = true;
             break;
@@ -341,15 +351,20 @@ void Game::play()
             _act(cmd);
         }
         std::cout << "BZZT! Game Over!" << std::endl;
-        std::cout << "Would you like to play another game? (Y/N)" << std::endl;
-        std::cin >> newGame;
+        if (!gameData_->in_->good()) {
+            newGame = "N";
+        } else {
+            std::cout << "Would you like to play another game? (Y/N)" << std::endl;
+            *(gameData_->in_) >> newGame;
 
-        // if player would like to continue, restart game
-        // and clear any renamed commands
-        if(newGame == "Y")
-        {
-            _restart();
-            cmd.resetMap_();
+            // if player would like to continue, restart game
+            // and clear any renamed commands
+            if(newGame == "Y")
+            {
+                _restart();
+                cmd.resetMap_();
+            }
         }
+
     }
 }
