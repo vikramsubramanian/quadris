@@ -149,6 +149,9 @@ istream &operator>>(istream &in, Command &c){
         }
     }
 
+    if(c.commandType_ == PLAY_HINT && bonusOn_ == false)
+        c.commandType_ = BAD_COMMAND;
+
     return in;
 }
 
