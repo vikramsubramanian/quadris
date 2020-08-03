@@ -306,9 +306,6 @@ void Game::_act(Command cmd)
             gameData_->board_->hint_(true);
             break;
         case Type::RENAME:
-            if(gameData_->bonusEnabled_ == false)
-                std::cout << "Invalid player command! " <<
-                    "Please enter a proper player command." << std::endl;
             break;
         case Type::ENABLE_BONUS:
             gameData_->bonusEnabled_ = true;

@@ -147,6 +147,10 @@ istream &operator>>(istream &in, Command &c){
                 commandTypes_.insert({newCmd, std::move(value)});
             }
         }
+        else
+        {
+            c.commandType_ = BAD_COMMAND;
+        }
     }
 
     if(c.commandType_ == PLAY_HINT && bonusOn_ == false)
