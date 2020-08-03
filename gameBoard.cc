@@ -190,6 +190,8 @@ void gameBoard::replace_(char piece)
 
 void gameBoard::hint_(bool playTurn)
 {
+    //Note: If playTurn == True, we have the computer 
+    //play the hint piece. This is an extra feature.
     Block *hintBlock = nullptr;
     char piece = curBlock_->pieceList.at(0).type;
     if(playTurn){
