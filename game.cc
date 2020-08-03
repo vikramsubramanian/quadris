@@ -298,7 +298,8 @@ void Game::_act(Command cmd)
         case Type::RESTART: 
             _restart();
             break;
-        case Type::HINT: 
+        case Type::HINT:
+            gameData_->board_->hint_();
             break;
         case Type::RENAME:
             if(gameData_->bonusEnabled_ == false)
@@ -332,9 +333,16 @@ void Game::play()
 
     _nextBlock();
     _nextBlock();
-    
-    while (!gameData_->board_->gameOver_() && *(gameData_->in_) >> cmd) {
-        _act(cmd);
+    std::string newGame = "Y";
+
+    while(newGame == "Y") {
+        while (!gameData_->board_->gameOver_() && *(gameData_->in_) >> cmd) {
+            _act(cmd);
+        }
+        std::cout << "BZZT! Game Over!" << std::endl;
+        std::cout << "Would you like to play another game? (Y/N)" << std::endl;
+        std::cin >> newGame;
+        if(newGame == "Y") _restart();
     }
 
     std::cout << "BZZT! Game Over!" << std::endl;
