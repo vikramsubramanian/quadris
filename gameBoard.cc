@@ -296,7 +296,7 @@ string gameBoard::getNextBlock(){
     {
         nextBlockRepr[(nextBlock->pieceList.at(i).y - 3)*4+nextBlock->pieceList.at(i).x] = type;
     }
-    return string(nextBlockRepr);
+    return nextBlockRepr;
 }
 
 void gameBoard::setLevel(int lvl)
