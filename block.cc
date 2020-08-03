@@ -16,6 +16,10 @@ void Block::shiftDown(char board[18][11], int clearedRow){
 
     for (int i = 0; i < pieceList.size(); i++)
     {
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
+    }
+    for (int i = 0; i < pieceList.size(); i++)
+    {
         newX = pieceList.at(i).x;
         newY = pieceList.at(i).y + 1;
         //FIX THIS!
@@ -127,8 +131,6 @@ bool Block::_inBounds(char board[18][11])
 {
     int newX, newY;
 
-    // First we remove the block from this copy of the board
-
     for (int i = 0; i < pieceList.size(); i++)
     {
         newX = pieceList.at(i).x;
@@ -146,6 +148,11 @@ bool Block::_inBounds(char board[18][11])
 bool Block::translate(Direction dir, char board[18][11])
 {    
     bool flag;
+    // First we remove the block from this copy of the board
+    for (int i = 0; i < pieceList.size(); i++)
+    {
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
+    }
 
     _transform(dir);
     flag = _inBounds(board);
@@ -181,6 +188,7 @@ bool Block::translate(Direction dir, char board[18][11])
         }
         _transform(dir);
     }
+
     return flag;
 }
 
@@ -192,6 +200,10 @@ bool Block::translate(Direction dir, char board[18][11])
     int newY = -1;
     
     // First we remove the block from this copy of the board
+    for (int i = 0; i < pieceList.size(); i++)
+    {
+        board[pieceList.at(i).y][pieceList.at(i).x] = ' ';
+    }
 
     int currentX = 12;
     int currentY = -1;
