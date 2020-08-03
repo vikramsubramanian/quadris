@@ -21,12 +21,16 @@
 // Constructor
 Game::Game(int lvl, std::string file, int seed) {
     gameData_ = new gamePImpl;
+
+    gameData_->init_.lvl_ = lvl;
+    gameData_->init_.file_ = file;
+    gameData_->init_.seed_ = seed;
+
     gameData_->board_ = new gameBoard;
     _attachObservers();
     gameData_->lvl_ = lvl;
     _setLevel();
     gameData_->file_ = std::ifstream(file);
-    gameData_->seed_ = seed;
     gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
     gameData_->in_ = &std::cin;
@@ -36,16 +40,8 @@ Game::Game(int lvl, std::string file, int seed) {
 // -------------------------------------------------------------------------------
 // Destructor
 Game::~Game() {
-    if (nullptr != gameData_) {
-        if (nullptr != gameData_->strat_) {
-            delete gameData_->strat_;
-        }
-        if (nullptr != gameData_->board_) {
-            _deleteObservers();
-            delete gameData_->board_;
-        }
-        delete gameData_;
-    }
+    _clearGameData();
+    delete gameData_;
 }
 
 // -------------------------------------------------------------------------------
@@ -57,12 +53,6 @@ Game::~Game() {
 void Game::_attachObservers() {
     gameData_->displays.push_back(new TextDisplay{std::cout, gameData_->board_});
     gameData_->board_->attach(gameData_->displays.at(0));
-/*    
-    if (GUI) {
-            gameData_->displays.push_back(new GraphicDisplay{std::cout, gameData_->board_});
-            gameData_->board_->attach(gameData_->displays.at(1));
-    }
-*/
 }
 
 // -------------------------------------------------------------------------------
@@ -74,6 +64,21 @@ void Game::_deleteObservers() {
     gameData_->displays.clear();
 }
 
+// -------------------------------------------------------------------------------
+// Game Data Clearer
+void Game::_clearGameData() {
+    if (nullptr != gameData_) {
+        if (nullptr != gameData_->strat_) {
+            delete gameData_->strat_;
+            gameData_->strat_ = nullptr;
+        }
+        if (nullptr != gameData_->board_) {
+            _deleteObservers();
+            delete gameData_->board_;
+            gameData_->board_ = nullptr;
+        }
+    }
+}
 
 // -------------------------------------------------------------------------------
 // Level Setter
@@ -81,6 +86,7 @@ void Game::_deleteObservers() {
 void Game::_setLevel() {
     if (nullptr != gameData_->strat_) {
         delete gameData_->strat_;
+        gameData_->strat_ = nullptr;
     }
     switch (gameData_->lvl_) {
         case 0:
@@ -118,21 +124,22 @@ void Game::_nextBlock() {
 void Game::_restart() {
     int hiScore;
     
-    //Reset the seed
-    gameData_->rng_ = std::mt19937(gameData_->seed_);
-
-    //Reset the block file
-    gameData_->file_.clear();
-    gameData_->file_.seekg(std::ios::beg);
-
     // Carry over the highest score, whether that's the current hiScore saved in game or something else entirely
     hiScore = gameData_->board_->getHiScore();
-    _deleteObservers();
-    delete gameData_->board_;
+    _clearGameData();
+
+    //Reset the block file
     gameData_->board_ = new gameBoard;
     _attachObservers();
-    _setLevel();
     gameData_->board_->setHiScore(hiScore);
+    gameData_->lvl_ = gameData_->init_.lvl_;
+    _setLevel();
+    gameData_->file_ = std::ifstream( gameData_->init_.file_);
+    gameData_->rng_ = std::mt19937(gameData_->init_.seed_);
+    gameData_->random_ = false;
+    gameData_->in_ = &std::cin;
+    gameData_->bonusEnabled_ = false;
+
 
     _nextBlock();
     _nextBlock();
