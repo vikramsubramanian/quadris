@@ -100,6 +100,9 @@ void Game::_setLevel() {
             break;
     }
     gameData_->board_->setLevel(gameData_->lvl_);
+    gameData_->drops_ = 0;
+    gameData_->prevScore_ = gameData_->board_->getScore();
+    gameData_->flag_ = true;
 }
 
 // -------------------------------------------------------------------------------
@@ -128,11 +131,28 @@ void Game::_restart() {
     delete gameData_->board_;
     gameData_->board_ = new gameBoard;
     _attachObservers();
-    gameData_->board_->setLevel(gameData_->lvl_);
+    _setLevel();
     gameData_->board_->setHiScore(hiScore);
 
     _nextBlock();
     _nextBlock();
+}
+
+// -------------------------------------------------------------------------------
+// External Force Handler
+void Game::_constructiveForce() {
+    gameData_->drops_++;
+    if (gameData_->prevScore_ != gameData_->board_->getScore()) {
+        gameData_->flag_ = false;
+    }
+
+    if (0 == gameData_->drops_ % 5) {
+        if (gameData_->flag_ && gameData_->lvl_ == 4) {
+            gameData_->board_->constructiveForce('B');
+        } 
+        gameData_->flag_ = true;
+    }
+    gameData_->prevScore_ = gameData_->board_->getScore();
 }
 
 // -------------------------------------------------------------------------------
@@ -171,9 +191,19 @@ void Game::_act(Command cmd)
             gameData_->board_->transformBlock(dirs);
             break;
         case Type::DROP:
-            gameData_->board_->drop();
-            gameData_->board_->updateScore();
-            _nextBlock();
+            while (mult > 0) {
+                gameData_->board_->drop();
+                gameData_->board_->updateScore();
+                _nextBlock();
+                mult--;
+                if (gameData_->board_->gameOver()) {
+                    break;
+                }                    
+                _constructiveForce();
+                if (gameData_->board_->gameOver()) {
+                    break;
+                }
+            }
             break;
         case Type::LEVELUP:
             gameData_->lvl_ = (4 > gameData_->lvl_ + mult) ? gameData_->lvl_ + mult : 4;
