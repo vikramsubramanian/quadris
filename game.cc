@@ -30,6 +30,7 @@ Game::Game(int lvl, std::string file, int seed) {
     gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
     gameData_->in_ = &std::cin;
+    gameData_->bonusEnabled_ = false;
 }
 
 // -------------------------------------------------------------------------------
@@ -221,7 +222,15 @@ void Game::_act(Command cmd)
             break;
         case Type::HINT: 
             break;
-        case Type::RENAME: 
+        case Type::RENAME:
+            if(gameData_->bonusEnabled_ == false)
+                std::cout << "Invalid player command! Please enter a proper player command." << std::endl;
+            break;
+        case Type::ENABLE_BONUS:
+            gameData_->bonusEnabled_ = true;
+            break;
+        case Type::DISABLE_BONUS:
+            gameData_->bonusEnabled_ = false;
             break;
         case Type::BAD_COMMAND:
             std::cout << "Invalid player command! Please enter a proper player command." << std::endl;

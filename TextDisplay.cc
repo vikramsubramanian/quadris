@@ -4,7 +4,7 @@ using namespace std;
 
 //--------------------------------------------------------------------------------------------
 // Constructor
-TextDisplay::TextDisplay(std::ostream &out, gameBoard *b): out{out}, subject_{b}{}
+TextDisplay::TextDisplay(std::ostream &out, gameBoard *b): subject_{b}, out{out}{}
 
 //--------------------------------------------------------------------------------------------
 // Destructor

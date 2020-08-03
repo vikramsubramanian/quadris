@@ -22,7 +22,9 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
                                     {"leveldown", LEVELDOWN},
                                     {"restart", RESTART},
                                     {"hint", HINT},
-                                    {"rename", RENAME}};
+                                    {"rename", RENAME},
+                                    {"enablebonus", ENABLE_BONUS},
+                                    {"disablebonus", DISABLE_BONUS}};
 
 // functor to check substring equality
 class substrEqual
@@ -102,24 +104,34 @@ istream &operator>>(istream &in, Command &c){
 
     // reset multiplier for commands that don't support it
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
-            c.commandType_ == RANDOM || c.commandType_ == NORANDOM || c.commandType_ == SEQUENCE)
+            c.commandType_ == RANDOM || c.commandType_ == NORANDOM ||
+            c.commandType_ == SEQUENCE || c.commandType_ == ENABLE_BONUS ||
+            c.commandType_ == DISABLE_BONUS)
+    {
         c.multiplier_ = 1;
+        if (c.commandType_ == ENABLE_BONUS)
+            c.bonusOn_ = true;
+        if (c.commandType_ == DISABLE_BONUS)
+            c.bonusOn_ = false;
+    }
 
-    // update map for rename command
+
+    // update map for rename command if bonus on
     if(c.commandType_ == RENAME)
     {
         c.multiplier_ = 1;
         string oldCmd, newCmd;
         cin >> oldCmd;
         cin >> newCmd;
-
-        auto kvp = commandTypes_.find(oldCmd);
-        if(kvp != end(commandTypes_))
-            {
-            auto const value = move(kvp->second);
-            commandTypes_.erase(kvp);
-            commandTypes_.insert({newCmd, std::move(value)});
+        if(c.bonusOn_ == true)
+        {
+            auto kvp = commandTypes_.find(oldCmd);
+            if (kvp != end(commandTypes_)) {
+                auto const value = move(kvp->second);
+                commandTypes_.erase(kvp);
+                commandTypes_.insert({newCmd, std::move(value)});
             }
+        }
     }
 
     return in;
