@@ -319,21 +319,7 @@ void gameBoard::hint()
         bool status = true;
         for (int i = 0; i < 11; i++)
         {
-            genblock = BlockFactory::createBlock(piece);
-            
-            // for (int i = 0; i < genblock->pieceList.size(); i++)
-            // {
-            //     //Now we check if we have space to get the new block in
-            //     xCor = genblock->pieceList.at(i).x;
-            //     yCor = genblock->pieceList.at(i).y;
-            //     if (displayStruct->board[yCor][xCor] != '_')
-            //     {
-            //         //This means we have no space to get the new block into the board
-            //         //this means the game is over
-            //         return;
-            //     }
-            // }
-            
+            genblock = BlockFactory::createBlock(piece); 
             blocks.push_back(genblock);
             
             for (int j = 0; j < i; j++)
@@ -343,7 +329,6 @@ void gameBoard::hint()
                 }
             
             generateBoardFromBlocks();
-
             status = genblock->translate(Direction::down, displayStruct->board);
             
             while (status == true)
@@ -352,28 +337,28 @@ void gameBoard::hint()
                     status = genblock->translate(Direction::down, displayStruct->board);
                 }
                 
-            if (genblock->pieceList.at(i).y > lowest)
+            if (genblock->pieceList.at(0).y > lowest)
                 {
-                    lowest = genblock->pieceList.at(i).y;
+                    lowest = genblock->pieceList.at(0).y;
                     hintBlock = genblock;
                     genblock = nullptr;
                 }
             else
                 {
+
                     delete genblock;
                     genblock = nullptr;
                 }
+                blocks.pop_back();
         }
-        for (int j = 0; j < hintBlock->pieceList.size(); j++)
+        for (int jj = 0; jj < hintBlock->pieceList.size(); jj++)
             {
-                hintBlock->pieceList.at(j).type = '?';
+                hintBlock->pieceList.at(jj).type = '?';
             }
-        blocks.pop_back();
+
         blocks.push_back(hintBlock);
-
-
         generateBoardFromBlocks();
-        tempPrint();
+        notifyObservers();
         blocks.pop_back();
         delete hintBlock;
         
