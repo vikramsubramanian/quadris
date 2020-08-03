@@ -296,7 +296,7 @@ void gameBoard::constructiveForce_(char piece) {
     genblock->transform(Direction::right);
     genblock->transform(Direction::right);
 
-    for (int i = 0; i < genblock->pieceList.size(); i++)
+    for (int i = 0; (unsigned)i < genblock->pieceList.size(); i++)
     {
         //Now we check if we have space to get the new block in
         xCor = genblock->pieceList.at(i).x;
