@@ -31,7 +31,8 @@ map <string, Type> commandTypes_ = {{"left", LEFT},
 class substrEqual
 {
     public:
-    substrEqual(string substr, int len) : substr_(substr), len_(len){}
+    substrEqual(string substr, int len) :
+        substr_(substr), len_(len){}
     bool operator()(const pair<string, Type> &c) const
     {
         return c.first.substr(0, len_) == substr_;
@@ -48,7 +49,8 @@ istream &operator>>(istream &in, Command &c){
 
     // EOF terminates program
     string cmd;
-    if (!(in >> cmd)) {
+    if (!(in >> cmd))
+    {
         c.commandType_ = ENDFILE;
         return in;
     }
@@ -68,7 +70,8 @@ istream &operator>>(istream &in, Command &c){
     if(i == 1) c.multiplier_++;
 
     // convert provided string to lowercase
-    transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c){
+    transform(cmd.begin(), cmd.end(), cmd.begin(),
+            [](unsigned char c){
         return tolower(c);
     });
 
@@ -80,15 +83,16 @@ istream &operator>>(istream &in, Command &c){
         return in;
     }
 
-    // search for unique match in commandTypes with provided cmd string
+    // search for unique match in commandTypes with provided string
     int substrLen = 1;
     int occurrences;
     while(substrLen <= cmd.length())
     {
         // occurrences tracks number of matching commands
         // with the current substring
-        occurrences = count_if(commandTypes_.begin(), commandTypes_.end(),
-                            substrEqual(cmd.substr(0, substrLen), substrLen));
+        occurrences = count_if(commandTypes_.begin(),
+                commandTypes_.end(),
+                substrEqual(cmd.substr(0, substrLen), substrLen));
 
         if(occurrences == 0) break;
         else if(occurrences == 1)
@@ -96,7 +100,8 @@ istream &operator>>(istream &in, Command &c){
             // check that the match is actually equal as commands
             // that match a unique prefix aren't necessarily valid
             std::map<string, Type>:: iterator it =
-                    find_if(commandTypes_.begin(), commandTypes_.end(),
+                    find_if(commandTypes_.begin(),
+                            commandTypes_.end(),
                             substrEqual(cmd, cmd.length()));
             if(it != commandTypes_.end())
                 c.commandType_ = (*it).second;
@@ -110,7 +115,8 @@ istream &operator>>(istream &in, Command &c){
     // and handle bonus enablement
     if(c.commandType_ == RESTART || c.commandType_ == HINT ||
             c.commandType_ == RANDOM || c.commandType_ == NORANDOM ||
-            c.commandType_ == SEQUENCE || c.commandType_ == ENABLE_BONUS ||
+            c.commandType_ == SEQUENCE ||
+            c.commandType_ == ENABLE_BONUS ||
             c.commandType_ == DISABLE_BONUS)
     {
         c.multiplier_ = 1;
@@ -131,7 +137,8 @@ istream &operator>>(istream &in, Command &c){
         if(c.bonusOn_ == true)
         {
             auto kvp = commandTypes_.find(oldCmd);
-            if (kvp != end(commandTypes_)) {
+            if (kvp != end(commandTypes_))
+            {
                 auto const value = move(kvp->second);
                 commandTypes_.erase(kvp);
                 commandTypes_.insert({newCmd, std::move(value)});

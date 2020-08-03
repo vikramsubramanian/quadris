@@ -14,7 +14,8 @@ struct Command{
     int multiplier_;
     bool bonusOn_;
 
-    Command() : commandType_(BAD_COMMAND), multiplier_(1), bonusOn_(false) {}
+    Command() : commandType_(BAD_COMMAND), multiplier_(1),
+        bonusOn_(false) {}
 };
 
 std::istream &operator>>(std::istream &, Command &);

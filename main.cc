@@ -45,5 +45,3 @@ int main(int argc, char *argv[])
     delete g; // deleting game instance
     return 1;
 }
-
-

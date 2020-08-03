@@ -47,8 +47,10 @@ class Game {
         ~Game();
         void play();
     private:
+        // Observer DP
         void _attachObservers();
         void _deleteObservers();
+
         void _clearGameData();
         void _setLevel();
         void _nextBlock();
