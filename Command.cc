@@ -154,7 +154,8 @@ istream &operator>>(istream &in, Command &c){
         }
     }
 
-    if(c.commandType_ == PLAY_HINT && c.bonusOn_ == false)
+    if((c.commandType_ == PLAY_HINT || c.commandType_ == FORCE)
+        && c.bonusOn_ == false)
         c.commandType_ = BAD_COMMAND;
 
     return in;
@@ -181,6 +182,7 @@ void Command::resetMap_()
                      {"hint", HINT},
                      {"playhint", PLAY_HINT},
                      {"rename", RENAME},
+                     {"force", FORCE},
                      {"enablebonus", ENABLE_BONUS},
                      {"disablebonus", DISABLE_BONUS}};
 }

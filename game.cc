@@ -40,8 +40,8 @@ Game::Game(int lvl, std::string file, int seed, bool textOnly)
     gameData_->rng_ = std::mt19937(seed);
     gameData_->random_ = false;
     gameData_->in_ = &std::cin;
-    gameData_->bonusEnabled_ = false;
     gameData_->forceBlock_ = 'B';
+    gameData_->bonusEnabled_ = false;
 }
 
 // -------------------------------------------------------------------------------
@@ -300,6 +300,8 @@ void Game::_act(Command cmd)
         case Type::RESTART: 
             _restart();
             break;
+        case Type::RENAME:
+            break;
         case Type::HINT:
             gameData_->board_->hint_(false);
             break;
@@ -309,12 +311,20 @@ void Game::_act(Command cmd)
                 gameData_->board_->hint_(true);
                 _nextBlock();
                 mult--;
+                if (gameData_->board_->gameOver_()) {
+                    break;
+                }
+                _constructiveForce();
+                if (gameData_->board_->gameOver_()) {
+                    break;
+                }
             }
             break;
         case Type::FORCE:
             if(gameData_->bonusEnabled_ == false) {
+                // ADD EAT INPUT
                 std::cout << "Invalid player command! " <<
-                    "Please enter a proper player command." << std::endl;
+                          "Please enter a proper player command." << std::endl;
             } else {
                 *(gameData_->in_) >> gameData_->forceBlock_;
             }
@@ -367,6 +377,5 @@ void Game::play()
                 cmd.resetMap_();
             }
         }
-
     }
 }

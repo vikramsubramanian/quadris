@@ -295,7 +295,6 @@ void gameBoard::hint_(bool playTurn)
 void gameBoard::constructiveForce_(char piece) {
     int xCor = -1;
     int yCor = -1;
-    char type;
 
     // Creating the block
     //We can have a new block only if the game is still playable

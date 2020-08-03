@@ -35,7 +35,6 @@ struct gamePImpl{
     std::mt19937 rng_;
     bool random_;
     std::istream* in_;
-    bool bonusEnabled_;
     // For the constructive force
     int drops_;
     int prevScore_;
