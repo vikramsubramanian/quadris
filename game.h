@@ -15,14 +15,21 @@ struct Command;
 class TextDisplay;
 class Observer;
 
+struct gameInit{
+    int lvl_; 
+    std::string file_; 
+    int seed_;
+};
+
 struct gamePImpl{
+    // Store the input parameters for the restart command
+    gameInit init_;
     gameBoard* board_;
     std::vector<Observer*> displays;
     bool gui; 
     int lvl_;
     Level* strat_;
     std::ifstream file_;
-    int seed_;
     std::mt19937 rng_;
     bool random_;
     std::istream* in_;
@@ -42,6 +49,7 @@ class Game {
     private:
         void _attachObservers();
         void _deleteObservers();
+        void _clearGameData();
         void _setLevel();
         void _nextBlock();
         void _restart();
