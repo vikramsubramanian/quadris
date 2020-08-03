@@ -7,8 +7,6 @@
 
 class Block{
 
-protected:
-    Block();
 
 public:
     /* The constructor is protected so that it cannot be instantiated by anything other
@@ -20,7 +18,17 @@ public:
     int level;
     void shiftDown(char board[18][11], int clearedRow);
     bool translate(Direction, char board[18][11]);
+
+protected:
+    Block();
     
+private:
+    bool inBounds_(newX, newY, board);
+    bool translateLeft_(char board[18][11]);
+    bool translateRight_(char board[18][11]);
+    bool translateDown_(char board[18][11]);
+    bool rotateClockwise_(char board[18][11]);
+    bool translateCounterclockwise_(char board[18][11]);
 };
 
 #endif
